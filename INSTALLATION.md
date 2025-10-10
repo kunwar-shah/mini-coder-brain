@@ -53,38 +53,55 @@ chmod +x install.sh
 
 ---
 
-### Method 2: Manual Installation
+### Method 2: Manual Installation (Fallback)
 
-**Step 1: Copy System Files**
+If the automatic installer fails, use these manual steps:
+
+**Step 1: Clone Repository**
 ```bash
-# Navigate to Mini-CoderBrain directory
+git clone https://github.com/kunwar-shah/mini-coder-brain.git
 cd mini-coder-brain
+```
 
-# Copy .claude folder
+**Step 2: Copy System Files**
+```bash
+# Copy .claude folder to your project
 cp -r .claude /path/to/your/project/
 
-# Copy CLAUDE.md controller
-cp docs/CLAUDE.md /path/to/your/project/
+# Copy CLAUDE.md controller to your project
+cp CLAUDE.md /path/to/your/project/
 ```
 
-**Step 2: Create Required Directories**
+**Step 3: Initialize Memory Bank from Templates**
 ```bash
+# Navigate to your project
 cd /path/to/your/project
-mkdir -p .claude/tmp .claude/cache .claude/archive
+
+# Copy templates to actual memory files
+cp .claude/memory/templates/productContext-template.md .claude/memory/productContext.md
+cp .claude/memory/templates/activeContext-template.md .claude/memory/activeContext.md
+cp .claude/memory/templates/progress-template.md .claude/memory/progress.md
+cp .claude/memory/templates/decisionLog-template.md .claude/memory/decisionLog.md
+cp .claude/memory/templates/systemPatterns-template.md .claude/memory/systemPatterns.md
 ```
 
-**Step 3: Make Hooks Executable**
+**Step 4: Make Hooks Executable**
 ```bash
 chmod +x .claude/hooks/*.sh
 ```
 
-**Step 4: Customize Templates**
+**Step 5: Create Required Directories**
+```bash
+mkdir -p .claude/tmp .claude/cache .claude/archive
+```
+
+**Step 6: Customize Your Memory Bank**
 ```bash
 # Edit productContext.md with your project details
 nano .claude/memory/productContext.md
 
 # Replace [PROJECT_NAME] with your project name
-# Replace [TECH_STACK] with your technology stack
+# Update technology stack, features, and architecture
 ```
 
 ---
@@ -92,7 +109,7 @@ nano .claude/memory/productContext.md
 ### Method 3: One-Liner (Advanced)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/yourusername/mini-coder-brain/main/install.sh | bash -s /path/to/your/project
+curl -sL https://raw.githubusercontent.com/kunwar-shah/mini-coder-brain/main/install.sh | bash -s /path/to/your/project
 ```
 
 ⚠️ **Security Note**: Always review scripts before piping to bash!
@@ -339,8 +356,8 @@ mv CLAUDE.md.backup CLAUDE.md
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/mini-coder-brain/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/mini-coder-brain/discussions)
+- **Issues**: [GitHub Issues](https://github.com/kunwar-shah/mini-coder-brain/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/kunwar-shah/mini-coder-brain/discussions)
 - **Documentation**: [Full Docs](docs/)
 
 ---

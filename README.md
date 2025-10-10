@@ -40,15 +40,43 @@ Mini-CoderBrain is a **drop-in context awareness system** that supercharges Clau
 
 ## ⚡ Quick Start (30 Seconds)
 
-### Installation
+### Method 1: Automatic Install (Recommended)
 
 ```bash
 # Clone the repository
 git clone https://github.com/kunwar-shah/mini-coder-brain.git
+cd mini-coder-brain
 
-# Copy to your project
-cp -r mini-coder-brain/.claude /path/to/your/project/
-cp mini-coder-brain/CLAUDE.md /path/to/your/project/
+# Run installer
+chmod +x install.sh
+./install.sh /path/to/your/project
+
+# Done! Installer handles everything automatically
+```
+
+### Method 2: Manual Install (Fallback)
+
+If the automatic installer fails, use this manual method:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/kunwar-shah/mini-coder-brain.git
+cd mini-coder-brain
+
+# 2. Copy framework files to your project
+cp -r .claude /path/to/your/project/
+cp CLAUDE.md /path/to/your/project/
+
+# 3. Initialize memory bank from templates
+cd /path/to/your/project
+cp .claude/memory/templates/productContext-template.md .claude/memory/productContext.md
+cp .claude/memory/templates/activeContext-template.md .claude/memory/activeContext.md
+cp .claude/memory/templates/progress-template.md .claude/memory/progress.md
+cp .claude/memory/templates/decisionLog-template.md .claude/memory/decisionLog.md
+cp .claude/memory/templates/systemPatterns-template.md .claude/memory/systemPatterns.md
+
+# 4. Make hooks executable
+chmod +x .claude/hooks/*.sh
 
 # Done! Open Claude Code in your project
 ```
