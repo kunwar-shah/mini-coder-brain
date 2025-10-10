@@ -1,0 +1,101 @@
+# Beautiful Jekyll Configuration for Mini-CoderBrain
+
+# Site settings
+title: Mini-CoderBrain
+description: Universal AI Context Awareness System for Claude Code
+author: Kunwar Shah
+url: "https://kunwar-shah.github.io"
+baseurl: "/mini-coder-brain"
+
+# Social sharing settings
+social-share: true
+
+# Navigation bar links
+navbar-links:
+  Home: "index"
+  Documentation:
+    - Installation Guide: "installation"
+    - Quick Start: "quickstart"
+    - Features: "features"
+    - Commands Reference: "commands"
+  Examples:
+    - React App: "examples/react"
+    - Python Django: "examples/python"
+    - Rust CLI: "examples/rust"
+  About:
+    - Changelog: "changelog"
+    - Contributing: "contributing"
+    - GitHub: "https://github.com/kunwar-shah/mini-coder-brain"
+
+# Image to show in the navigation bar
+avatar: "/assets/img/brain-logo.png"
+
+# Social media links
+social-network-links:
+  github: kunwar-shah/mini-coder-brain
+
+# Beautiful Jekyll skin (theme color)
+# Options: "blue", "minimal", "darkly", etc.
+remote_theme: daattali/beautiful-jekyll@6.0.1
+
+# Excerpt word length
+excerpt_length: 50
+
+# Whether or not to show an excerpt for every blog post
+feed_show_excerpt: true
+
+# Whether or not to show a list of tags below each post preview in the feed page
+feed_show_tags: true
+
+# Add a search button to the navbar
+post_search: true
+
+# Add a button in the footer to edit the current page. Only works if your website is hosted on GitHub
+edit_page_button: true
+
+# SEO settings
+keywords: "claude code, ai context, memory bank, development assistant, code context"
+
+# Timezone
+timezone: "UTC"
+
+# Output options
+markdown: kramdown
+highlighter: rouge
+
+# Kramdown settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+
+# Plugins
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Pagination
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+# Build settings
+exclude:
+  - .claude/
+  - .development/
+  - .git/
+  - .gitignore
+  - install.sh
+  - manual-install.sh
+  - examples/
+  - node_modules/
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /docs/:path/
