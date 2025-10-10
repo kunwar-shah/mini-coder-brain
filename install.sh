@@ -137,8 +137,14 @@ install_mini_coderbrain() {
         exit 1
     fi
 
-    if [ ! -f "$SCRIPT_DIR/docs/CLAUDE.md" ]; then
-        print_error "CLAUDE.md not found in docs folder!"
+    # Check for CLAUDE.md in root or docs
+    local claude_md_source=""
+    if [ -f "$SCRIPT_DIR/CLAUDE.md" ]; then
+        claude_md_source="$SCRIPT_DIR/CLAUDE.md"
+    elif [ -f "$SCRIPT_DIR/docs/CLAUDE.md" ]; then
+        claude_md_source="$SCRIPT_DIR/docs/CLAUDE.md"
+    else
+        print_error "CLAUDE.md not found!"
         exit 1
     fi
 
@@ -164,7 +170,7 @@ install_mini_coderbrain() {
 
     # Install CLAUDE.md
     print_info "Installing CLAUDE.md controller..."
-    cp "$SCRIPT_DIR/docs/CLAUDE.md" "$target_path/"
+    cp "$claude_md_source" "$target_path/"
     print_success "CLAUDE.md installed"
 
     # Create required directories
@@ -179,13 +185,30 @@ install_mini_coderbrain() {
     chmod +x "$target_path/.claude/hooks"/*.sh 2>/dev/null || true
     print_success "Hooks configured"
 
-    # Customize templates with project info
-    if [ -f "$target_path/.claude/memory/productContext.md" ]; then
-        print_info "Customizing templates..."
-        sed -i.bak "s/\[PROJECT_NAME\]/$project_name/g" "$target_path/.claude/memory/productContext.md" 2>/dev/null || true
-        rm -f "$target_path/.claude/memory/productContext.md.bak"
-        print_success "Templates customized"
-    fi
+    # Copy templates to actual memory files
+    print_info "Initializing memory bank from templates..."
+
+    for template in "$target_path/.claude/memory/templates"/*-template.md; do
+        if [ -f "$template" ]; then
+            filename=$(basename "$template" | sed 's/-template//')
+            target_file="$target_path/.claude/memory/$filename"
+
+            # Only copy if target doesn't exist (don't overwrite existing memory)
+            if [ ! -f "$target_file" ]; then
+                cp "$template" "$target_file"
+                print_success "Created $filename from template"
+
+                # Customize with project name
+                sed -i.bak "s/\[PROJECT_NAME\]/$project_name/g" "$target_file" 2>/dev/null || \
+                sed -i '' "s/\[PROJECT_NAME\]/$project_name/g" "$target_file" 2>/dev/null || true
+                rm -f "$target_file.bak"
+            else
+                print_info "$filename already exists (keeping existing)"
+            fi
+        fi
+    done
+
+    print_success "Memory bank initialized"
 
     # Verify installation
     print_info "Verifying installation..."

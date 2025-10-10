@@ -1,4 +1,4 @@
-# Installation Guide - Mini-CoderBrain v2.0
+# Installation Guide - Mini-CoderBrain v1.0
 
 Complete installation guide for Universal AI Context Awareness System.
 
@@ -7,7 +7,7 @@ Complete installation guide for Universal AI Context Awareness System.
 ## 📋 Prerequisites
 
 ### Required
-- **Claude Code v2.0+** - Get it from [claude.ai](https://claude.ai/claude-code)
+- **Claude Code** - Get it from [claude.ai](https://claude.ai/claude-code)
 - **Bash shell** - macOS/Linux/WSL on Windows
 
 ### Optional (Recommended)
@@ -24,12 +24,15 @@ Complete installation guide for Universal AI Context Awareness System.
 
 **Step 1: Clone Repository**
 ```bash
-git clone https://github.com/yourusername/mini-coder-brain.git
+git clone https://github.com/kunwar-shah/mini-coder-brain.git
 cd mini-coder-brain
 ```
 
 **Step 2: Run Installer**
 ```bash
+# Make installer executable (first time only)
+chmod +x install.sh
+
 # Interactive mode (prompts for project path)
 ./install.sh
 
@@ -38,13 +41,14 @@ cd mini-coder-brain
 ```
 
 **What the installer does**:
-- ✅ Detects project type (React, Python, etc.)
+- ✅ Detects project type (React, Python, Rust, etc.)
 - ✅ Backs up existing `.claude` folder (if any)
-- ✅ Copies `.claude/` system folder
+- ✅ Copies `.claude/` system folder with all hooks
 - ✅ Copies `CLAUDE.md` controller
 - ✅ Creates required directories (tmp, cache, archive)
 - ✅ Makes hooks executable
-- ✅ Customizes templates with project name
+- ✅ **Copies templates to actual memory files** (productContext.md, etc.)
+- ✅ Customizes with your project name
 - ✅ Verifies installation
 
 ---
