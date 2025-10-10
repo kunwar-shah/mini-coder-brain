@@ -1,0 +1,57 @@
+# Mini-CoderBrain .gitignore
+# Protects sensitive user data from being pushed to GitHub
+
+# ============================================================================
+# SENSITIVE: User's Memory Bank (Personal Project Context)
+# ============================================================================
+# These contain user-specific project information - NEVER commit actual memory files
+.claude/memory/productContext.md
+.claude/memory/activeContext.md
+.claude/memory/progress.md
+.claude/memory/decisionLog.md
+.claude/memory/systemPatterns.md
+.claude/memory/project-structure.json
+
+# Development files (internal use only)
+.development/
+chats/
+development/
+*.backup
+*.bak
+
+# Temporary files
+.claude/tmp/*
+!.claude/tmp/.gitkeep
+.claude/cache/*
+!.claude/cache/.gitkeep
+
+# Session-specific files
+.claude/tmp/context-loaded.flag
+.claude/tmp/context-state.json
+.claude/tmp/current-state.json
+.claude/tmp/micro-context*.md
+.claude/tmp/session-context.json
+.claude/tmp/*.log
+.claude/tmp/*-notified
+
+# Archive folder (user-specific data)
+.claude/archive/*
+!.claude/archive/README.md
+
+# Memory conversations (session data)
+.claude/memory/conversations/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test installations
+test-project/
+test-installation/
