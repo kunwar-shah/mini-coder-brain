@@ -7,6 +7,121 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2025-10-11 - Foundation Complete
+
+### 🐛 Critical Bug Fixes
+
+#### Session-Aware Context Loading
+- **Fixed**: Context not loading in new conversations
+- **Issue**: Flag persisted between conversations, new sessions had no context
+- **Solution**: Track session ID in context-loaded flag
+- **Impact**: Context now loads properly in every new conversation
+- **File**: `.claude/hooks/session-start.sh`
+
+#### Activity Count Tracking
+- **Fixed**: Activity count always showing 0 in responses
+- **Issue**: Grep pattern mismatch with actual log format
+- **Solution**: Changed pattern from `\|(Write|Edit)\|` to `^(Write|Edit)$`
+- **Impact**: Accurate operation tracking (e.g., 96 ops)
+- **File**: `.claude/hooks/optimized-intelligent-stop.sh`
+
+#### Session File Creation
+- **Fixed**: Sessions folder empty, no session tracking
+- **Issue**: Session files never created
+- **Solution**: Added session file creation matching coder-brain pattern
+- **Format**: `session_{SESSION_ID}_{TIMESTAMP}.md`
+- **Impact**: Proper session history tracking
+- **File**: `.claude/hooks/optimized-intelligent-stop.sh`
+
+### ✨ New Features
+
+#### PreCompact Hook
+- **Added**: Automatic context preservation before conversation compaction
+- **Purpose**: Maintain continuity when context window fills
+- **Creates**: compact-summaries/ with session state
+- **Logs**: Compaction events to decisionLog.md
+- **File**: `.claude/hooks/pre-compact-umb-sync.sh`
+
+#### SessionEnd Hook
+- **Added**: Capture summary when user exits conversation
+- **Purpose**: Track session accomplishments and modified files
+- **Creates**: Session end summaries with context
+- **Updates**: activeContext.md with exit notes
+- **File**: `.claude/hooks/session-end.sh`
+
+#### Memory Cleanup Enhancement
+- **Added**: Automatic cleanup of old conversation files
+- **Policy**: 30-day retention for sessions, responses, tool logs
+- **Impact**: Prevents conversation folder bloat
+- **File**: `.claude/hooks/memory-cleanup.sh`
+
+### 📚 Documentation
+
+#### V2.0 Planning Documents
+- **Added**: BEHAVIORAL_TRAINING_EXPLAINED.md (foundation insight)
+- **Added**: V2.0-ROADMAP.md (4-phase development plan)
+- **Added**: V2.0-QUICK-REFERENCE.md (summary)
+- **Added**: SESSION-AWARE-CONTEXT-LOADING.md (technical deep-dive)
+- **Added**: FOUNDATION-COMPLETE-TESTING.md (testing checklist)
+
+#### GitHub Pages Setup
+- **Created**: Beautiful Jekyll theme documentation site
+- **Pages**: Installation, Quick Start, Features, Commands, Changelog, Contributing
+- **URL**: https://kunwar-shah.github.io/mini-coder-brain
+- **Status**: Ready for deployment
+
+### 🔧 Configuration
+
+#### Settings Updates
+- **Registered**: PreCompact hook (30s timeout)
+- **Registered**: SessionEnd hook (30s timeout)
+- **File**: `.claude/settings.json`
+
+### 📊 Hook System (Complete)
+
+All 6 critical hooks now implemented:
+- ✅ SessionStart - Context loading (fixed)
+- ✅ UserPromptSubmit - Activity tracking
+- ✅ PostToolUse - Tool logging (fixed)
+- ✅ PreCompact - Context preservation (new)
+- ✅ Stop - Session intelligence (fixed)
+- ✅ SessionEnd - Exit summary (new)
+
+### 🎯 Impact
+
+**Before Fixes**:
+- Context lost in new conversations ❌
+- Activity count always 0 ❌
+- No session file tracking ❌
+- Context lost during compaction ❌
+
+**After Fixes**:
+- Context loads every conversation ✅
+- Accurate activity tracking ✅
+- Complete session history ✅
+- Context preserved through compaction ✅
+
+### 🧪 Testing
+
+See `.development/FOUNDATION-COMPLETE-TESTING.md` for:
+- Complete testing checklist
+- Expected file structure
+- Success criteria
+- Known issues to watch
+
+### 🔄 Migration
+
+No breaking changes. All improvements are backward compatible.
+
+Upgrade by pulling latest:
+```bash
+cd mini-coder-brain
+git pull origin main
+chmod +x .claude/hooks/*.sh
+```
+
+---
+
 ## [2.1.0] - 2025-10-06 - Context Perfection Edition
 
 ### 🚀 Major Features
