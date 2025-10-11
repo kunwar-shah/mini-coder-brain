@@ -62,10 +62,11 @@ analyze_session_intelligence() {
   
   if [ -f "$simple_log" ]; then
     # Fixed activity count calculation - count all meaningful development operations
-    activity_count=$(grep -E '\|(Write|Edit|MultiEdit|Read|Bash)\|' "$simple_log" | wc -l || echo 0)
-    
-    # Tool sequence analysis
-    tool_sequence=$(jq -r 'select(.timestamp | startswith("'$today'")) | .tool_name' "$detailed_log" 2>/dev/null | tail -5 | tr '\n' '→' | sed 's/→$//' || echo "Unknown")
+    # Match tool names at start/end of line (no pipes in current format)
+    activity_count=$(grep -E '^(Write|Edit|MultiEdit|Read|Bash)$' "$simple_log" | wc -l || echo 0)
+
+    # Tool sequence analysis (fixed: use "tool" not "tool_name" in JSONL)
+    tool_sequence=$(jq -r 'select(.timestamp | startswith("'$today'")) | .tool' "$detailed_log" 2>/dev/null | tail -5 | tr '\n' '→' | sed 's/→$//' || echo "Unknown")
     
     # File patterns analysis (enhanced)
     significant_files=$(jq -r 'select(.timestamp | startswith("'$today'") and (.tool_name == "Write" or .tool_name == "Edit" or .tool_name == "MultiEdit")) | .tool_input.file_path // empty' "$detailed_log" 2>/dev/null | xargs -I {} basename {} 2>/dev/null | tail -5 | tr '\n' ' ' || echo "")
