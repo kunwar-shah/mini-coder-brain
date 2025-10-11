@@ -2,7 +2,7 @@
 
 # Site settings
 title: Mini-CoderBrain
-description: Universal AI Context Awareness System for Claude Code
+description: Transform Claude Code into a persistent, context-aware development partner. Universal memory system with automatic project detection, cross-session continuity, and intelligent cleanup. Zero config, works with any tech stack.
 author: Kunwar Shah
 url: "https://kunwar-shah.github.io"
 baseurl: "/mini-coder-brain"
@@ -54,7 +54,7 @@ post_search: true
 edit_page_button: true
 
 # SEO settings
-keywords: "claude code, ai context, memory bank, development assistant, code context"
+keywords: "claude code, ai context awareness, memory bank, persistent ai, code assistant, developer tools, universal context, cross-session memory, intelligent notifications, codebase mapping, zero configuration, developer productivity, coding automation, ai assistant, context management, session continuity, automatic memory management, activity tracking, development workflow, ai memory system"
 
 # Timezone
 timezone: "UTC"
