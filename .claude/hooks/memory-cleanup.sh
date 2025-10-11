@@ -225,7 +225,63 @@ if [ -d "$ROOT/.claude/cache" ]; then
   echo ""
 fi
 
-# === 6. REPORT RESULTS ===
+# === 6. CLEAN OLD SESSION AND RESPONSE FILES ===
+CONV_DIR="$MB/conversations"
+if [ -d "$CONV_DIR" ]; then
+  echo "🗂️  Cleaning old conversation files..."
+
+  # Keep last 10 session files, remove older ones
+  if [ -d "$CONV_DIR/sessions" ]; then
+    old_sessions=$(find "$CONV_DIR/sessions" -name "session_*.md" -type f -mtime +30 2>/dev/null | wc -l || echo 0)
+
+    if [ "$DRY_RUN" = false ]; then
+      if [ "$old_sessions" -gt 0 ]; then
+        find "$CONV_DIR/sessions" -name "session_*.md" -type f -mtime +30 -delete 2>/dev/null || true
+        echo "  Removed $old_sessions session files older than 30 days"
+      else
+        echo "  No old session files to remove"
+      fi
+    else
+      echo "  [DRY RUN] Would remove $old_sessions session files"
+    fi
+  fi
+
+  # Keep last 20 response files, remove older ones
+  if [ -d "$CONV_DIR/responses" ]; then
+    old_responses=$(find "$CONV_DIR/responses" -name "response-*.md" -type f -mtime +30 2>/dev/null | wc -l || echo 0)
+
+    if [ "$DRY_RUN" = false ]; then
+      if [ "$old_responses" -gt 0 ]; then
+        find "$CONV_DIR/responses" -name "response-*.md" -type f -mtime +30 -delete 2>/dev/null || true
+        echo "  Removed $old_responses response files older than 30 days"
+      else
+        echo "  No old response files to remove"
+      fi
+    else
+      echo "  [DRY RUN] Would remove $old_responses response files"
+    fi
+  fi
+
+  # Clean old tool tracking logs (keep last 30 days)
+  if [ -d "$CONV_DIR/tool-tracking" ]; then
+    old_logs=$(find "$CONV_DIR/tool-tracking" -name "*.log" -o -name "*.jsonl" -type f -mtime +30 2>/dev/null | wc -l || echo 0)
+
+    if [ "$DRY_RUN" = false ]; then
+      if [ "$old_logs" -gt 0 ]; then
+        find "$CONV_DIR/tool-tracking" \( -name "*.log" -o -name "*.jsonl" \) -type f -mtime +30 -delete 2>/dev/null || true
+        echo "  Removed $old_logs tool tracking logs older than 30 days"
+      else
+        echo "  No old tool logs to remove"
+      fi
+    else
+      echo "  [DRY RUN] Would remove $old_logs tool tracking logs"
+    fi
+  fi
+
+  echo ""
+fi
+
+# === 7. REPORT RESULTS ===
 if [ "$DRY_RUN" = false ]; then
   # File sizes (after)
   active_lines_after=$(wc -l < "$MB/activeContext.md" 2>/dev/null || echo 0)
