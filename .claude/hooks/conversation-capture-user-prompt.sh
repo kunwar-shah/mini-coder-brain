@@ -92,11 +92,22 @@ if [ "$activity_count" -gt 50 ]; then
       notifications="${notifications}🔄 High activity ($activity_count ops) + ${hours_since_sync}h since last sync. Run /memory-sync --full. "
     fi
   else
-    # No sync record exists, suggest it
-    sync_notified_flag="$CLAUDE_TMP/sync-notified-$today"
-    if [ ! -f "$sync_notified_flag" ]; then
+    # No sync record exists - check when we last notified
+    last_notification_file="$CLAUDE_TMP/last-sync-notification"
+
+    if [ -f "$last_notification_file" ]; then
+      last_notification=$(cat "$last_notification_file" 2>/dev/null || echo "0")
+      hours_since_notification=$(( (current_time - last_notification) / 3600 ))
+
+      # Show reminder every 2 hours during high activity
+      if [ "$hours_since_notification" -gt 2 ]; then
+        notifications="${notifications}🔄 High activity ($activity_count ops) - no sync record. Consider /memory-sync --full. "
+        echo "$current_time" > "$last_notification_file"
+      fi
+    else
+      # First notification
       notifications="${notifications}🔄 High activity detected ($activity_count ops). Consider /memory-sync --full. "
-      touch "$sync_notified_flag"
+      echo "$current_time" > "$last_notification_file"
     fi
   fi
 fi

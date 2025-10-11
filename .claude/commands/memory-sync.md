@@ -1,7 +1,7 @@
 ---
 description: Synchronize all memory bank files with current session context
 argument-hint: "[--full] [--quick]"
-allowed-tools: Read(*), Write(*), Edit(*), Bash(date:*)
+allowed-tools: Read(*), Write(*), Edit(*), Bash(date:*), Bash(echo:*)
 ---
 
 # Memory Sync — Universal Context Synchronization
@@ -50,24 +50,28 @@ The `/memory-sync` command provides intelligent synchronization of your memory b
    - Detect technical decisions made
    - Extract progress milestones
 
-2. **Update Active Context**
+2. **Record Sync Timestamp** (IMPORTANT - do this FIRST)
+   - Update `.claude/tmp/last-memory-sync` with current Unix timestamp: `date +%s > .claude/tmp/last-memory-sync`
+   - This tracks when sync was performed for notification system
+
+3. **Update Active Context**
    - Append session summary with timestamp
    - Update current focus if changed
    - Add new blockers discovered
    - Record achievements completed
 
-3. **Update Progress (if --full)**
+4. **Update Progress (if --full)**
    - Move completed items to ✅ COMPLETED section
    - Update in-progress status
    - Add new pending tasks
    - Update sprint progress percentage
 
-4. **Record Decisions (if --full)**
+5. **Record Decisions (if --full)**
    - Extract technical decisions from conversation
    - Format as ADR (Architecture Decision Record)
    - Append to decisionLog.md with timestamp
 
-5. **Update Patterns (if applicable)**
+6. **Update Patterns (if applicable)**
    - Detect new coding patterns adopted
    - Record architectural changes
    - Update technology stack if changed
