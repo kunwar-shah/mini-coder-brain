@@ -85,11 +85,11 @@ if [ "$activity_count" -gt 50 ]; then
 
   if [ -f "$last_sync_file" ]; then
     last_sync_time=$(cat "$last_sync_file" 2>/dev/null || echo "0")
-    hours_since_sync=$(( (current_time - last_sync_time) / 3600 ))
+    minutes_since_sync=$(( (current_time - last_sync_time) / 60 ))
 
-    # High activity + no sync for 2+ hours
-    if [ "$hours_since_sync" -gt 2 ]; then
-      notifications="${notifications}🔄 High activity ($activity_count ops) + ${hours_since_sync}h since last sync. Run /memory-sync --full. "
+    # High activity + no sync for 10+ minutes
+    if [ "$minutes_since_sync" -gt 10 ]; then
+      notifications="${notifications}🔄 High activity ($activity_count ops) + ${minutes_since_sync}m since last sync. Run /memory-sync --full. "
     fi
   else
     # No sync record exists - check when we last notified
@@ -97,10 +97,10 @@ if [ "$activity_count" -gt 50 ]; then
 
     if [ -f "$last_notification_file" ]; then
       last_notification=$(cat "$last_notification_file" 2>/dev/null || echo "0")
-      hours_since_notification=$(( (current_time - last_notification) / 3600 ))
+      minutes_since_notification=$(( (current_time - last_notification) / 60 ))
 
-      # Show reminder every 2 hours during high activity
-      if [ "$hours_since_notification" -gt 2 ]; then
+      # Show reminder every 10 minutes during high activity
+      if [ "$minutes_since_notification" -gt 10 ]; then
         notifications="${notifications}🔄 High activity ($activity_count ops) - no sync record. Consider /memory-sync --full. "
         echo "$current_time" > "$last_notification_file"
       fi
