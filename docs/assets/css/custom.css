@@ -411,38 +411,50 @@ footer p {
 
 /* --- Avatar/Logo - Smaller --- */
 
-/* Override Beautiful Jekyll avatar styles with higher specificity */
+/* Override Beautiful Jekyll avatar styles - 48px square logo */
 .navbar-custom .avatar-container {
   width: auto !important;
-  margin-top: -20px !important;
+  margin-top: 0 !important;
+  margin-right: 0.75rem !important;
 }
 
 .navbar-custom .avatar-container .avatar-img,
 .navbar-custom.top-nav-regular .avatar-container .avatar-img {
-  width: auto !important;
-  height: 32px !important;
-  max-height: 32px !important;
-  border-radius: 6px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
-  margin-right: 0.5rem !important;
+  width: 48px !important;
+  height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  margin-right: 0 !important;
   display: inline-block !important;
+  object-fit: cover !important;
+}
+
+.navbar-brand {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 0 !important;
 }
 
 .navbar-brand img {
-  border-radius: 6px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
-  height: 32px !important;
-  width: auto !important;
-  margin-right: 0.5rem !important;
-  margin-top: -20px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  height: 48px !important;
+  width: 48px !important;
+  margin-right: 0.75rem !important;
   display: inline-block !important;
+  object-fit: cover !important;
 }
 
 .avatar-container img {
-  border-radius: 6px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
-  max-height: 40px !important;
-  width: auto !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  max-height: 48px !important;
+  max-width: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: cover !important;
 }
 
 /* --- Post Content Spacing --- */
