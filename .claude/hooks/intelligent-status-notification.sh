@@ -79,22 +79,40 @@ map_notification=$(detect_map_staleness)
 # === HIGH-ACTIVITY MEMORY BANK UPDATE SUGGESTION ===
 detect_high_activity() {
   local notification=""
+  local current_time=$(date +%s)
+  local ten_minutes=600  # 10 minutes in seconds
 
   # Very high activity = >80 operations (major milestone)
   if [ "$activity_count" -gt 80 ]; then
-    # Check if we already notified about update today
-    local update_notified_flag="$CLAUDE_TMP/update-notified-$today"
-    if [ ! -f "$update_notified_flag" ]; then
+    # Check if we notified in the last 10 minutes
+    local update_notified_flag="$CLAUDE_TMP/update-notified-timestamp"
+    local last_notified=0
+
+    if [ -f "$update_notified_flag" ]; then
+      last_notified=$(cat "$update_notified_flag" 2>/dev/null || echo 0)
+    fi
+
+    local time_since_notification=$((current_time - last_notified))
+
+    if [ "$time_since_notification" -ge "$ten_minutes" ]; then
       notification="💾 Major development session ($activity_count ops). Consider: /update-memory-bank to preserve context"
-      touch "$update_notified_flag"
+      echo "$current_time" > "$update_notified_flag"
     fi
   # High activity = >50 operations (significant work)
   elif [ "$activity_count" -gt 50 ]; then
-    # Check if we already notified about sync today
-    local sync_notified_flag="$CLAUDE_TMP/sync-notified-$today"
-    if [ ! -f "$sync_notified_flag" ]; then
+    # Check if we notified in the last 10 minutes
+    local sync_notified_flag="$CLAUDE_TMP/sync-notified-timestamp"
+    local last_notified=0
+
+    if [ -f "$sync_notified_flag" ]; then
+      last_notified=$(cat "$sync_notified_flag" 2>/dev/null || echo 0)
+    fi
+
+    local time_since_notification=$((current_time - last_notified))
+
+    if [ "$time_since_notification" -ge "$ten_minutes" ]; then
       notification="🔄 High activity detected ($activity_count ops). Suggest: /update-memory-bank or /memory-sync"
-      touch "$sync_notified_flag"
+      echo "$current_time" > "$sync_notified_flag"
     fi
   fi
 
