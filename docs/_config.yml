@@ -41,8 +41,8 @@ social-network-links:
 # Options: "blue", "minimal", "darkly", etc.
 remote_theme: daattali/beautiful-jekyll@6.0.1
 
-# Custom CSS - use ext-css for Beautiful Jekyll
-ext-css:
+# Custom CSS - site-wide stylesheet
+site-css:
   - "/assets/css/main.css"
 
 # Excerpt word length
