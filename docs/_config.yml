@@ -1,8 +1,8 @@
-# Beautiful Jekyll Configuration for Mini-CoderBrain
+# Beautiful Jekyll Configuration for Mini-CoderBrain v2.0
 
 # Site settings
-title: Mini-CoderBrain
-description: Transform Claude Code into a persistent, context-aware development partner. Universal memory system with automatic project detection, cross-session continuity, and intelligent cleanup. Zero config, works with any tech stack.
+title: Mini-CoderBrain v2.0
+description: Intelligent AI Context Awareness with measurable quality scores. Auto-detects project type, reads documentation, validates context (60-95% scores). Transform Claude into a persistent, context-aware development partner.
 author: Kunwar Shah
 url: "https://kunwar-shah.github.io"
 baseurl: "/mini-coder-brain"
@@ -13,19 +13,19 @@ social-share: true
 # Navigation bar links
 navbar-links:
   Home: "index"
-  Documentation:
-    - Installation Guide: "installation"
+  Get Started:
+    - Installation: "installation"
     - Quick Start: "quickstart"
+    - How to Use: "how-to-use"
+  Documentation:
     - Features: "features"
-    - Commands Reference: "commands"
-  Examples:
-    - React App: "examples/react"
-    - Python Django: "examples/python"
-    - Rust CLI: "examples/rust"
-  About:
+    - Commands: "commands"
     - Changelog: "changelog"
+  Resources:
+    - Examples: "https://github.com/kunwar-shah/mini-coder-brain/tree/main/examples"
+    - Setup Guide: "https://github.com/kunwar-shah/mini-coder-brain/blob/main/SETUP.md"
     - Contributing: "contributing"
-    - GitHub: "https://github.com/kunwar-shah/mini-coder-brain"
+  GitHub: "https://github.com/kunwar-shah/mini-coder-brain"
 
 # Image to show in the navigation bar
 avatar: "/assets/img/brain-logo.png"

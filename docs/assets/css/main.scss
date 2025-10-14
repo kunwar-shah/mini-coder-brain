@@ -1,0 +1,408 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* ========================================
+   Mini-CoderBrain Professional Styling
+   Enterprise-grade polish for GitHub Pages
+   ======================================== */
+
+/* --- Typography Improvements --- */
+
+/* Reduce base font size for better readability */
+body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #2c3e50;
+}
+
+/* Professional heading sizes */
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1a252f;
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.875rem;
+  color: #1a252f;
+  border-bottom: 2px solid #e1e4e8;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #2c3e50;
+}
+
+h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+  color: #34495e;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+/* Paragraph spacing */
+p {
+  margin-bottom: 1.25rem;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* --- Code Styling --- */
+
+/* Inline code */
+code {
+  background-color: #f6f8fa;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 0.875em;
+  border-radius: 3px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: #d73a49;
+}
+
+/* Code blocks */
+pre {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 16px;
+  overflow: auto;
+  font-size: 0.875em;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #24292e;
+  border-radius: 0;
+}
+
+/* --- List Styling --- */
+
+ul, ol {
+  margin-bottom: 1.25rem;
+  padding-left: 2rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+
+/* Nested lists */
+ul ul, ol ol, ul ol, ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Link Styling --- */
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+a:hover {
+  color: #0256c7;
+  text-decoration: none;
+  border-bottom: 1px solid #0256c7;
+}
+
+/* --- Button Styling --- */
+
+.btn {
+  font-size: 0.95rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: none;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #0366d6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0256c7;
+  color: white;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* --- Navigation Bar --- */
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.navbar-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.navbar-nav .nav-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+
+/* --- Container & Layout --- */
+
+.main-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 1140px;
+}
+
+/* --- Professional Content Sections --- */
+
+/* Feature boxes */
+.get-started-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.get-started-wrap .btn {
+  flex: 1 1 auto;
+  min-width: 200px;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid #0366d6;
+  padding-left: 1.5rem;
+  margin-left: 0;
+  margin-right: 0;
+  color: #586069;
+  font-style: italic;
+  background-color: #f6f8fa;
+  padding: 1rem 1.5rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+table th, table td {
+  padding: 0.75rem;
+  border: 1px solid #e1e4e8;
+  text-align: left;
+}
+
+table th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+  color: #24292e;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* --- Horizontal Rules --- */
+
+hr {
+  border: 0;
+  border-top: 2px solid #e1e4e8;
+  margin: 2rem 0;
+}
+
+/* --- Footer --- */
+
+footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e1e4e8;
+  font-size: 0.9rem;
+  color: #586069;
+}
+
+/* --- Responsive Design --- */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .get-started-wrap {
+    flex-direction: column;
+  }
+
+  .get-started-wrap .btn {
+    width: 100%;
+  }
+}
+
+/* --- Custom Classes --- */
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 12px;
+  margin-right: 0.5rem;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+/* Highlight boxes */
+.highlight-box {
+  background-color: #f0f7ff;
+  border-left: 4px solid #0366d6;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.warning-box {
+  background-color: #fffbeb;
+  border-left: 4px solid #ffc107;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.success-box {
+  background-color: #f0fdf4;
+  border-left: 4px solid #28a745;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* --- Avatar/Logo --- */
+
+.navbar-brand img,
+.avatar-container img {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- Post Content Spacing --- */
+
+.post-content,
+.main-explain-area {
+  margin-top: 2rem;
+}
+
+/* --- Improved Readability --- */
+
+.main-content p,
+.post-content p {
+  max-width: 750px;
+}
+
+/* --- Professional Spacing --- */
+
+section {
+  margin-bottom: 3rem;
+}
+
+/* --- Clean Professional Look --- */
+
+.intro-header {
+  margin-bottom: 2rem;
+}
+
+.intro-header .page-heading h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro-header .page-subheading {
+  font-size: 1.15rem;
+  color: #586069;
+  font-weight: 400;
+}
