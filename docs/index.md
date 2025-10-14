@@ -2,6 +2,7 @@
 layout: home
 title: Mini-CoderBrain v2.0
 subtitle: Intelligent Setup & Context Validation for Claude Code
+css: assets/css/custom.css
 ---
 
 # 🧠 Mini-CoderBrain v2.0
