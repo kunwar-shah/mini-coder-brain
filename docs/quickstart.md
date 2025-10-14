@@ -1,16 +1,16 @@
 ---
 layout: page
 title: Quick Start
-subtitle: Get productive with Mini-CoderBrain in 5 minutes
+subtitle: Get productive with Mini-CoderBrain v2.0 in 2 minutes
 ---
 
-# Quick Start Guide
+# Quick Start Guide (v2.0)
 
-Get up and running with Mini-CoderBrain in 5 minutes.
+Get up and running with Mini-CoderBrain v2.0 in 2 minutes with intelligent setup!
 
 ---
 
-## 🚀 Installation (30 seconds)
+## 🚀 Step 1: Install (30 seconds)
 
 ```bash
 git clone https://github.com/kunwar-shah/mini-coder-brain.git
@@ -19,55 +19,92 @@ chmod +x install.sh
 ./install.sh /path/to/your/project
 ```
 
----
-
-## ✅ Verify Installation
-
-Open your project in Claude Code. You should see:
-
-```
-🧠 [MINI-CODERBRAIN: ACTIVE] - YourProjectName
-🎯 Focus: General Development
-📂 Context: .claude/memory/ (loaded)
-⚡ Ready for development
-```
-
-**Success!** Mini-CoderBrain is active.
+**Installation complete!** But there's one more critical step...
 
 ---
 
-## 🎯 First Steps
+## 🔴 Step 2: Initialize Context (MANDATORY)
 
-### 1. Map Your Codebase (Optional but Recommended)
+**⚠️ CRITICAL**: This step is **REQUIRED** for mini-coder-brain to work!
 
+Open your project in Claude Code and run **ONE** of these:
+
+### Option A: With Documentation (Best!)
 ```
-/map-codebase --rebuild
-```
-
-This creates an instant file access system. One-time setup (~30 seconds), then instant loading forever.
-
-### 2. Update Your Context
-
-```
-/context-update focus "Building user authentication feature"
+/init-memory-bank --docs-path ./docs
 ```
 
-Claude now knows what you're working on!
+Use this if you have:
+- SRS.md, ARCHITECTURE.md, API.md
+- Any technical documentation
+- Requirements documents
 
-### 3. Start Coding
+**Result**: 90-95% context quality ⭐
 
-Just talk to Claude naturally:
+### Option B: Auto-Detection
+```
+/init-memory-bank
+```
+
+Use this if you have:
+- Existing code (package.json, README.md)
+- Git history
+- No formal documentation
+
+**Result**: 75-85% context quality ✅
+
+### Option C: Interactive Wizard
+```
+/init-memory-bank
+```
+
+Use this if you have:
+- Brand new empty project
+- Just starting
+
+**Result**: 60-70% context quality (minimum) ⚠️
+
+---
+
+## ✅ Step 3: Verify Setup
+
+Check your context quality:
+
+```
+/validate-context
+```
+
+**Expected output**:
+```
+📊 Context Quality: 85% (Recommended) ✅
+
+✅ Project name: your-project
+✅ Tech stack: 5 technologies
+✅ Core features: 4 features
+✅ Architecture: Defined
+
+✅ Ready for development!
+```
+
+**If score < 60%**: Run `/validate-context --fix` for help.
+
+---
+
+## 🎯 Step 4: Start Developing!
+
+Now you can just talk to Claude naturally:
 
 ```
 "Add JWT authentication to the user login endpoint"
 ```
 
 Claude will:
-- ✅ Know your project structure
+- ✅ Know your project structure automatically
 - ✅ Follow your coding patterns
-- ✅ Use your tech stack
-- ✅ Remember past decisions
-- ✅ Track progress automatically
+- ✅ Use your exact tech stack
+- ✅ Remember all decisions
+- ✅ Track progress across sessions
+- ✅ **Never ask "what framework are you using?" again!**
 
 ---
 

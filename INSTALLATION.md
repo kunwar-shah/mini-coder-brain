@@ -1,6 +1,8 @@
-# Installation Guide - Mini-CoderBrain v1.0
+# Installation Guide - Mini-CoderBrain v2.0
 
-Complete installation guide for Universal AI Context Awareness System.
+Complete installation guide for Universal AI Context Awareness System with Intelligent Setup & Validation.
+
+**⚠️ IMPORTANT**: Version 2.0 requires **MANDATORY** initialization after installation. Follow all steps carefully!
 
 ---
 
@@ -9,12 +11,14 @@ Complete installation guide for Universal AI Context Awareness System.
 ### Required
 - **Claude Code** - Get it from [claude.ai](https://claude.ai/claude-code)
 - **Bash shell** - macOS/Linux/WSL on Windows
+- **Git repository** - Recommended for full features (optional for basic use)
 
 ### Optional (Recommended)
 - **jq** - Enables enhanced features
   - Ubuntu/Debian: `sudo apt-get install jq`
   - macOS: `brew install jq`
   - Windows WSL: `sudo apt-get install jq`
+- **Project Documentation** - SRS, Architecture docs for optimal context quality
 
 ---
 
@@ -47,9 +51,82 @@ chmod +x install.sh
 - ✅ Copies `CLAUDE.md` controller
 - ✅ Creates required directories (tmp, cache, archive)
 - ✅ Makes hooks executable
-- ✅ **Copies templates to actual memory files** (productContext.md, etc.)
+- ✅ **Copies templates to memory bank** (DO NOT edit templates directly!)
 - ✅ Customizes with your project name
 - ✅ Verifies installation
+- ⚠️ **Shows mandatory `/init-memory-bank` requirement**
+
+**💡 After installation, you MUST run `/init-memory-bank`** - See "Mandatory Initialization" section below.
+
+---
+
+## 🔴 MANDATORY: Initialize Context
+
+**⚠️ CRITICAL**: This step is **REQUIRED** for mini-coder-brain to work!
+
+After running the installer, open your project in Claude Code and run:
+
+### Option A: With Documentation (RECOMMENDED)
+```
+/init-memory-bank --docs-path ./docs
+```
+
+**Best for**: Projects with SRS, ARCHITECTURE.md, API.md, or technical documentation
+
+**What it does**:
+- 🔍 Auto-detects your project type
+- 📚 Reads all documentation files
+- 🎯 Extracts features, architecture, tech stack
+- ✅ Populates memory bank with real data
+- 📊 Shows context quality score (aim for 80%+)
+
+### Option B: Auto-Detection (Existing Projects)
+```
+/init-memory-bank
+```
+
+**Best for**: Existing projects with code but no documentation
+
+**What it does**:
+- 🔍 Scans package.json, README.md, code structure
+- 🎯 Auto-detects tech stack and patterns
+- ✅ Generates project-structure.json
+- 📊 Confirms detected info with you
+
+### Option C: Interactive Wizard (New Projects)
+```
+/init-memory-bank
+```
+
+**Best for**: Brand new projects starting from scratch
+
+**What it does**:
+- 💬 Asks about project name, tech stack, features
+- 🎯 Guides you through all required info
+- ✅ Creates complete memory bank from your answers
+- 📊 Validates minimum requirements met
+
+### Verify Initialization
+
+After initialization, check your context quality:
+
+```
+/validate-context
+```
+
+**Expected output**:
+```
+📊 Context Quality: 85% (Recommended) ✅
+
+✅ Project name: your-project
+✅ Tech stack: 5 technologies
+✅ Core features: 4 features
+✅ Architecture: Defined
+
+✅ Ready for development!
+```
+
+**If quality < 60%**: Run `/validate-context --fix` for guided improvements.
 
 ---
 
@@ -155,16 +232,29 @@ your-project/
 ⚡ Ready for development
 ```
 
-### Step 3: Test Commands
+### Step 3: Initialize Context (MANDATORY)
+
+Run the mandatory initialization:
+```
+/init-memory-bank
+```
+
+Or with documentation:
+```
+/init-memory-bank --docs-path ./docs
+```
+
+### Step 4: Test Commands
 
 Try these commands:
 ```
-/memory-sync
-/context-update
-/memory-cleanup --dry-run
+/validate-context              # Check context quality
+/update-memory-bank            # Update memory (renamed from /umb)
+/memory-cleanup --dry-run      # Test cleanup
+/import-docs ./path/to/docs    # Import documentation (if you have it)
 ```
 
-If commands work, installation is successful! ✅
+If commands work and context quality >= 60%, installation is successful! ✅
 
 ---
 
@@ -317,40 +407,50 @@ mv CLAUDE.md.backup CLAUDE.md
 
 ## 🎯 Post-Installation
 
-### Recommended First Steps
+### Recommended First Steps (v2.0 Workflow)
 
-1. **Customize Templates**
-   ```bash
-   nano .claude/memory/productContext.md  # Add project details
-   nano .claude/memory/activeContext.md   # Set current focus
+1. **Initialize Context (MANDATORY)**
    ```
-
-2. **Test Memory Commands**
-   ```
-   /memory-sync              # Test sync
-   /context-update           # Test updates
-   /memory-cleanup --dry-run # Test cleanup
+   /init-memory-bank --docs-path ./docs  # With documentation
+   # OR
+   /init-memory-bank                     # Auto-detect
    ```
 
-3. **Enable Codebase Mapping**
+2. **Validate Quality**
    ```
-   /map-codebase --rebuild   # One-time setup
-   /map-codebase             # Instant loading
+   /validate-context                     # Check score (aim for 80%+)
    ```
 
-4. **Work on Your Project**
+3. **Import Additional Docs (If Needed)**
+   ```
+   /import-docs ./additional-docs        # Add more documentation
+   ```
+
+4. **Enable Codebase Mapping**
+   ```
+   /map-codebase --rebuild              # One-time setup
+   /map-codebase                        # Instant loading
+   ```
+
+5. **Work on Your Project**
    - Claude now has full context
    - Perfect continuity across sessions
    - Auto-cleanup prevents bloat
+   - Context quality monitored automatically
+
+6. **Update Memory After Major Work**
+   ```
+   /update-memory-bank "Completed feature X"  # After milestones
+   ```
 
 ---
 
 ## 📚 Next Steps
 
-- **Read**: [README.md](README.md) for feature overview
-- **Review**: [CLAUDE.md](docs/CLAUDE.md) for controller details
-- **Study**: [SRS](docs/SRS-MINI-CODERBRAIN.md) for complete specification
-- **Explore**: Available commands and features
+- **📖 Setup Guide**: [SETUP.md](SETUP.md) - Comprehensive setup guide for all scenarios
+- **📋 README**: [README.md](README.md) - Feature overview and quick start
+- **🔧 Commands**: Available commands and usage
+- **📘 Examples**: [examples/](examples/) - Reference projects (empty/existing/complex)
 
 ---
 
@@ -358,10 +458,18 @@ mv CLAUDE.md.backup CLAUDE.md
 
 - **Issues**: [GitHub Issues](https://github.com/kunwar-shah/mini-coder-brain/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/kunwar-shah/mini-coder-brain/discussions)
-- **Documentation**: [Full Docs](docs/)
+- **Documentation**: [Full Docs](https://github.com/kunwar-shah/mini-coder-brain)
 
 ---
 
 **Installation Complete!** 🎉
 
-Mini-CoderBrain v2.0 is now active in your project. Claude has perfect context awareness and memory continuity!
+Mini-CoderBrain v2.0 is now active in your project.
+
+**⚠️ REMEMBER**: Run `/init-memory-bank` to complete setup!
+
+After initialization, Claude will have:
+- ✅ Perfect context awareness
+- ✅ Memory continuity across sessions
+- ✅ Measurable quality scores (60-95%)
+- ✅ Intelligent validation and warnings
