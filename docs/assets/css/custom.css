@@ -411,11 +411,10 @@ footer p {
 
 /* --- Avatar/Logo - Smaller --- */
 
-/* Override Beautiful Jekyll avatar styles - 48px square logo */
+/* Hide centered avatar - logo is in navbar-brand title instead */
+.intro-header .avatar-container,
 .navbar-custom .avatar-container {
-  width: auto !important;
-  margin-top: 0 !important;
-  margin-right: 0.75rem !important;
+  display: none !important;
 }
 
 .navbar-custom .avatar-container .avatar-img,

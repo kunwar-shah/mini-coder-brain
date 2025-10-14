@@ -1,7 +1,7 @@
 # Beautiful Jekyll Configuration for Mini-CoderBrain v2.0
 
 # Site settings
-title: Mini-CoderBrain v2.0
+title: '<img src="/mini-coder-brain/assets/img/brain-logo.png" alt="Brain Logo" style="height:48px;width:48px;margin-right:0.75rem;border-radius:8px;vertical-align:middle;"> Mini-CoderBrain v2.0'
 description: Intelligent AI Context Awareness with measurable quality scores. Auto-detects project type, reads documentation, validates context (60-95% scores). Transform Claude into a persistent, context-aware development partner.
 author: Kunwar Shah
 url: "https://kunwar-shah.github.io"
@@ -27,8 +27,8 @@ navbar-links:
     - Contributing: "contributing"
   GitHub: "https://github.com/kunwar-shah/mini-coder-brain"
 
-# Image to show in the navigation bar
-avatar: "/assets/img/brain-logo.png"
+# Image to show in the navigation bar (removed - using inline in title instead)
+# avatar: "/assets/img/brain-logo.png"
 
 # Favicon
 favicon: "/favicon.ico"
