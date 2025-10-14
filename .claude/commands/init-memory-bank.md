@@ -1,12 +1,331 @@
 ---
-description: Initialize memory bank with auto-populated project context
-argument-hint: "[--dry-run]"
-allowed-tools: Read(*), Write(*), Bash(git:*, cat:*, ls:*)
+description: Initialize memory bank with auto-populated project context (MANDATORY on first install)
+argument-hint: "[--dry-run] [--docs-path <path>]"
+allowed-tools: Read(*), Write(*), Edit(*), Glob(*), Grep(*), Bash(git:*, ls:*, find:*, wc:*)
 ---
 
 # Init Memory Bank — Smart Context Initialization
 
-Scans your existing project and automatically populates all memory bank files with real project data. No more manual template filling!
+**⚠️ MANDATORY**: Run this command immediately after installing mini-coder-brain!
+
+You are an intelligent initialization wizard. Your job is to populate `.claude/memory/` files with high-quality project context by:
+1. Detecting project type (empty/existing/complex)
+2. Auto-scanning code, configs, and documentation
+3. Interactive prompting for missing critical info
+4. Generating complete, accurate memory bank files
+
+## Execution Steps (FOLLOW IN ORDER)
+
+### STEP 1: Parse Arguments
+
+Check for arguments:
+- `--dry-run` → Preview mode (show what would be done, don't write files)
+- `--docs-path <path>` → Custom documentation folder to scan
+
+### STEP 2: Detect Project Type
+
+Scan current directory and classify:
+
+**Type A: Empty Project** (< 10 files, no package.json/requirements.txt/etc)
+- Behavior: Interactive wizard, create from scratch
+- Prompt user for: name, description, tech stack, goals
+
+**Type B: Existing Project - Simple** (has code, no docs folder)
+- Behavior: Auto-detect + confirm with user
+- Scan: package.json, README.md, git history, code structure
+
+**Type C: Existing Project - Complex** (has code + documentation)
+- Behavior: Auto-detect + auto-read docs + minimal prompts
+- Scan: everything from Type B + docs folder
+
+**Detection Logic**:
+```bash
+# Check for project config files
+has_config=$(ls package.json requirements.txt Cargo.toml go.mod 2>/dev/null | wc -l)
+
+# Check for documentation folder
+has_docs=$(ls -d docs/ documentation/ .docs/ 2>/dev/null | wc -l)
+
+# Count total files
+file_count=$(find . -maxdepth 2 -type f 2>/dev/null | wc -l)
+
+# Classify
+if [ $file_count -lt 10 ] && [ $has_config -eq 0 ]; then
+  project_type="empty"
+elif [ $has_docs -gt 0 ]; then
+  project_type="complex"
+else
+  project_type="simple"
+fi
+```
+
+### STEP 3: Execute Type-Specific Workflow
+
+#### For Type A (Empty Project):
+
+1. **Interactive Prompts** (ask user):
+```
+🎯 Let's set up your project context!
+
+What is your project name?
+→ [user input]
+
+What type of application are you building? (1-2 sentences)
+→ [user input]
+
+What technology stack do you plan to use? (e.g., "Next.js, TypeScript, Prisma, PostgreSQL")
+→ [user input]
+
+What are the core features? (3-5 features, comma-separated)
+→ [user input]
+
+What is your primary development goal? (e.g., "MVP in 2 months", "Production-ready SaaS")
+→ [user input]
+
+Do you have technical documentation? (path or "none")
+→ [user input or none]
+```
+
+2. **Generate Files**:
+- Create productContext.md with user inputs
+- Create systemPatterns.md with tech stack defaults
+- Create activeContext.md with "Project initialization" as focus
+- Create progress.md with "Planning phase"
+- Create decisionLog.md (empty, ready for use)
+
+3. **Output**:
+```
+✅ Project context initialized!
+📝 Next: Start building! I'll help you implement features with full context awareness.
+```
+
+#### For Type B (Existing - Simple):
+
+1. **Auto-Detect** (scan files):
+   - `package.json` / `Cargo.toml` / `requirements.txt` → project name, dependencies
+   - `README.md` → project description, features
+   - Git history (last 30 days) → recent work, patterns
+   - Code structure → frontend/backend/database paths
+   - Test files → testing framework
+   - Config files → linter, formatter detection
+
+2. **Show Detection Summary**:
+```
+🔍 Project Analysis Complete!
+
+Detected:
+  Name: my-awesome-app
+  Type: Node.js + TypeScript
+  Tech Stack: React 18, Express, Prisma, PostgreSQL
+  Structure: Frontend (src/), Backend (api/), Database (prisma/)
+  Recent Activity: 47 commits in 30 days
+  Testing: Vitest detected
+
+Is this correct? (yes/no/edit)
+→ [wait for user confirmation]
+```
+
+3. **Prompt for Missing Critical Info**:
+```
+I couldn't detect these items. Please provide:
+
+What are your core features? (3-5 features)
+→ [user input]
+
+What is your current development goal?
+→ [user input]
+
+Do you have documentation I should read? (path or "none")
+→ [user input]
+```
+
+4. **Generate Files** with detected + user-provided info
+
+#### For Type C (Existing - Complex):
+
+1. **Auto-Detect** (everything from Type B)
+
+2. **Auto-Read Documentation**:
+
+Scan for common doc files:
+```bash
+# Default docs to read
+docs=(
+  "README.md"
+  "docs/SRS.md"
+  "docs/ARCHITECTURE.md"
+  "docs/API.md"
+  "docs/TECHNICAL_SPEC.md"
+  "ARCHITECTURE.md"
+  "SRS.md"
+)
+
+# If --docs-path provided, scan that folder
+if [ -n "$docs_path" ]; then
+  # Find all .md files in docs path
+  find "$docs_path" -name "*.md" -o -name "*.txt"
+fi
+```
+
+For each found doc:
+- Read file using Read tool
+- Extract relevant sections:
+  - Features → productContext.md
+  - Architecture → systemPatterns.md
+  - Tech stack → productContext.md
+  - Decisions → decisionLog.md
+
+3. **Show Integration Summary**:
+```
+📚 Documentation Analysis Complete!
+
+Read files:
+  ✅ README.md (89 lines) → Project overview
+  ✅ docs/SRS.md (234 lines) → Features & requirements
+  ✅ docs/ARCHITECTURE.md (156 lines) → System design
+  ✅ docs/API.md (178 lines) → API structure
+
+Extracted:
+  → 12 core features
+  → 8 technical decisions
+  → Complete tech stack description
+  → Architecture patterns
+
+Context Quality: 95% (Optimal)
+
+Proceed with initialization? (yes/no)
+→ [wait for user confirmation]
+```
+
+4. **Generate Files** with full integration
+
+### STEP 4: Generate project-structure.json
+
+Auto-detect and create project structure file:
+
+```json
+{
+  "detected": true,
+  "timestamp": "2025-10-14T10:30:00Z",
+  "structure": {
+    "frontend": ["src/", "app/", "components/"],
+    "backend": ["api/", "server/", "backend/"],
+    "database": ["prisma/", "migrations/", "db/"],
+    "tests": ["__tests__/", "tests/", "test/"],
+    "docs": ["docs/", "documentation/"],
+    "config": ["package.json", "tsconfig.json", "Cargo.toml"]
+  },
+  "languages": ["typescript", "javascript"],
+  "frameworks": ["react", "express", "prisma"]
+}
+```
+
+Save to `.claude/memory/project-structure.json`
+
+### STEP 5: Validate Context Quality
+
+Check minimum requirements:
+- ✅ Project name defined (not `[PROJECT_NAME]`)
+- ✅ Tech stack has 3+ items
+- ✅ Core features has 2+ items
+- ✅ Architecture or structure defined
+
+Calculate quality score:
+```
+Base: 40%
++ Project name: +10%
++ Description: +10%
++ Tech stack (3+): +15%
++ Core features (2+): +15%
++ Architecture: +10%
++ Documentation read: +20%
++ Git history: +10%
++ Testing info: +5%
++ Patterns detected: +5%
+```
+
+Show result:
+```
+📊 Context Quality: 85% (Recommended)
+
+✅ Project name: my-awesome-app
+✅ Tech stack: 5 technologies
+✅ Core features: 4 features
+✅ Architecture: Defined
+⚠️  Documentation: Basic (consider adding SRS/technical docs)
+
+Ready for development!
+```
+
+### STEP 6: Update CLAUDE.md Metadata
+
+Update the Project Setup Metadata section in CLAUDE.md:
+
+```yaml
+uses_git: true              # (detected from .git/)
+git_host: github            # (detected from remote)
+repository_url: "..."       # (from git remote)
+uses_docker: true           # (detected Dockerfile)
+testing_framework: "vitest" # (detected)
+# ... etc
+```
+
+### STEP 7: Output Summary
+
+```
+🎉 Memory Bank Initialized Successfully!
+
+📊 Summary:
+   Project Type: Existing - Complex
+   Context Quality: 95% (Optimal)
+   Files Created: 5
+   Documentation Read: 3 files
+   Auto-detected: Tech stack, structure, patterns
+
+📁 Memory Bank Files:
+   ✅ productContext.md (187 lines)
+   ✅ systemPatterns.md (134 lines)
+   ✅ activeContext.md (89 lines)
+   ✅ progress.md (76 lines)
+   ✅ decisionLog.md (45 lines)
+   ✅ project-structure.json (auto-generated)
+
+🚀 Next Steps:
+   1. Review .claude/memory/productContext.md
+   2. Run /map-codebase for instant file access
+   3. Start developing with full context awareness!
+
+⚡ Mini-CoderBrain is now active and ready!
+```
+
+### STEP 8: Dry-Run Mode
+
+If `--dry-run` flag detected:
+- DO NOT write any files
+- Show preview of what would be written
+- Display detection results
+- Show quality score
+- Exit with instructions to run without --dry-run
+
+## Implementation Notes
+
+- Use Glob to find files efficiently
+- Use Grep to search for patterns in code
+- Use Read to read documentation files
+- Use Write to create new memory files
+- Use Edit if files already exist (append, don't overwrite)
+- Always show progress with emoji indicators
+- Be conversational and helpful
+- Validate all inputs
+- Handle errors gracefully
+
+## Error Handling
+
+- No git repo → Skip git analysis, use file scan only
+- No README → Prompt user for description
+- No docs → Rely on auto-detection + user input
+- Empty project → Interactive wizard only
+- Permission errors → Show clear error message
 
 ## Purpose
 
@@ -20,12 +339,40 @@ The `/init-memory-bank` command intelligently analyzes your project and creates 
 ## Usage
 
 ```bash
-# Initialize memory bank (auto-populates all files)
+# MANDATORY: Initialize memory bank (auto-populates all files)
 /init-memory-bank
+
+# With custom documentation path (highly recommended!)
+/init-memory-bank --docs-path ./docs
 
 # Dry run (preview what would be populated, no changes)
 /init-memory-bank --dry-run
+
+# Full setup with docs
+/init-memory-bank --docs-path ./documentation --dry-run
 ```
+
+## Critical: Context Quality
+
+Mini-CoderBrain requires quality context to work at 100% effectiveness:
+
+**🔴 MANDATORY (Must Provide):**
+- Project name & description
+- Technology stack (3+ items)
+- Core features (2+ items)
+
+**🟡 HIGHLY RECOMMENDED (80%+ accuracy):**
+- Path to SRS, Technical Specs, Architecture docs
+- Existing project documentation
+- Link to requirements document
+
+**🟢 OPTIMAL (100% effectiveness):**
+- Complete SRS with all requirements
+- Architecture diagrams and explanations
+- API documentation
+- Decision history
+
+**💡 TIP**: Use `--docs-path` to point to your documentation folder. Claude will read and integrate all relevant docs automatically!
 
 ## What Gets Populated
 

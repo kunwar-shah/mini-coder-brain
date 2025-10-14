@@ -1,5 +1,50 @@
 # CLAUDE.md — Mini-CoderBrain Universal Controller
 
+## 📋 Project Setup Metadata
+
+**IMPORTANT**: Fill this section during `/init-memory-bank` setup. These settings affect how mini-coder-brain understands your project workflow.
+
+```yaml
+# Version Control
+uses_git: true              # Using Git for version control?
+git_host: github            # github / gitlab / bitbucket / none
+repository_url: ""          # Full repo URL (if applicable)
+
+# Containerization
+uses_docker: false          # Using Docker?
+uses_docker_compose: false  # Using docker-compose?
+
+# CI/CD
+ci_cd_tool: none            # github-actions / gitlab-ci / jenkins / circleci / none
+deployment_target: ""       # production / staging / vercel / aws / none
+
+# Testing
+testing_framework: ""       # jest / vitest / pytest / none
+test_coverage_required: 80  # Minimum coverage % (0-100)
+
+# Code Quality
+uses_linter: false          # ESLint / Pylint / RuboCop?
+uses_formatter: false       # Prettier / Black / rustfmt?
+uses_pre_commit: false      # Pre-commit hooks enabled?
+
+# Documentation
+has_technical_docs: false   # Technical documentation available?
+docs_location: ""           # Path to docs folder
+api_docs_tool: ""           # swagger / openapi / jsdoc / none
+
+# Development Workflow
+branching_strategy: ""      # git-flow / trunk-based / feature-branch
+code_review_required: false # PR reviews required?
+pair_programming: false     # Team uses pair programming?
+```
+
+**How to Use**:
+- Run `/init-memory-bank` to auto-populate these settings
+- Update manually in this section if your workflow changes
+- Claude reads this to adapt suggestions and behavior
+
+---
+
 ## 🚀 Session Bootstrapping Rules (ONCE per session only)
 
 **IMPORTANT**: Execute these rules ONLY when you see the session-start hook output (boot status display). DO NOT re-execute on subsequent conversation turns.
@@ -99,11 +144,12 @@ ONLY ask user when information is genuinely missing or ambiguous
    - Adapt to project-specific conventions and standards
 
 6) Available commands:
-   - **Core**: `/map-codebase`, `/umb`, `/memory-sync`, `/context-update`, `/memory-cleanup`
+   - **Essential**: `/init-memory-bank` (MANDATORY first run), `/update-memory-bank`, `/map-codebase`
    - **Memory Management**:
+     - `/init-memory-bank` - Initialize project context (MANDATORY after installation)
+     - `/update-memory-bank` - Update memory after major development work
      - `/memory-sync` - Full memory bank synchronization
      - `/context-update` - Quick real-time context updates
-     - `/umb "note"` - Fast manual sync with note
      - `/memory-cleanup` - Archive old data, prevent "Prompt is too long" errors
    - **Codebase**: `/map-codebase` - Revolutionary instant file access
 
@@ -166,14 +212,19 @@ Archive old session updates and clean temporary files to prevent "Prompt is too 
 - Preserves all history in `.claude/archive/`
 - No data loss - everything archived
 
-### `/umb "note"`
-Quick manual sync - fast memory bank update with note.
+### `/update-memory-bank "note"`
+Update memory bank after major development work.
 
 **Usage**:
-- `/umb "Completed authentication feature"` - Manual sync with note
+- `/update-memory-bank "Completed authentication feature"` - Update with context note
+- `/update-memory-bank` - Standard update (analyzes current session)
 - Automatic sync happens on session end via stop hook
 
-**Use when**: Need quick sync without full analysis
+**Use when**:
+- After completing major features or tasks
+- After making technical decisions
+- When prompted: "Consider: /update-memory-bank"
+- End of development session
 
 ---
 

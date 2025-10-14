@@ -1,232 +1,111 @@
 # Mini-CoderBrain Examples
 
-Example integrations showing Mini-CoderBrain in action across different project types.
+This folder contains example projects showing how mini-coder-brain should be set up for different scenarios.
+
+## Examples Included
+
+### 1. `empty-project/`
+**Scenario**: Starting a brand new project from scratch
+**Context Quality**: 60% (Minimum)
+**Best For**: New projects, prototypes, MVPs
+
+Shows what mini-coder-brain looks like when:
+- No existing code
+- No documentation
+- Interactive `/init-memory-bank` was used
+- User provided minimal required info
+
+**Key Files**:
+- `.claude/memory/productContext.md` - Basic project info from user input
+- `.claude/memory/activeContext.md` - Planning phase focus
+- `.claude/memory/progress.md` - Empty with template structure
 
 ---
 
-## 📂 Available Examples
+### 2. `existing-nodejs/`
+**Scenario**: Existing Node.js + TypeScript project with some code
+**Context Quality**: 80% (Recommended)
+**Best For**: Mature codebases, mid-development projects
 
-### 1. [React App](react-app/)
-- **Project Type**: Frontend (React + TypeScript)
-- **Features**: Component development, state management, routing
-- **Shows**: Auto-detection of frontend structure, instant codebase mapping
+Shows what mini-coder-brain looks like when:
+- Existing codebase (package.json, src/, tests/)
+- README.md exists
+- `/init-memory-bank` auto-detected project info
+- Git history analyzed
+- No formal documentation (SRS/Architecture)
 
-### 2. [Python Django](python-django/)
-- **Project Type**: Backend (Python Django)
-- **Features**: REST API, database models, authentication
-- **Shows**: Backend path detection, database awareness, API development flow
-
-### 3. [Rust CLI](rust-cli/)
-- **Project Type**: CLI Tool (Rust)
-- **Features**: Command-line parsing, file operations
-- **Shows**: Rust project detection, cargo integration, module navigation
+**Key Files**:
+- `.claude/memory/productContext.md` - Auto-populated from package.json + README
+- `.claude/memory/systemPatterns.md` - Detected patterns from code
+- `.claude/memory/progress.md` - Generated from git commits
+- `.claude/memory/project-structure.json` - Auto-detected structure
 
 ---
 
-## 🚀 How to Use Examples
+### 3. `complex-fullstack/`
+**Scenario**: Full-stack project with comprehensive documentation
+**Context Quality**: 95% (Optimal)
+**Best For**: Enterprise projects, well-documented codebases
 
-### Quick Start
+Shows what mini-coder-brain looks like when:
+- Complex codebase (frontend + backend + database)
+- Comprehensive documentation (SRS, ARCHITECTURE, API docs)
+- `/init-memory-bank --docs-path ./docs` used
+- All docs auto-integrated
+- High-quality context
 
+**Key Files**:
+- `.claude/memory/productContext.md` - Rich context from SRS + README
+- `.claude/memory/systemPatterns.md` - Detailed patterns from ARCHITECTURE.md
+- `.claude/memory/decisionLog.md` - ADRs extracted from docs
+- `.claude/memory/progress.md` - Comprehensive sprint tracking
+- `.claude/memory/project-structure.json` - Complete structure mapping
+
+---
+
+## How to Use These Examples
+
+### Study the Examples
 ```bash
-# Clone Mini-CoderBrain
-git clone https://github.com/yourusername/mini-coder-brain.git
-cd mini-coder-brain
-
-# Install to an example project
-./install.sh examples/react-app
-# or
-./install.sh examples/python-django
-# or
-./install.sh examples/rust-cli
-
-# Open in Claude Code
-# Navigate to the example directory and start Claude Code
+# View each example's memory bank files
+cd examples/empty-project/.claude/memory/
+cat productContext.md
 ```
 
-### What Each Example Demonstrates
-
-#### React App Example
+### Copy as Template
 ```bash
-cd examples/react-app
-
-# After Mini-CoderBrain installation:
-# - Auto-detects: src/, components/, pages/, public/
-# - Maps: Component hierarchy, state flow, routing structure
-# - Commands ready: /map-codebase for instant component access
+# Use an example as starting point for your project
+cp -r examples/existing-nodejs/.claude /path/to/your/project/
 ```
 
-#### Python Django Example
-```bash
-cd examples/python-django
-
-# After Mini-CoderBrain installation:
-# - Auto-detects: models/, views/, api/, migrations/, admin/
-# - Maps: Database schema, API endpoints, admin interface
-# - Commands ready: /map-database for schema awareness
-```
-
-#### Rust CLI Example
-```bash
-cd examples/rust-cli
-
-# After Mini-CoderBrain installation:
-# - Auto-detects: src/, Cargo.toml, modules
-# - Maps: Module structure, dependencies, build config
-# - Commands ready: /map-codebase for module navigation
-```
+### Compare Quality Levels
+Run `/validate-context` in each example to see quality scores:
+- Empty: ~60% (Minimum)
+- Existing: ~80% (Recommended)
+- Complex: ~95% (Optimal)
 
 ---
 
-## 📊 Performance Comparison
+## Quick Start Guide
 
-### Without Mini-CoderBrain
-```
-❌ Manual context loading every session
-❌ "Prompt is too long" after 15-20 minutes
-❌ No project structure awareness
-❌ Degraded AI responses over time
-```
+### If Your Project Matches "Empty"
+1. Install mini-coder-brain
+2. Run `/init-memory-bank`
+3. Answer prompts interactively
+4. Start building!
 
-### With Mini-CoderBrain
-```
-✅ Auto-context loading (once per session)
-✅ 100+ turn conversations (no errors)
-✅ Full project structure mapped
-✅ Consistent AI quality throughout
-```
+### If Your Project Matches "Existing"
+1. Install mini-coder-brain
+2. Run `/init-memory-bank` (auto-detects everything)
+3. Confirm detected info
+4. Enhance productContext.md manually if needed
 
----
-
-## 🧪 Testing the Examples
-
-### Step 1: Install
-```bash
-./install.sh examples/react-app
-```
-
-### Step 2: Open in Claude Code
-```bash
-cd examples/react-app
-# Open Claude Code here
-```
-
-### Step 3: Verify Installation
-Look for:
-```
-🧠 [CODERBRAIN: ACTIVE] - react-app
-🎯 Focus: [Current development focus]
-📂 Context: .claude/memory/ (loaded)
-⚡ Ready for development
-```
-
-### Step 4: Test Commands
-```
-/memory-sync
-/context-update focus "Testing Mini-CoderBrain example"
-/map-codebase --rebuild
-/memory-cleanup --dry-run
-```
-
-### Step 5: Test Multi-Turn Conversation
-Ask Claude 10+ questions about the project:
-- "Show me the project structure"
-- "Where are the React components?"
-- "Explain the state management approach"
-- etc.
-
-**Expected**: No "Prompt is too long" errors, consistent quality
+### If Your Project Matches "Complex"
+1. Install mini-coder-brain
+2. Run `/init-memory-bank --docs-path ./docs`
+3. Review auto-integrated context
+4. Start developing with 95%+ context!
 
 ---
 
-## 📝 Example Project Structures
-
-### React App
-```
-react-app/
-├── .claude/              # Mini-CoderBrain system
-├── CLAUDE.md            # Controller
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── hooks/
-│   ├── utils/
-│   └── App.tsx
-├── public/
-└── package.json
-```
-
-### Python Django
-```
-python-django/
-├── .claude/              # Mini-CoderBrain system
-├── CLAUDE.md            # Controller
-├── myproject/
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── myapp/
-│   ├── models.py
-│   ├── views.py
-│   ├── admin.py
-│   └── urls.py
-├── manage.py
-└── requirements.txt
-```
-
-### Rust CLI
-```
-rust-cli/
-├── .claude/              # Mini-CoderBrain system
-├── CLAUDE.md            # Controller
-├── src/
-│   ├── main.rs
-│   ├── cli.rs
-│   ├── commands/
-│   └── utils/
-├── Cargo.toml
-└── Cargo.lock
-```
-
----
-
-## 🎯 Learning Path
-
-**Beginner**: Start with React App
-- Familiar structure for most developers
-- Clear component hierarchy
-- Easy to understand context flow
-
-**Intermediate**: Try Python Django
-- Backend development patterns
-- Database awareness features
-- API development workflow
-
-**Advanced**: Explore Rust CLI
-- Systems programming context
-- Module system navigation
-- Performance-critical codebase
-
----
-
-## 🤝 Contributing Examples
-
-Want to add an example? We'd love to see:
-- Vue.js / Svelte apps
-- FastAPI / Flask backends
-- Go microservices
-- Mobile apps (React Native / Flutter)
-- Monorepo setups
-
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
-
----
-
-## 📚 Additional Resources
-
-- [Installation Guide](../INSTALLATION.md)
-- [System Documentation](../docs/CLAUDE.md)
-- [Performance Metrics](../README.md#performance)
-
----
-
-**Examples maintained by the Mini-CoderBrain community** 🚀
+**Note**: These are reference examples. Real projects will vary. Use `/validate-context` to check your actual context quality.

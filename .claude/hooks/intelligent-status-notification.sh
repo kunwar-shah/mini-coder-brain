@@ -76,16 +76,24 @@ detect_map_staleness() {
 
 map_notification=$(detect_map_staleness)
 
-# === HIGH-ACTIVITY SYNC SUGGESTION ===
+# === HIGH-ACTIVITY MEMORY BANK UPDATE SUGGESTION ===
 detect_high_activity() {
   local notification=""
 
-  # High activity = >50 operations
-  if [ "$activity_count" -gt 50 ]; then
+  # Very high activity = >80 operations (major milestone)
+  if [ "$activity_count" -gt 80 ]; then
+    # Check if we already notified about update today
+    local update_notified_flag="$CLAUDE_TMP/update-notified-$today"
+    if [ ! -f "$update_notified_flag" ]; then
+      notification="💾 Major development session ($activity_count ops). Consider: /update-memory-bank to preserve context"
+      touch "$update_notified_flag"
+    fi
+  # High activity = >50 operations (significant work)
+  elif [ "$activity_count" -gt 50 ]; then
     # Check if we already notified about sync today
     local sync_notified_flag="$CLAUDE_TMP/sync-notified-$today"
     if [ ! -f "$sync_notified_flag" ]; then
-      notification="🔄 High activity detected ($activity_count ops). Suggest: /memory-sync --full"
+      notification="🔄 High activity detected ($activity_count ops). Suggest: /update-memory-bank or /memory-sync"
       touch "$sync_notified_flag"
     fi
   fi
