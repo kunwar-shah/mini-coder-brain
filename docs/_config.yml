@@ -43,7 +43,7 @@ remote_theme: daattali/beautiful-jekyll@6.0.1
 
 # Custom CSS - site-wide stylesheet
 site-css:
-  - "/assets/css/custom.css"
+  - "assets/css/custom.css"
 
 # Excerpt word length
 excerpt_length: 50
