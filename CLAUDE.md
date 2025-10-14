@@ -247,6 +247,7 @@ Update memory bank after major development work.
 - Ensure `activeContext.md` reflects today's focus & blockers
 - Auto-detect and adapt to project's technology stack
 - Use project structure from `.claude/memory/project-structure.json`
+- **NEVER add co-author attribution to git commits** - No "Co-Authored-By: Claude" or similar tags
 
 ### Reference Rules (Read as Needed)
 **IMPORTANT**: These rules exist to guide development WITHOUT bloating context tokens:

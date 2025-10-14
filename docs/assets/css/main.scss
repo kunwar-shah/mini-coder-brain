@@ -5,90 +5,182 @@
 
 /* ========================================
    Mini-CoderBrain Professional Styling
-   Enterprise-grade polish for GitHub Pages
+   Enterprise-grade polish with Inter font
    ======================================== */
 
-/* --- Typography Improvements --- */
+/* --- Google Fonts - Inter --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-/* Reduce base font size for better readability */
+/* --- Base Typography - Much Smaller & Professional --- */
+
 body {
-  font-size: 16px;
-  line-height: 1.7;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
   color: #2c3e50;
+  font-weight: 400;
 }
 
-/* Professional heading sizes */
+/* --- Professional Heading Sizes (Reduced) --- */
+
 h1 {
-  font-size: 2.2rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.875rem;
   color: #1a252f;
-  line-height: 1.3;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-top: 2rem;
-  margin-bottom: 0.875rem;
-  color: #1a252f;
-  border-bottom: 2px solid #e1e4e8;
-  padding-bottom: 0.5rem;
-}
-
-h3 {
   font-size: 1.4rem;
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #2c3e50;
+  color: #1a252f;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 0.4rem;
+  letter-spacing: -0.01em;
 }
 
-h4 {
+h3 {
   font-size: 1.15rem;
   font-weight: 600;
   margin-top: 1.25rem;
   margin-bottom: 0.625rem;
+  color: #2c3e50;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   color: #34495e;
 }
 
 h5 {
-  font-size: 1rem;
+  font-size: 0.925rem;
   font-weight: 600;
   color: #34495e;
 }
 
-/* Paragraph spacing */
-p {
-  margin-bottom: 1.25rem;
-  font-size: 16px;
-  line-height: 1.7;
+h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #586069;
 }
 
-/* --- Code Styling --- */
+/* --- Paragraph & Text Spacing --- */
 
-/* Inline code */
+p {
+  margin-bottom: 1rem;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* --- Navigation Bar - Compact & Professional --- */
+
+.navbar {
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  min-height: auto;
+}
+
+.navbar-brand {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.25rem 0;
+  letter-spacing: -0.01em;
+}
+
+.navbar-nav {
+  font-size: 0.875rem;
+}
+
+.navbar-nav .nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  white-space: nowrap;
+}
+
+.navbar-nav .dropdown-menu {
+  font-size: 0.875rem;
+  padding: 0.25rem 0;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .dropdown-item {
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.navbar-nav .dropdown-item:hover {
+  background-color: #f6f8fa;
+}
+
+/* Fix dropdown text wrapping */
+.navbar-nav .dropdown-menu a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+/* --- Header/Intro Sections - Compact --- */
+
+.intro-header {
+  margin-bottom: 1.5rem;
+  padding: 2rem 0 1.5rem;
+}
+
+.intro-header .page-heading {
+  text-align: center;
+}
+
+.intro-header .page-heading h1 {
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.intro-header .page-subheading {
+  font-size: 1rem;
+  color: #586069;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.intro-header .post-heading h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* --- Code Styling - Compact --- */
+
 code {
   background-color: #f6f8fa;
-  padding: 0.2em 0.4em;
+  padding: 0.15em 0.35em;
   margin: 0;
-  font-size: 0.875em;
+  font-size: 0.85em;
   border-radius: 3px;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   color: #d73a49;
 }
 
-/* Code blocks */
 pre {
   background-color: #f6f8fa;
   border: 1px solid #e1e4e8;
   border-radius: 6px;
-  padding: 16px;
+  padding: 12px;
   overflow: auto;
-  font-size: 0.875em;
+  font-size: 0.8125em;
   line-height: 1.45;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 pre code {
@@ -96,24 +188,25 @@ pre code {
   padding: 0;
   color: #24292e;
   border-radius: 0;
+  font-size: 1em;
 }
 
-/* --- List Styling --- */
+/* --- List Styling - Compact --- */
 
 ul, ol {
-  margin-bottom: 1.25rem;
-  padding-left: 2rem;
+  margin-bottom: 1rem;
+  padding-left: 1.75rem;
 }
 
 li {
-  margin-bottom: 0.5rem;
-  line-height: 1.7;
+  margin-bottom: 0.375rem;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
-/* Nested lists */
 ul ul, ol ol, ul ol, ol ul {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.375rem;
+  margin-bottom: 0.375rem;
 }
 
 /* --- Link Styling --- */
@@ -121,31 +214,30 @@ ul ul, ol ol, ul ol, ol ul {
 a {
   color: #0366d6;
   text-decoration: none;
-  transition: color 0.2s ease, border-bottom 0.2s ease;
+  transition: color 0.15s ease;
 }
 
 a:hover {
   color: #0256c7;
-  text-decoration: none;
-  border-bottom: 1px solid #0256c7;
+  text-decoration: underline;
 }
 
-/* --- Button Styling --- */
+/* --- Button Styling - Compact --- */
 
 .btn {
-  font-size: 0.95rem;
-  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: none;
   transition: all 0.2s ease;
   border: none;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 .btn-success {
@@ -179,25 +271,8 @@ a:hover {
 }
 
 .btn-lg {
-  font-size: 1.1rem;
-  padding: 0.75rem 1.5rem;
-}
-
-/* --- Navigation Bar --- */
-
-.navbar {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-}
-
-.navbar-brand {
-  font-size: 1.3rem;
-  font-weight: 700;
-}
-
-.navbar-nav .nav-link {
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  padding: 0.625rem 1.25rem;
 }
 
 /* --- Container & Layout --- */
@@ -205,50 +280,39 @@ a:hover {
 .main-content {
   max-width: 900px;
   margin: 0 auto;
+  padding: 1.5rem 1rem;
 }
 
 .container {
   max-width: 1140px;
 }
 
-/* --- Professional Content Sections --- */
+/* --- Blockquotes - Compact --- */
 
-/* Feature boxes */
-.get-started-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.get-started-wrap .btn {
-  flex: 1 1 auto;
-  min-width: 200px;
-}
-
-/* Blockquotes */
 blockquote {
-  border-left: 4px solid #0366d6;
-  padding-left: 1.5rem;
+  border-left: 3px solid #0366d6;
+  padding-left: 1.25rem;
   margin-left: 0;
   margin-right: 0;
   color: #586069;
   font-style: italic;
   background-color: #f6f8fa;
-  padding: 1rem 1.5rem;
-  border-radius: 0 6px 6px 0;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9375rem;
 }
 
-/* Tables */
+/* --- Tables - Compact --- */
+
 table {
   border-collapse: collapse;
   width: 100%;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
 }
 
 table th, table td {
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid #e1e4e8;
   text-align: left;
 }
@@ -257,6 +321,7 @@ table th {
   background-color: #f6f8fa;
   font-weight: 600;
   color: #24292e;
+  font-size: 0.875rem;
 }
 
 table tr:nth-child(even) {
@@ -267,59 +332,34 @@ table tr:nth-child(even) {
 
 hr {
   border: 0;
-  border-top: 2px solid #e1e4e8;
-  margin: 2rem 0;
+  border-top: 1px solid #e1e4e8;
+  margin: 1.5rem 0;
 }
 
-/* --- Footer --- */
+/* --- Footer - Compact --- */
 
 footer {
-  margin-top: 3rem;
-  padding-top: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
   border-top: 1px solid #e1e4e8;
-  font-size: 0.9rem;
+  font-size: 0.8125rem;
   color: #586069;
 }
 
-/* --- Responsive Design --- */
-
-@media (max-width: 768px) {
-  body {
-    font-size: 15px;
-  }
-
-  h1 {
-    font-size: 1.9rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-  }
-
-  .get-started-wrap {
-    flex-direction: column;
-  }
-
-  .get-started-wrap .btn {
-    width: 100%;
-  }
+footer p {
+  font-size: 0.8125rem;
 }
 
 /* --- Custom Classes --- */
 
-/* Status badges */
 .badge {
   display: inline-block;
-  padding: 0.35rem 0.65rem;
-  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   font-weight: 600;
   line-height: 1;
-  border-radius: 12px;
-  margin-right: 0.5rem;
+  border-radius: 10px;
+  margin-right: 0.375rem;
 }
 
 .badge-success {
@@ -337,44 +377,123 @@ footer {
   color: #212529;
 }
 
-/* Highlight boxes */
+/* Highlight boxes - Compact */
 .highlight-box {
   background-color: #f0f7ff;
-  border-left: 4px solid #0366d6;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  border-radius: 0 6px 6px 0;
+  border-left: 3px solid #0366d6;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9375rem;
 }
 
 .warning-box {
   background-color: #fffbeb;
-  border-left: 4px solid #ffc107;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  border-radius: 0 6px 6px 0;
+  border-left: 3px solid #ffc107;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9375rem;
 }
 
 .success-box {
   background-color: #f0fdf4;
-  border-left: 4px solid #28a745;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  border-radius: 0 6px 6px 0;
+  border-left: 3px solid #28a745;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9375rem;
 }
 
-/* --- Avatar/Logo --- */
+/* --- Avatar/Logo - Smaller --- */
 
 .navbar-brand img,
 .avatar-container img {
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  max-height: 40px;
 }
 
 /* --- Post Content Spacing --- */
 
 .post-content,
 .main-explain-area {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+  font-size: 14px;
+}
+
+.post-content h1,
+.main-explain-area h1 {
+  margin-top: 1.5rem;
+}
+
+/* --- Professional Spacing --- */
+
+section {
+  margin-bottom: 2.5rem;
+}
+
+/* --- Get Started Buttons --- */
+
+.get-started-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.get-started-wrap .btn {
+  flex: 1 1 auto;
+  min-width: 180px;
+}
+
+/* --- Responsive Design --- */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.075rem;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 0.8125rem;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .intro-header .page-heading h1 {
+    font-size: 1.6rem;
+  }
+
+  .intro-header .page-subheading {
+    font-size: 0.9375rem;
+  }
+
+  .get-started-wrap {
+    flex-direction: column;
+  }
+
+  .get-started-wrap .btn {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 1rem 0.75rem;
+  }
 }
 
 /* --- Improved Readability --- */
@@ -384,25 +503,53 @@ footer {
   max-width: 750px;
 }
 
-/* --- Professional Spacing --- */
+/* --- Professional Polish --- */
 
-section {
-  margin-bottom: 3rem;
+.page-heading,
+.post-heading {
+  margin-bottom: 1.5rem;
 }
 
-/* --- Clean Professional Look --- */
-
-.intro-header {
-  margin-bottom: 2rem;
+/* Override any large Beautiful Jekyll defaults */
+.navbar-custom {
+  padding: 0.5rem 0;
 }
 
-.intro-header .page-heading h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+.navbar-custom .navbar-brand {
+  font-size: 1.1rem;
+  line-height: 1.5;
 }
 
-.intro-header .page-subheading {
-  font-size: 1.15rem;
-  color: #586069;
-  font-weight: 400;
+.navbar-custom .nav-link {
+  font-size: 0.875rem;
+}
+
+/* Compact content sections */
+.posts-list .post-preview {
+  padding: 1.25rem 0;
+}
+
+.post-preview h2 {
+  font-size: 1.4rem;
+  margin-top: 0;
+}
+
+.post-preview .post-meta {
+  font-size: 0.8125rem;
+}
+
+/* --- Clean Professional Appearance --- */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Better visual hierarchy */
+strong, b {
+  font-weight: 600;
+}
+
+em, i {
+  font-style: italic;
 }
