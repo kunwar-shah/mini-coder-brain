@@ -93,6 +93,8 @@ p {
   font-weight: 700;
   padding: 0.25rem 0;
   letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-nav {
@@ -107,16 +109,18 @@ p {
 }
 
 .navbar-nav .dropdown-menu {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   padding: 0.25rem 0;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-width: auto;
 }
 
 .navbar-nav .dropdown-item {
-  padding: 0.4rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.35rem 0.875rem;
+  font-size: 0.75rem;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
 .navbar-nav .dropdown-item:hover {
@@ -128,7 +132,7 @@ p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 250px;
+  max-width: 220px;
 }
 
 /* --- Header/Intro Sections - Compact --- */
@@ -407,7 +411,14 @@ footer p {
 
 /* --- Avatar/Logo - Smaller --- */
 
-.navbar-brand img,
+.navbar-brand img {
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  max-height: 35px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
 .avatar-container img {
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
