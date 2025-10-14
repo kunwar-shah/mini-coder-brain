@@ -30,6 +30,9 @@ navbar-links:
 # Image to show in the navigation bar
 avatar: "/assets/img/brain-logo.png"
 
+# Favicon
+favicon: "/favicon.png"
+
 # Social media links
 social-network-links:
   github: kunwar-shah/mini-coder-brain
