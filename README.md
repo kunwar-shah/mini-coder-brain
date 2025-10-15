@@ -4,7 +4,7 @@
 **Transform Claude from a stateless assistant into a persistent, context-aware development partner in 30 seconds.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/kunwar-shah/mini-coder-brain)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/kunwar-shah/mini-coder-brain)
 [![Status](https://img.shields.io/badge/status-production--ready-success.svg)](https://github.com/kunwar-shah/mini-coder-brain)
 [![Quality](https://img.shields.io/badge/context--validation-automated-brightgreen.svg)](https://github.com/kunwar-shah/mini-coder-brain)
 [![Documentation](https://img.shields.io/badge/docs-github--pages-blue)](https://kunwar-shah.github.io/mini-coder-brain)
@@ -67,36 +67,63 @@
 
 ---
 
-## ⚡ What's New in v2.0? (October 2025)
+## ⚡ What's New in v2.1? (October 2025)
+
+### 🎭 Behavior Profiles - Customizable AI Modes
+
+**NEW**: Choose how Claude should behave based on your task!
+
+- ✨ **4 Core Profiles**:
+  - **default** (200 tokens) - Balanced general development
+  - **focus** (150 tokens) - Deep concentration, minimal output
+  - **research** (300 tokens) - Detailed exploration and learning
+  - **implementation** (200 tokens) - Rapid feature building
+- ✨ **Custom Profiles** - Create your own with markdown templates
+- ✨ **Profile Selection** - Set in `CLAUDE.md` or override per-session
+- ✨ **Zero Token Impact** - Loaded once at session start
+
+### 📚 Behavioral Patterns Library
+
+**NEW**: 4,700 lines of behavioral training, accessible on-demand!
+
+- ✨ **5 Core Patterns**:
+  - **pre-response-protocol** - MANDATORY 5-step checklist
+  - **context-utilization** - Memory bank usage guide
+  - **proactive-behavior** - When to suggest things
+  - **anti-patterns** - What NOT to do (1200 lines)
+  - **tool-selection-rules** - Which tool for each task
+- ✨ **Reference-Based** - Read on-demand, zero token cost
+- ✨ **Modular** - Update patterns without touching core
+
+### 📊 Smart Metrics System
+
+**NEW**: Track behavioral effectiveness automatically!
+
+- ✨ **`/metrics`** - View session, weekly, profile metrics
+- ✨ **Background Collection** - No user action required
+- ✨ **Privacy-First** - No sensitive content stored
+- ✨ **Tool Usage Tracking** - See which tools used most
+- ✨ **Profile Performance** - Compare effectiveness
+- ✨ **Auto-Cleanup** - Archives after 30 days
+
+**v2.1 Impact**: Data-driven behavioral intelligence with customizable AI modes, all while maintaining 79.8% token efficiency!
+
+---
+
+## ⚡ What Was New in v2.0
 
 ### 🎯 Intelligent Setup & Validation
 
-**NEW**: Smart initialization wizard adapts to your project type!
-
-- ✨ **`/init-memory-bank`** (MANDATORY) - Intelligent wizard with 3 modes:
-  - **Empty Project**: Interactive prompts guide you through setup
-  - **Existing Project**: Auto-detects tech stack, structure, patterns
-  - **Complex Project**: Auto-reads documentation (SRS, ARCHITECTURE, API docs)
-- ✨ **`/validate-context`** - Check context quality (shows percentage score)
-- ✨ **Context Quality Hook** - Auto-validates on session start, warns if <60%
-- ✨ **`/import-docs`** - Import documentation after initial setup
-- ✨ **`/update-memory-bank`** - Renamed from `/umb` with clear purpose
+- ✨ **`/init-memory-bank`** (MANDATORY) - 3-mode intelligent wizard
+- ✨ **`/validate-context`** - Context quality scoring (40-100%)
+- ✨ **Context Quality Hook** - Auto-validates on session start
+- ✨ **`/import-docs`** - Import external documentation
 
 ### 📚 Enhanced Documentation & Templates
 
-- ✨ **Enhanced Templates** - Inline examples and guidance in every template
-- ✨ **Examples Folder** - 3 reference projects (empty/existing/complex)
-- ✨ **Comprehensive Setup Guide** - Step-by-step for all scenarios
-- ✨ **Project Metadata** - Docker, CI/CD, testing info in CLAUDE.md
-
-### 🎓 Better User Experience
-
-- ✨ **Mandatory Init Message** - Install script shows required setup clearly
-- ✨ **Quality Scores** - Know exactly how good your context is (40-100%)
-- ✨ **Smart Warnings** - Get notified if context quality drops
-- ✨ **GitHub-Ready Docs** - All docs link to repository, not local files
-
-**Upgrade Impact**: Context quality jumps from "hope it works" to **measurable 60-95% scores** with clear improvement paths!
+- ✨ **Enhanced Templates** - Inline examples and guidance
+- ✨ **Examples Folder** - 3 reference projects
+- ✨ **Project Metadata** - Docker, CI/CD, testing info
 
 ---
 
@@ -104,28 +131,33 @@
 
 Mini-CoderBrain is a **drop-in context awareness system** that supercharges Claude Code with:
 
+- ✅ **Behavior Profiles** (v2.1) - Customizable AI modes (default, focus, research, implementation)
+- ✅ **Patterns Library** (v2.1) - 4,700 lines of behavioral training, zero token cost
+- ✅ **Smart Metrics** (v2.1) - Track effectiveness automatically with /metrics command
 - ✅ **Real-Time Activity Tracking** - See exactly what's happening (📊 Activity: 42 ops)
-- ✅ **Intelligent Notifications** - Proactive suggestions for memory sync, cleanup, and map rebuilds
+- ✅ **Intelligent Notifications** - Proactive suggestions for memory sync, cleanup
 - ✅ **Perfect Cross-Session Continuity** - Remembers everything across sessions
 - ✅ **Mandatory Pre-Response Protocol** - Claude checks context BEFORE responding
-- ✅ **Zero Context Duplication** - 79.9% token reduction, 25% longer conversations
+- ✅ **Zero Context Duplication** - 79.8% token reduction, 25% longer conversations
 - ✅ **Auto Memory Management** - Prevents "Prompt is too long" errors forever
-- ✅ **100% Universal** - Works with React, Python, Rust, Go, Java, PHP, and any project type
+- ✅ **100% Universal** - Works with React, Python, Rust, Go, Java, PHP, any project
 
 ---
 
 ## 📊 Performance Metrics
 
-| Metric | Before | After | Improvement |
+| Metric | Before | After (v2.1) | Improvement |
 |--------|--------|-------|-------------|
 | Context duplication | 500% | 0% | **Eliminated** |
-| Token efficiency | Poor | Excellent | **79.9% reduction** |
+| Token efficiency | Poor | Excellent | **79.8% reduction** |
 | Conversation length | 80 turns | 100+ turns | **25% longer** |
 | "Prompt too long" errors | Frequent | Never | **100% fixed** |
 | Activity visibility | None | Real-time | **100% tracking** |
 | Setup time | 30 mins | 30 seconds | **60x faster** |
+| Behavioral modes | 1 (fixed) | 4+ (customizable) | **Flexible AI** |
+| Effectiveness tracking | None | Automatic | **Data-driven** |
 
-**Real Impact**: Work for hours without context degradation or token errors!
+**Real Impact**: Work for hours with customizable AI behavior, zero token waste, and data-driven insights!
 
 ---
 
@@ -170,7 +202,24 @@ cd /path/to/your/project
 - ✅ Validates context quality (shows percentage score)
 - 🚀 Makes Claude 100% context-aware immediately
 
-### Step 3: Verify Setup
+### Step 3: Choose Your Profile (v2.1 - OPTIONAL)
+
+Customize Claude's behavior for your task:
+
+```yaml
+# Edit CLAUDE.md (line ~41):
+behavior_profile: "default"  # default / focus / research / implementation
+```
+
+**Profile Options**:
+- **default** - Balanced general development (recommended)
+- **focus** - Deep concentration, minimal output
+- **research** - Detailed exploration and learning
+- **implementation** - Rapid feature building
+
+**Skip this step** to use default profile (works like v2.0).
+
+### Step 4: Verify Setup
 
 Check your context quality:
 
@@ -181,10 +230,11 @@ Check your context quality:
 Expected output:
 ```
 📊 Context Quality: 85% (Recommended) ✅
+🎭 Profile: default
 ✅ Ready for development!
 ```
 
-**Done!** Claude now knows your entire project!
+**Done!** Claude now knows your entire project with customizable behavior!
 
 ### Method 2: Manual Install (Fallback)
 
@@ -221,6 +271,7 @@ After installation, start Claude Code. You should see:
 🧠 [MINI-CODERBRAIN: ACTIVE] - YourProjectName
 🎯 Focus: General Development
 📂 Context: .claude/memory/ (loaded)
+🎭 Profile: default
 ⚡ Ready for development | Session: sessionstart-1234567890
 ```
 
