@@ -12,6 +12,9 @@ CLAUDE_TMP="$ROOT/.claude/tmp"
 session_id="sessionstart-$(date +%s)"
 context_flag="$CLAUDE_TMP/context-loaded.flag"
 
+# Store session start time for duration tracking
+echo "$(date +%s)" > "$CLAUDE_TMP/session-start-time"
+
 # === LIGHTWEIGHT CLEANUP (background) ===
 {
   find "$CLAUDE_TMP" -name "micro-context*.md" -type f -mmin +60 -delete 2>/dev/null || true
@@ -99,6 +102,9 @@ if [ -f "$ROOT/CLAUDE.md" ]; then
     fi
   fi
 fi
+
+# Store current profile for status footer
+echo "$behavior_profile" > "$CLAUDE_TMP/current-profile"
 
 # === OUTPUT SESSION STATUS ===
 # Extract project name and current focus

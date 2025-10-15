@@ -112,11 +112,98 @@ if [ "$activity_count" -gt 50 ]; then
   fi
 fi
 
-# Build status line with notifications
-status_line="🧠 Context: Active | Activity: ${activity_count} ops | Map: ${map_status}"
+# === BUILD ENHANCED STATUS FOOTER ===
+
+# Get session duration
+session_start_file="$CLAUDE_TMP/session-start-time"
+session_duration="0m"
+if [ -f "$session_start_file" ]; then
+  start_time=$(cat "$session_start_file" 2>/dev/null || echo "0")
+  current_time=$(date +%s)
+  duration_seconds=$((current_time - start_time))
+  duration_minutes=$((duration_seconds / 60))
+  if [ "$duration_minutes" -lt 60 ]; then
+    session_duration="${duration_minutes}m"
+  else
+    duration_hours=$((duration_minutes / 60))
+    remaining_minutes=$((duration_minutes % 60))
+    session_duration="${duration_hours}h ${remaining_minutes}m"
+  fi
+fi
+
+# Get current profile
+profile="default"
+profile_file="$CLAUDE_TMP/current-profile"
+if [ -f "$profile_file" ]; then
+  profile=$(cat "$profile_file" 2>/dev/null || echo "default")
+fi
+
+# Get current focus from activeContext.md
+current_focus="Development"
+if [ -f "$MB/activeContext.md" ]; then
+  # Extract first line after "## 🎯 Current Focus"
+  focus_line=$(grep -A 1 "^## 🎯 Current Focus" "$MB/activeContext.md" 2>/dev/null | tail -1 | sed 's/^[[:space:]]*//' || echo "")
+  if [ -n "$focus_line" ] && [ "$focus_line" != "## 🎯 Current Focus" ]; then
+    # Truncate to 50 chars max
+    current_focus=$(echo "$focus_line" | cut -c 1-50)
+    if [ ${#focus_line} -gt 50 ]; then
+      current_focus="${current_focus}..."
+    fi
+  fi
+fi
+
+# Get memory health indicator
+memory_health="Healthy"
+if [ -f "$MB/activeContext.md" ]; then
+  session_count=$(grep "^## .* Session Update" "$MB/activeContext.md" 2>/dev/null | wc -l 2>/dev/null || echo "0")
+  session_count=${session_count// /}
+  if [ "${session_count:-0}" -gt 15 ] 2>/dev/null; then
+    memory_health="Needs Cleanup"
+  elif [ "${session_count:-0}" -gt 10 ] 2>/dev/null; then
+    memory_health="Monitor"
+  fi
+fi
+
+# Get last sync time
+last_sync="Never"
+last_sync_file="$CLAUDE_TMP/last-memory-sync"
+if [ -f "$last_sync_file" ]; then
+  last_sync_time=$(cat "$last_sync_file" 2>/dev/null || echo "0")
+  current_time=$(date +%s)
+  minutes_ago=$(( (current_time - last_sync_time) / 60 ))
+  if [ "$minutes_ago" -lt 60 ]; then
+    last_sync="${minutes_ago}m ago"
+  else
+    hours_ago=$((minutes_ago / 60))
+    last_sync="${hours_ago}h ago"
+  fi
+fi
+
+# Get tool usage breakdown (top 3 tools)
+tool_breakdown="None"
+if [ -f "$tools_log" ]; then
+  # Get unique tool names with counts
+  tool_stats=$(awk '{print $NF}' "$tools_log" 2>/dev/null | sort | uniq -c | sort -rn | head -3)
+  if [ -n "$tool_stats" ]; then
+    tool_array=()
+    while IFS= read -r line; do
+      count=$(echo "$line" | awk '{print $1}')
+      tool=$(echo "$line" | awk '{print $2}')
+      tool_array+=("${tool}(${count})")
+    done <<< "$tool_stats"
+    tool_breakdown=$(IFS=' '; echo "${tool_array[*]}")
+  fi
+fi
+
+# Build enhanced status footer
+status_line="🧠 MINI-CODER-BRAIN STATUS\n"
+status_line="${status_line}📊 Activity: ${activity_count} ops | 🗺️ Map: ${map_status} | ⚡ Context: Active\n"
+status_line="${status_line}🎭 Profile: ${profile} | ⏱️ ${session_duration} | 🎯 Focus: ${current_focus}\n"
+status_line="${status_line}💾 Memory: ${memory_health} | 🔄 Last sync: ${last_sync} | 🔧 Tools: ${tool_breakdown}"
+
 if [ -n "$notifications" ]; then
-  # Add notifications on new line
-  full_status="${status_line}\n\n${notifications}"
+  # Add notifications on new line with separator
+  full_status="${status_line}\n\n💡 ${notifications}"
 else
   full_status="${status_line}"
 fi

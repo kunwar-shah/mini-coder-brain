@@ -121,7 +121,7 @@ detect_high_activity() {
 
 activity_notification=$(detect_high_activity)
 
-# === BUILD STATUS FOOTER (Minimal, Every Response) ===
+# === BUILD ENHANCED STATUS FOOTER ===
 build_status_footer() {
   local map_status="None"
   local map_age=""
@@ -133,19 +133,81 @@ build_status_footer() {
     local age_hours=$(( (current_time - file_time) / 3600 ))
 
     if [ "$age_hours" -lt 4 ]; then
-      map_status="Fresh"
-      map_age="${age_hours}h"
+      map_status="Fresh (${age_hours}h)"
     elif [ "$age_hours" -lt 24 ]; then
-      map_status="OK"
-      map_age="${age_hours}h"
+      map_status="OK (${age_hours}h)"
     else
-      map_status="Stale"
-      map_age="${age_hours}h"
+      map_status="Stale (${age_hours}h)"
     fi
   fi
 
-  # Build minimal footer: 🧠 Context: Active | Activity: 12 ops | Map: Fresh (2h)
-  echo "🧠 Context: Active | Activity: ${activity_count} ops | Map: ${map_status}$([ -n "$map_age" ] && echo " (${map_age})" || echo "")"
+  # Get session duration
+  local session_duration="0m"
+  local session_start_file="$CLAUDE_TMP/session-start-time"
+  if [ -f "$session_start_file" ]; then
+    local start_time=$(cat "$session_start_file" 2>/dev/null || echo "0")
+    local current_time=$(date +%s)
+    local duration_seconds=$((current_time - start_time))
+    local duration_minutes=$((duration_seconds / 60))
+    if [ "$duration_minutes" -lt 60 ]; then
+      session_duration="${duration_minutes}m"
+    else
+      local duration_hours=$((duration_minutes / 60))
+      local remaining_minutes=$((duration_minutes % 60))
+      session_duration="${duration_hours}h ${remaining_minutes}m"
+    fi
+  fi
+
+  # Get current profile
+  local profile="default"
+  local profile_file="$CLAUDE_TMP/current-profile"
+  if [ -f "$profile_file" ]; then
+    profile=$(cat "$profile_file" 2>/dev/null || echo "default")
+  fi
+
+  # Get current focus from activeContext.md
+  local current_focus="Development"
+  if [ -f "$MB/activeContext.md" ]; then
+    local focus_line=$(grep -A 1 "^## 🎯 Current Focus" "$MB/activeContext.md" 2>/dev/null | tail -1 | sed 's/^[[:space:]]*//' || echo "")
+    if [ -n "$focus_line" ] && [ "$focus_line" != "## 🎯 Current Focus" ]; then
+      current_focus=$(echo "$focus_line" | cut -c 1-50)
+      if [ ${#focus_line} -gt 50 ]; then
+        current_focus="${current_focus}..."
+      fi
+    fi
+  fi
+
+  # Get memory health
+  local memory_health="Healthy"
+  if [ -f "$MB/activeContext.md" ]; then
+    local session_count=$(grep "^## 📊 Session Update" "$MB/activeContext.md" 2>/dev/null | wc -l)
+    if [ "${session_count:-0}" -gt 15 ]; then
+      memory_health="Needs Cleanup"
+    elif [ "${session_count:-0}" -gt 10 ]; then
+      memory_health="Monitor"
+    fi
+  fi
+
+  # Get last sync time
+  local last_sync="Never"
+  local last_sync_file="$CLAUDE_TMP/last-memory-sync"
+  if [ -f "$last_sync_file" ]; then
+    local last_sync_time=$(cat "$last_sync_file" 2>/dev/null || echo "0")
+    local current_time=$(date +%s)
+    local minutes_ago=$(( (current_time - last_sync_time) / 60 ))
+    if [ "$minutes_ago" -lt 60 ]; then
+      last_sync="${minutes_ago}m ago"
+    else
+      local hours_ago=$((minutes_ago / 60))
+      last_sync="${hours_ago}h ago"
+    fi
+  fi
+
+  # Build enhanced footer
+  echo "🧠 MINI-CODER-BRAIN STATUS"
+  echo "📊 Activity: ${activity_count} ops | 🗺️ Map: ${map_status} | ⚡ Context: Active"
+  echo "🎭 Profile: ${profile} | ⏱️ ${session_duration} | 🎯 Focus: ${current_focus}"
+  echo "💾 Memory: ${memory_health} | 🔄 Last sync: ${last_sync}"
 }
 
 status_footer=$(build_status_footer)
