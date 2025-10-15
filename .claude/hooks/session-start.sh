@@ -80,6 +80,26 @@ else
     context_status="in history"
 fi
 
+# === DETECT BEHAVIOR PROFILE (v2.1+) ===
+behavior_profile="default"  # Default profile
+
+if [ -f "$ROOT/CLAUDE.md" ]; then
+  # Extract profile from CLAUDE.md (line with behavior_profile:)
+  detected_profile=$(grep -E "^behavior_profile:" "$ROOT/CLAUDE.md" 2>/dev/null | \
+                     sed -E 's/^behavior_profile:[[:space:]]*"?([^"#[:space:]]+)"?.*/\1/' | \
+                     head -1 || echo "default")
+
+  if [ -n "$detected_profile" ] && [ "$detected_profile" != "default" ]; then
+    # Check if profile file exists
+    if [ -f "$ROOT/.claude/profiles/$detected_profile.md" ]; then
+      behavior_profile="$detected_profile"
+    else
+      # Profile not found, fall back to default
+      behavior_profile="default"
+    fi
+  fi
+fi
+
 # === OUTPUT SESSION STATUS ===
 # Extract project name and current focus
 project_name=$(grep -m1 "^# Product Context — " "$MB/productContext.md" 2>/dev/null | sed 's/^# Product Context — //' || \
@@ -103,5 +123,6 @@ cat <<EOF
 🧠 [MINI-CODERBRAIN: ACTIVE] - $project_name
 🎯 Focus: $current_focus
 📂 Context: .claude/memory/ ($context_status)
+🎭 Profile: $behavior_profile
 ⚡ Ready for development | Session: $session_id
 EOF

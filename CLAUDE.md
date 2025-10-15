@@ -36,6 +36,9 @@ api_docs_tool: ""           # swagger / openapi / jsdoc / none
 branching_strategy: ""      # git-flow / trunk-based / feature-branch
 code_review_required: false # PR reviews required?
 pair_programming: false     # Team uses pair programming?
+
+# Behavior Profile (v2.1+)
+behavior_profile: "default" # default / focus / research / implementation / custom-name
 ```
 
 **How to Use**:
@@ -57,6 +60,12 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - @.claude/memory/progress.md
    - @.claude/memory/decisionLog.md
    - @.claude/memory/systemPatterns.md
+
+1b) **Load behavior profile ONCE** (v2.1+ feature):
+   - Check `behavior_profile` setting in CLAUDE.md Project Setup Metadata (line ~41)
+   - Load corresponding profile from `.claude/profiles/[profile-name].md`
+   - If not specified or invalid, load `.claude/profiles/default.md`
+   - Profile persists throughout session (no re-loading)
 
 2) Produce a short **Boot Status** (3–5 bullets):
    - Current focus & objectives (from activeContext)
@@ -290,6 +299,8 @@ Update memory bank after major development work.
 ## 🎯 Mini-CoderBrain Core Features
 - ✅ **Universal Context Awareness** - Auto-loads project context once per session
 - ✅ **Context Continuity** - Full context persists naturally in conversation history
+- ✅ **Behavioral Patterns Library** (v2.1) - Reference-based pattern system with zero token impact
+- ✅ **Behavior Profiles** (v2.1) - Customizable AI modes (default, focus, research, implementation)
 - ✅ **Project Structure Detection** - Automatic detection of frontend/backend/database paths
 - ✅ **Persistent Memory** - Context preservation across sessions
 - ✅ **Intelligent Notifications** - Smart suggestions for memory sync and cleanup
