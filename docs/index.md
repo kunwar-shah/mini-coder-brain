@@ -1,47 +1,55 @@
 ---
 layout: home
-title: Mini-CoderBrain v2.0
-subtitle: Intelligent Setup & Context Validation for Claude Code
+title: Mini-CoderBrain v2.1
+subtitle: Data-Driven Behavioral Intelligence for Claude Code
 css: assets/css/custom.css
 ---
 
-# 🧠 Mini-CoderBrain v2.0
+# 🧠 Mini-CoderBrain v2.1
 
-**Intelligent AI Context Awareness with Measurable Quality**
+**Data-Driven Behavioral Intelligence with Customizable AI Modes**
 
-Mini-CoderBrain v2.0 is a revolutionary universal AI context awareness system that gives Claude perfect memory and understanding of your project. Now with intelligent setup that adapts to any project type, automatic context validation, and measurable quality scores (60-95%).
+Mini-CoderBrain v2.1 is a revolutionary universal AI context awareness system that gives Claude perfect memory and understanding of your project. Now with customizable behavior profiles, modular patterns library, and automatic effectiveness tracking.
 
-**NEW in v2.0**: Intelligent wizard auto-detects your project type and populates context automatically. No more guesswork - know exactly how good your context is!
+**NEW in v2.1**: Behavior Profiles (4 AI modes), Patterns Library (4,700 lines), Smart Metrics (automatic tracking). All while maintaining 79.8% token efficiency!
 
 ---
 
-## ✨ Key Features (v2.0)
+## ✨ Key Features (v2.1)
 
-### 🎯 Intelligent Setup & Validation ✨ NEW
+### 🎭 Behavior Profiles ✨ NEW
+- **4 Core Profiles** - default, focus, research, implementation
+- **Customizable AI Modes** - Match behavior to your task
+- **Token Flexible** - focus (150), default (200), research (300)
+- **Custom Profiles** - Create your own with markdown templates
+- **[Profiles Guide](USER-GUIDE-PROFILES.md)** - Complete documentation
+
+### 📚 Patterns Library ✨ NEW
+- **4,700 Lines** - Comprehensive behavioral training
+- **5 Core Patterns** - Pre-response protocol, context usage, proactive behavior, anti-patterns, tool selection
+- **Zero Token Cost** - Read on-demand, never injected
+- **Modular System** - Update patterns independently
+- **[Patterns Guide](USER-GUIDE-PATTERNS.md)** - Complete reference
+
+### 📊 Smart Metrics ✨ NEW
+- **Automatic Tracking** - Tool usage, session data, profile performance
+- **`/metrics` Command** - Session, weekly, profile comparison views
+- **Privacy-First** - No code content, only metadata
+- **Optimization** - Data-driven workflow improvements
+- **[Metrics Guide](USER-GUIDE-METRICS.md)** - Usage guide
+
+### 🎯 Intelligent Setup & Validation (v2.0)
 - **Smart initialization wizard** - Adapts to empty/existing/complex projects
-- **Auto-documentation reading** - Reads SRS, ARCHITECTURE, API docs automatically
 - **Context quality scoring** - Measurable 40-100% quality scores
-- **Validation on session-start** - Automatic quality checks, warns if <60%
-- **`/validate-context`** - Check quality anytime with detailed reports
+- **Validation on session-start** - Automatic quality checks
+- **`/validate-context`** - Check quality anytime
 
-### ⚡ Perfect Context Awareness
+### ⚡ Perfect Context Awareness (Core)
 - **Auto-loads project context** once per session
-- **Zero duplication** - context persists naturally in conversation history
-- **Cross-session memory** - Claude remembers everything between sessions
-- **90% fewer "what framework?" questions** - Claude knows your stack
-
-### 🧹 Intelligent Memory Management
-- **Automatic cleanup** - Prevents "Prompt is too long" errors
-- **Smart notifications** - Suggests memory sync when needed
-- **Token efficient** - 25% longer conversations before hitting limits
-- **Quality monitoring** - Tracks and warns about context degradation
-
-### 🚀 Revolutionary Features
-- **Instant file access** - `/map-codebase` for surgical precision development
-- **Import documentation** - `/import-docs` adds docs after initialization
-- **Update memory** - `/update-memory-bank` for major milestones
+- **Zero duplication** - 79.8% token reduction
+- **Cross-session memory** - Claude remembers everything
+- **Instant file access** - `/map-codebase` for precision development
 - **Persistent memory bank** - productContext, systemPatterns, progress tracking
-- **Activity monitoring** - Intelligent hooks track development operations
 
 ---
 
@@ -92,14 +100,28 @@ Open your project in Claude Code and run:
 
 ## 📚 Documentation
 
+### v2.1 Documentation (NEW)
+<div class="get-started-wrap">
+  <a class="btn btn-success" href="MIGRATION-V2.1.html">🚀 Migration Guide (v2.0→v2.1)</a>
+  <a class="btn btn-primary" href="USER-GUIDE-PROFILES.html">🎭 Behavior Profiles Guide</a>
+  <a class="btn btn-info" href="USER-GUIDE-PATTERNS.html">📚 Patterns Library Guide</a>
+  <a class="btn btn-warning" href="USER-GUIDE-METRICS.html">📊 Metrics System Guide</a>
+</div>
+
+### Quick Reference
+<div class="get-started-wrap">
+  <a class="btn btn-success" href="QUICK-REFERENCE-V2.1.html">📄 Quick Reference (Cheat Sheet)</a>
+  <a class="btn btn-primary" href="V2.1-FAQ.html">❓ FAQ (21 Questions)</a>
+  <a class="btn btn-info" href="V2.1-DOCUMENTATION-INDEX.html">📖 Complete Documentation Index</a>
+</div>
+
+### Core Documentation (v2.0)
 <div class="get-started-wrap">
   <a class="btn btn-success" href="{{ '/installation' | relative_url }}">📖 Installation Guide</a>
-  <a class="btn btn-primary" href="{{ '/quickstart' | relative_url }}">⚡ Quick Start (v2.0)</a>
+  <a class="btn btn-primary" href="{{ '/quickstart' | relative_url }}">⚡ Quick Start</a>
   <a class="btn btn-info" href="{{ '/features' | relative_url }}">✨ Features</a>
   <a class="btn btn-warning" href="{{ '/commands' | relative_url }}">🛠️ Commands</a>
 </div>
-
-**NEW**: [How to Use Guide](https://github.com/kunwar-shah/mini-coder-brain/blob/main/SETUP.md) - Comprehensive setup guide for all scenarios
 
 ---
 
