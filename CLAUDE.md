@@ -86,9 +86,16 @@ On SESSION START (when session-start hook displays boot status), do the followin
 
 **Context Persistence**: Once loaded at session start, context remains available throughout the entire conversation via conversation history. DO NOT re-load memory files on subsequent turns.
 
-5) **CRITICAL: Context Utilization Rules** (Behavior Training)
+5) **CRITICAL: Behavioral Patterns** (Read reference patterns as needed)
 
-You have ALREADY loaded these files at session start and they remain in conversation history:
+**Pattern Library** (Read on-demand, NOT injected - zero token impact):
+- **@.claude/patterns/pre-response-protocol.md** → MANDATORY 5-step checklist before every response
+- **@.claude/patterns/context-utilization.md** → How to use memory bank files without duplication
+- **@.claude/patterns/proactive-behavior.md** → When/how to make helpful suggestions
+- **@.claude/patterns/anti-patterns.md** → Banned behaviors and common mistakes to avoid
+- **@.claude/patterns/tool-selection-rules.md** → Which tool to use for each task
+
+**Memory Bank Files** (loaded once at session start, persist in conversation history):
 - **productContext.md** → Project name, tech stack, architecture, features, goals
 - **systemPatterns.md** → Coding patterns, conventions, standards, best practices
 - **activeContext.md** → Current focus, recent achievements, blockers, what we just did
@@ -97,45 +104,21 @@ You have ALREADY loaded these files at session start and they remain in conversa
 - **project-structure.json** → Detected file paths and project structure
 - **(Optional) codebase-map.json** → Semantic file mapping (if /map-codebase was run)
 
-**🧠 MANDATORY PRE-RESPONSE PROTOCOL** (STOP and CHECK):
+**MANDATORY PRE-RESPONSE PROTOCOL**:
+Before responding to ANY request, complete the 5-step checklist from @.claude/patterns/pre-response-protocol.md:
+1. ✅ CHECK productContext.md
+2. ✅ CHECK systemPatterns.md
+3. ✅ CHECK activeContext.md
+4. ✅ CHECK project-structure.json
+5. ✅ CHECK codebase-map.json (if exists)
 
-Before responding to ANY user request, you MUST complete this 5-step checklist:
+**ZERO ASSUMPTION RULE**: If context has the answer, USE IT immediately. Only ask user when genuinely missing information.
 
-1. ✅ **CHECK productContext.md** → Project name, tech stack, architecture, features
-2. ✅ **CHECK systemPatterns.md** → Coding patterns, conventions, testing standards
-3. ✅ **CHECK activeContext.md** → Current focus, recent work, what we just did
-4. ✅ **CHECK project-structure.json** → File locations (frontend, backend, database paths)
-5. ✅ **CHECK codebase-map.json** → Specific file locations (if map exists)
-
-**ONLY AFTER** completing steps 1-5, respond to the user. NEVER ask for information that's in context.
-
-**BANNED QUESTIONS** (context already has answers):
-❌ "What framework are you using?" → CHECK productContext.md
-❌ "Where is the User model located?" → CHECK codebase-map.json or project-structure.json
-❌ "What's your preferred coding style?" → CHECK systemPatterns.md
-❌ "What did we do last session?" → CHECK activeContext.md
-❌ "What validation library do you use?" → CHECK systemPatterns.md or search recent code
-❌ "Should I create tests?" → CHECK systemPatterns.md for testing patterns
-❌ "What commit message format?" → CHECK systemPatterns.md for commit patterns
-
-**ZERO ASSUMPTION RULE**:
-If loaded context files have the answer → USE IT IMMEDIATELY
-If you're unsure → SEARCH conversation history from Turn 1
-ONLY ask user when information is genuinely missing or ambiguous
-
-**Examples of Correct Behavior**:
-✅ User: "Add authentication"
-   You: *Check productContext.md → sees "Next.js 14 + Prisma"*
-   You: *Check systemPatterns.md → sees "Uses Zod validation"*
-   You: *Proceed with Next.js auth implementation using Zod, no questions asked*
-
-✅ User: "Update the User model"
-   You: *Check codebase-map.json → finds "src/lib/db/schema/user.ts"*
-   You: *Open that file and make changes, no questions asked*
-
-✅ User: "Write tests for this"
-   You: *Check systemPatterns.md → sees "Vitest, colocated __tests__/"*
-   You: *Create tests following that pattern, no questions asked*
+**For detailed behavioral guidelines, read patterns on-demand**:
+- Context usage → @.claude/patterns/context-utilization.md
+- What NOT to do → @.claude/patterns/anti-patterns.md
+- Tool selection → @.claude/patterns/tool-selection-rules.md
+- Proactive suggestions → @.claude/patterns/proactive-behavior.md
 
 5) Project context awareness:
    - Auto-detect technology stack (package.json, requirements.txt, Cargo.toml, etc.)
@@ -249,6 +232,36 @@ Update memory bank after major development work.
 - Use project structure from `.claude/memory/project-structure.json`
 - **NEVER add co-author attribution to git commits** - No "Co-Authored-By: Claude" or similar tags
 
+### Behavioral Patterns (Read as Needed)
+**IMPORTANT**: Patterns are read on-demand to guide behavior WITHOUT bloating context tokens:
+
+- **@.claude/patterns/pre-response-protocol.md** - MANDATORY 5-step checklist
+  - Check all context files before responding
+  - Zero assumption rule
+  - Banned questions list
+
+- **@.claude/patterns/context-utilization.md** - Memory bank usage
+  - How to use each memory file
+  - Load-once principle (79.9% token reduction)
+  - Context persistence throughout session
+
+- **@.claude/patterns/proactive-behavior.md** - When to suggest
+  - Good times to suggest (after tasks, detecting patterns)
+  - Bad times to suggest (after every action)
+  - Suggestion format and etiquette
+
+- **@.claude/patterns/anti-patterns.md** - What NOT to do
+  - Context duplication (banned)
+  - Asking questions context answers (banned)
+  - Over-engineering simple tasks
+  - Security anti-patterns
+
+- **@.claude/patterns/tool-selection-rules.md** - Which tool to use
+  - Read vs Glob vs Grep
+  - Edit vs Write
+  - Bash vs specialized tools
+  - Parallel vs sequential operations
+
 ### Reference Rules (Read as Needed)
 **IMPORTANT**: These rules exist to guide development WITHOUT bloating context tokens:
 
@@ -270,7 +283,7 @@ Update memory bank after major development work.
   - Anti-patterns to avoid
   - Context lifecycle
 
-**How to use rules**: Read them when relevant, don't inject in every prompt. Rules are reference material, not active context!
+**How to use patterns and rules**: Read them when relevant, don't inject in every prompt. They are reference material, not active context!
 
 ---
 
