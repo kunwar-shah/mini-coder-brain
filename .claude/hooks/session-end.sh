@@ -89,4 +89,22 @@ fi
   echo "- **Status**: Ready for next session"
 } >> "$MB/activeContext.md" || true
 
+# === METRICS COLLECTION (v2.1+) ===
+# Finalize session metrics
+if [ -f "$ROOT/.claude/hooks/metrics-collector.sh" ]; then
+  # Calculate session duration (from context-loaded.flag timestamp)
+  context_flag="$ROOT/.claude/tmp/context-loaded.flag"
+  if [ -f "$context_flag" ]; then
+    session_start=$(tail -1 "$context_flag" 2>/dev/null | date -f - +%s 2>/dev/null || date +%s)
+    session_end=$(date +%s)
+    duration_minutes=$(( (session_end - session_start) / 60 ))
+
+    # Record session end metrics
+    "$ROOT/.claude/hooks/metrics-collector.sh" finalize "$duration_minutes" 2>/dev/null || true
+  fi
+
+  # Cleanup old metrics
+  "$ROOT/.claude/hooks/metrics-collector.sh" cleanup 2>/dev/null || true
+fi
+
 exit 0
