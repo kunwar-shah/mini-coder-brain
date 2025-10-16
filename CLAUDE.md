@@ -76,24 +76,44 @@ On SESSION START (when session-start hook displays boot status), do the followin
 3) Prefix EVERY response with: `[MINI-CODER-BRAIN: ACTIVE]`.
 
 4) **Enhanced Status Footer** (MANDATORY - NEVER SKIP - v2.1):
-   - The UserPromptSubmit hook injects an enhanced status footer in `additionalContext`
+   - The UserPromptSubmit hook injects enhanced status footer data
    - You MUST display this status footer at the END of EVERY response
    - **Always display it** - even for short responses, errors, or questions
-   - Enhanced footer format (4 lines):
-     ```
+   - **CRITICAL**: Display the EXACT footer with notifications (if any)
 
-     🧠 MINI-CODER-BRAIN STATUS
-     📊 Activity: X ops | 🗺️ Map: Status | ⚡ Context: Active
-     🎭 Profile: default | ⏱️ 15m | 🎯 Focus: Current work description
-     💾 Memory: Healthy | 🔄 Last sync: 10m ago | 🔧 Tools: Read(5) Edit(3)
+   **How to construct the footer**:
+   - Read activity count from tool logs (`.claude/memory/conversations/tool-tracking/`)
+   - Read session duration from `.claude/tmp/session-start-time`
+   - Read last sync from `.claude/tmp/last-memory-sync`
+   - Read current profile from `.claude/tmp/current-profile`
+   - Check for notifications (memory bloat, high activity, map staleness)
 
-     💡 [Notifications if any - only show if notifications exist]
+   **Footer format** (3-4 lines):
+   ```
 
-     ```
-   - Clean, simple, no separator lines
-   - Shows: Activity count, Map status, Profile, Session duration, Focus, Memory health, Last sync, Tool usage
-   - Notifications section only shown when there are actual notifications
-   - See: @.claude/docs/V2.1-STATUS-FOOTER.md for full details
+   🧠 MINI-CODER-BRAIN STATUS
+   📊 Activity: X ops | 🗺️ Map: Status | ⚡ Context: Active
+   🎭 Profile: name | ⏱️ duration | 🎯 Focus: current work
+   💾 Memory: health | 🔄 Last sync: time | 🔧 Tools: top 3
+
+   💡 [Notifications ONLY if they exist - THIS IS CRITICAL FOR USER ENGAGEMENT]
+
+   ```
+
+   **Notification Types** (show when triggered):
+   - 🧹 Memory cleanup: >10 session updates in activeContext
+   - 🔄 High activity: >50 ops + >10min since last sync
+   - 🗺️ Map stale: Codebase map >24h old
+
+   **Example with notifications**:
+   ```
+   🧠 MINI-CODER-BRAIN STATUS
+   📊 Activity: 149 ops | 🗺️ Map: None | ⚡ Context: Active
+   🎭 Profile: default | ⏱️ 2h 15m | 🎯 Focus: Test suite development
+   💾 Memory: Monitor | 🔄 Last sync: 1d ago | 🔧 Tools: Write(20) Bash(15) Edit(10)
+
+   💡 🧹 Memory cleanup recommended (13 session updates). Run /memory-cleanup. 🔄 High activity (149 ops) + 1698m since last sync. Run /memory-sync --full.
+   ```
 
 > If `.claude/memory/` is missing: ask to create & initialize with default templates, then stop until done.
 

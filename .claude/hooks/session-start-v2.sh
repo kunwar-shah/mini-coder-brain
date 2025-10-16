@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Session-Aware Context Loading (v2.0 Fix)
 # Loads context ONLY when starting a NEW conversation/session

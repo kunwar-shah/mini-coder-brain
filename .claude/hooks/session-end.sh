@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Session End Hook - Captures conversation when user explicitly ends session
 # Runs when user closes conversation or exits Claude Code

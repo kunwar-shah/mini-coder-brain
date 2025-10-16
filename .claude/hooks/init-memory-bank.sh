@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # init-memory-bank.sh - Smart Memory Bank Initialization
 # Auto-populates memory bank files from existing project

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # StatusLine Script - Intelligent Status Display with Notifications
 # Optimized for speed (must run < 300ms)

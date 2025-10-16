@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Conversation Capture - User Prompt Hook (OPTIMIZED - Zero Duplication)
 # Part of CoderBrain conversation intelligence system

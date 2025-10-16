@@ -10,7 +10,7 @@
 #   - Clears notification flags (user acted on notification)
 #   - Ensures status footer shows accurate "Last sync" time
 
-set -euo pipefail
+set -eu
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
 CLAUDE_TMP="$ROOT/.claude/tmp"

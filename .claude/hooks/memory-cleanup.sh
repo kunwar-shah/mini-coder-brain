@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Memory Bank Cleanup Script - Prevent "Prompt is too long" errors
 # Archives old session updates, deduplicates ADRs, cleans tmp files

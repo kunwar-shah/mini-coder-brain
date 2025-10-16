@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Metrics Collector for Mini-CoderBrain v2.1
 # Collects behavioral and performance metrics during session

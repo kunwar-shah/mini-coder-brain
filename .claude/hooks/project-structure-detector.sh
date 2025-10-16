@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Universal Project Structure Detector
 # Detects common project patterns and populates {detected_*_path} variables

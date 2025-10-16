@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # PostToolUse Hook - Track tool usage for activity monitoring
 # Logs every tool use to build accurate activity metrics

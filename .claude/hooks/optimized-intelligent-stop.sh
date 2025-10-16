@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Optimized Intelligent Stop Hook - Ultimate Session Analysis
 # Combines: intelligent-stop-enhanced.sh + enhanced-stop-umb-sync.sh + session milestone detection

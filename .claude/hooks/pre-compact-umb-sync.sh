@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Pre-Compact Hook - Preserve context before conversation compaction
 # Runs automatically when Claude Code is about to compact the conversation

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # memory-sync.sh - Smart Memory Bank Synchronization with Pattern Learning
 # Syncs context + learns patterns over time (with token limits)

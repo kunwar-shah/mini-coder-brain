@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
 MB="$ROOT/.claude/memory"

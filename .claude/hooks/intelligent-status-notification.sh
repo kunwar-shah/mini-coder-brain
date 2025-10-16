@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 # Intelligent Status Notification Hook v2.1 (Enhanced)
 # - Minimal status footer every response (user knows system is alive)
