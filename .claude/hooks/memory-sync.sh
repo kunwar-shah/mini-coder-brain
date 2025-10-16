@@ -170,8 +170,8 @@ echo ""
 echo "🎯 Memory Bank synchronized successfully!"
 echo "📁 Context preserved in .claude/memory/"
 
-# Record sync timestamp for notification system
-echo "$(date +%s)" > "$CLAUDE_TMP/last-memory-sync"
+# Update sync timestamp (Fix #3: Status footer integration)
+bash "$ROOT/.claude/hooks/lib/update-sync-timestamp.sh" 2>/dev/null || true
 
 echo ""
 echo "Next session will load with complete context awareness."

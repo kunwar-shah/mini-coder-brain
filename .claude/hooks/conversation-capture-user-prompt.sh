@@ -117,11 +117,24 @@ fi
 # Get session duration
 session_start_file="$CLAUDE_TMP/session-start-time"
 session_duration="0m"
+start_time=0
+
 if [ -f "$session_start_file" ]; then
+  # Use explicit session start time (v2.1+)
   start_time=$(cat "$session_start_file" 2>/dev/null || echo "0")
+else
+  # Fallback: Use context-loaded.flag timestamp (for old sessions)
+  context_flag="$CLAUDE_TMP/context-loaded.flag"
+  if [ -f "$context_flag" ]; then
+    start_time=$(stat -c %Y "$context_flag" 2>/dev/null || stat -f %m "$context_flag" 2>/dev/null || echo "0")
+  fi
+fi
+
+if [ "$start_time" -gt 0 ]; then
   current_time=$(date +%s)
   duration_seconds=$((current_time - start_time))
   duration_minutes=$((duration_seconds / 60))
+
   if [ "$duration_minutes" -lt 60 ]; then
     session_duration="${duration_minutes}m"
   else
@@ -171,11 +184,17 @@ if [ -f "$last_sync_file" ]; then
   last_sync_time=$(cat "$last_sync_file" 2>/dev/null || echo "0")
   current_time=$(date +%s)
   minutes_ago=$(( (current_time - last_sync_time) / 60 ))
-  if [ "$minutes_ago" -lt 60 ]; then
+
+  if [ "$minutes_ago" -eq 0 ]; then
+    last_sync="Just now"
+  elif [ "$minutes_ago" -lt 60 ]; then
     last_sync="${minutes_ago}m ago"
-  else
+  elif [ "$minutes_ago" -lt 1440 ]; then
     hours_ago=$((minutes_ago / 60))
     last_sync="${hours_ago}h ago"
+  else
+    days_ago=$((minutes_ago / 1440))
+    last_sync="${days_ago}d ago"
   fi
 fi
 

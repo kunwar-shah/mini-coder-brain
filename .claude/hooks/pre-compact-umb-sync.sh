@@ -86,4 +86,7 @@ find "$MB/conversations/compact-summaries/" -name "precompact-*.md" -type f 2>/d
   echo "  - Backup: .claude/tmp/precompact/$ts.md"
 } >> "$CLAUDE_TMP/hook-activity.log" 2>/dev/null || true
 
+# Update sync timestamp (Fix #3: Status footer integration)
+bash "$ROOT/.claude/hooks/lib/update-sync-timestamp.sh" 2>/dev/null || true
+
 exit 0
