@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Mini-CoderBrain Installer v2.0
+# Mini-CoderBrain Installer v2.1
 # Smart installer for Universal AI Context Awareness System
 
-VERSION="2.0.0"
+VERSION="2.1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Colors for output
@@ -247,6 +247,12 @@ install_mini_coderbrain() {
     echo -e "${GREEN}  ✅ Mini-CoderBrain v${VERSION} installed successfully!${NC}"
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
+    echo -e "${BLUE}✨ What's New in v2.1:${NC}"
+    echo "  🎭 Behavior Profiles - 4 AI modes (default, focus, research, implementation)"
+    echo "  📚 Pattern Library - 4,700 lines behavioral training (zero token cost)"
+    echo "  📊 Smart Metrics - Privacy-first tracking with /metrics command"
+    echo "  🧠 Enhanced Status Footer - 9 real-time metrics (transparency)"
+    echo ""
     echo -e "${YELLOW}⚠️  IMPORTANT - REQUIRED SETUP:${NC}"
     echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
@@ -273,12 +279,21 @@ install_mini_coderbrain() {
     echo "  • /update-memory-bank     - Update memory after major changes"
     echo "  • /memory-cleanup         - Clean bloated memory"
     echo "  • /map-codebase           - Enable instant file access"
+    echo "  • /metrics                - View session analytics (v2.1)"
+    echo ""
+    echo -e "${BLUE}🎭 Behavior Profiles (v2.1):${NC}"
+    echo "  Add to CLAUDE.md to switch AI modes:"
+    echo "  • behavior_profile: \"default\"        - Balanced development"
+    echo "  • behavior_profile: \"focus\"          - Deep concentration mode"
+    echo "  • behavior_profile: \"research\"       - Detailed exploration"
+    echo "  • behavior_profile: \"implementation\" - Rapid feature building"
     echo ""
     echo -e "${BLUE}📊 Performance:${NC}"
-    echo "  • ✅ Zero context duplication (79.9% token reduction)"
+    echo "  • ✅ Zero context duplication (79.8% token reduction)"
     echo "  • ✅ 25% longer conversations (100+ turns)"
     echo "  • ✅ Perfect cross-session continuity"
     echo "  • ✅ Automatic memory cleanup"
+    echo "  • ✅ Enhanced status footer (9 real-time metrics)"
     echo ""
     echo -e "${BLUE}📚 Documentation:${NC}"
     echo "  • README: https://github.com/kunwar-shah/mini-coder-brain#readme"
