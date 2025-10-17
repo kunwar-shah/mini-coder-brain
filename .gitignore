@@ -54,3 +54,4 @@ Thumbs.db
 # Test installations
 test-project/
 test-installation/
+backup-*/
