@@ -55,3 +55,4 @@ Thumbs.db
 test-project/
 test-installation/
 backup-*/
+.development/
