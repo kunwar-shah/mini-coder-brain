@@ -54,11 +54,18 @@ behavior_profile: "default" # default / focus / research / implementation / cust
 
 On SESSION START (when session-start hook displays boot status), do the following automatically:
 
-1) **Context files are ALREADY LOADED by session-start hook** (they persist in conversation history):
-   - ⚠️ **FORBIDDEN**: DO NOT use Read tool on these files unless user explicitly asks
-   - ⚠️ **FORBIDDEN**: DO NOT re-read productContext.md, activeContext.md, progress.md, decisionLog.md, systemPatterns.md
-   - ✅ **CORRECT**: Use the content from Turn 1 (session-start hook output) available in conversation history
-   - These files are in conversation history from Turn 1 - reference that, don't re-read
+1) **Core context files ALREADY LOADED by session-start hook** (they persist in conversation history):
+   - ✅ **Loaded at session start**: productContext.md, activeContext.md (core only), systemPatterns.md
+   - 📋 **On-demand only**: progress.md, decisionLog.md (read when needed, not at session start)
+
+   **⚠️ FORBIDDEN - DO NOT re-read these files**:
+   - ❌ DO NOT Read productContext.md (already in Turn 1 conversation history)
+   - ❌ DO NOT Read activeContext.md (already in Turn 1 conversation history)
+   - ❌ DO NOT Read systemPatterns.md (already in Turn 1 conversation history)
+
+   **✅ CORRECT behavior**:
+   - Use content from Turn 1 session-start hook output (in conversation history)
+   - Read progress.md or decisionLog.md ONLY when you need specific information from them
 
 1b) **Load behavior profile ONCE** (v2.1+ feature):
    - Check `behavior_profile` setting in CLAUDE.md Project Setup Metadata (line ~41)
