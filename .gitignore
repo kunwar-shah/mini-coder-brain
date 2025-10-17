@@ -13,7 +13,6 @@
 .claude/memory/project-structure.json
 
 # Development files (internal use only)
-.development/
 chats/
 development/
 *.backup
