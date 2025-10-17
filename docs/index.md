@@ -1,21 +1,21 @@
 ---
 layout: home
-title: Mini-CoderBrain v2.1
+title: Mini-CoderBrain
 subtitle: Data-Driven Behavioral Intelligence for Claude Code
 css: assets/css/custom.css
 ---
 
-# 🧠 Mini-CoderBrain v2.1
+# 🧠 Mini-CoderBrain
 
 **Data-Driven Behavioral Intelligence with Customizable AI Modes**
 
-Mini-CoderBrain v2.1 is a revolutionary universal AI context awareness system that gives Claude perfect memory and understanding of your project. Now with customizable behavior profiles, modular patterns library, and automatic effectiveness tracking.
+Mini-CoderBrain is a revolutionary universal AI context awareness system that gives Claude perfect memory and understanding of your project. Features customizable behavior profiles, modular patterns library, and automatic effectiveness tracking.
 
-**NEW in v2.1**: Behavior Profiles (4 AI modes), Patterns Library (4,700 lines), Smart Metrics (automatic tracking). All while maintaining 79.8% token efficiency!
+**Latest Features**: Behavior Profiles (4 AI modes), Patterns Library (4,700 lines), Smart Metrics (automatic tracking), Comprehensive Test Suite. All while maintaining 79.8% token efficiency!
 
 ---
 
-## ✨ Key Features (v2.1)
+## ✨ Key Features
 
 ### 🎭 Behavior Profiles ✨ NEW
 - **4 Core Profiles** - default, focus, research, implementation
@@ -38,7 +38,7 @@ Mini-CoderBrain v2.1 is a revolutionary universal AI context awareness system th
 - **Optimization** - Data-driven workflow improvements
 - **[Metrics Guide](USER-GUIDE-METRICS.md)** - Usage guide
 
-### 🎯 Intelligent Setup & Validation (v2.0)
+### 🎯 Intelligent Setup & Validation
 - **Smart initialization wizard** - Adapts to empty/existing/complex projects
 - **Context quality scoring** - Measurable 40-100% quality scores
 - **Validation on session-start** - Automatic quality checks

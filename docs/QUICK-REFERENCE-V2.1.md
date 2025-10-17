@@ -1,4 +1,4 @@
-# Mini-CoderBrain v2.1 - Quick Reference
+# Mini-CoderBrain - Quick Reference
 
 **One-Page Cheat Sheet** | Print this for quick reference!
 
