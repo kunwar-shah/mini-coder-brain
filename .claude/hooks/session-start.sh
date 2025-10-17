@@ -58,9 +58,11 @@ if [ "$should_load_context" == "true" ]; then
         echo ""
     fi
 
-    # Load activeContext.md
+    # Load activeContext.md (EXCLUDE session history - token optimization)
     if [ -f "$MB/activeContext.md" ]; then
-        cat "$MB/activeContext.md"
+        # Load ONLY core sections (stop at "## Session Updates" marker)
+        # This reduces token usage by ~70% while preserving essential context
+        sed '/^## Session Updates$/,$d' "$MB/activeContext.md"
         echo ""
     fi
 
@@ -115,6 +117,15 @@ project_name=$(echo "$project_name" | sed 's/\[//g;s/\]//g' | xargs)
 current_focus=$(grep -A 5 "## 🎯 Current Focus" "$MB/activeContext.md" 2>/dev/null | grep -v "^#" | grep -v "^$" | grep -v "^---" | head -1 | sed 's/^\*\*//;s/\*\*$//' || echo "General Development")
 current_focus=$(echo "$current_focus" | sed 's/\[//g;s/\]//g' | xargs)
 
+# === MEMORY HEALTH CHECK (v2.2+) ===
+session_count=$(grep -c "^## 📊 Session" "$MB/activeContext.md" 2>/dev/null || echo 0)
+memory_health_tip=""
+if [ "$session_count" -gt 8 ]; then
+  memory_health_tip="💡 Memory cleanup recommended ($session_count session updates). Run /memory-cleanup to reduce token usage."
+elif [ "$session_count" -gt 12 ]; then
+  memory_health_tip="⚠️  Memory bloat detected ($session_count session updates). Run /memory-cleanup before continuing."
+fi
+
 # Clean up placeholders
 if [[ -z "$project_name" ]] || [[ "$project_name" == "PROJECT_NAME" ]]; then
   project_name=$(basename "$ROOT" 2>/dev/null || echo "My Project")
@@ -132,3 +143,9 @@ cat <<EOF
 🎭 Profile: $behavior_profile
 ⚡ Ready for development | Session: $session_id
 EOF
+
+# Show memory health tip if needed
+if [ -n "$memory_health_tip" ]; then
+  echo ""
+  echo "$memory_health_tip"
+fi

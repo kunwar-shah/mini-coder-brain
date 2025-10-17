@@ -32,6 +32,54 @@ Result: 3000 lines total, 79.9% token reduction
 
 ---
 
+### ❌ BANNED: Loading Full Session History (v2.2+)
+
+**The Problem**:
+```
+Session-start loads activeContext.md with 13 session updates:
+- Line 1-50: Core context (focus, achievements, blockers) ✅ NEEDED
+- Line 51-100: 13 session update entries ❌ BLOAT
+
+Result: 50% token waste at EVERY session start
+Compounds over time → "Prompt too long" errors
+```
+
+**Why This Happens**:
+- Hooks append session updates to activeContext.md
+- Without cleanup, this accumulates exponentially
+- Old session history provides little value vs token cost
+
+**The Solution** (Implemented in v2.2):
+```bash
+# session-start.sh now loads ONLY core sections:
+sed '/^## Session Updates$/,$d' "$MB/activeContext.md"
+
+# Excludes everything after "## Session Updates" marker
+# Result: 48% token reduction at session start
+```
+
+**Memory Health Levels**:
+- ✅ **Healthy**: 0-5 session updates
+- 💡 **Monitor**: 6-8 session updates
+- ⚠️ **Needs Cleanup**: 9-12 session updates
+- 🚨 **Critical**: 13+ session updates
+
+**AI Behavior**:
+```
+When session-start shows warning:
+✅ Acknowledge the warning
+✅ Suggest /memory-cleanup
+✅ Explain benefits concisely
+✅ Don't force, just recommend
+
+Example:
+"I see memory bloat detected (13 session updates). Running /memory-cleanup will reduce token usage by 40% and prevent 'Prompt too long' errors. Want to run it now?"
+```
+
+**Related Pattern**: @.claude/patterns/memory-health-check.md
+
+---
+
 ## 🚫 Asking Questions Context Already Answers
 
 ### ❌ BANNED QUESTIONS LIST

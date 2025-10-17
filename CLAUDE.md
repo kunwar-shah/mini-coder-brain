@@ -67,15 +67,21 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - If not specified or invalid, load `.claude/profiles/default.md`
    - Profile persists throughout session (no re-loading)
 
-2) Produce a short **Boot Status** (3–5 bullets):
+2) **Memory Health Check** (v2.2+ - Session Start):
+   - Session-start hook displays memory health tip if needed
+   - If you see "💡 Memory cleanup recommended" → Acknowledge and suggest user run /memory-cleanup
+   - If you see "⚠️ Memory bloat detected" → STRONGLY recommend /memory-cleanup before continuing work
+   - This prevents token bloat and "Prompt too long" errors
+
+3) Produce a short **Boot Status** (3–5 bullets):
    - Current focus & objectives (from activeContext)
    - Key blockers / open questions (from activeContext)
    - Recent progress (from progress)
    - Decisions relevant today (from decisionLog)
 
-3) Prefix EVERY response with: `[MINI-CODER-BRAIN: ACTIVE]`.
+4) Prefix EVERY response with: `[MINI-CODER-BRAIN: ACTIVE]`.
 
-4) **Enhanced Status Footer** (MANDATORY - NEVER SKIP - v2.1):
+5) **Enhanced Status Footer** (MANDATORY - NEVER SKIP - v2.1):
    - The UserPromptSubmit hook injects enhanced status footer data
    - You MUST display this status footer at the END of EVERY response
    - **Always display it** - even for short responses, errors, or questions
@@ -119,7 +125,7 @@ On SESSION START (when session-start hook displays boot status), do the followin
 
 **Context Persistence**: Once loaded at session start, context remains available throughout the entire conversation via conversation history. DO NOT re-load memory files on subsequent turns.
 
-5) **CRITICAL: Behavioral Patterns** (Read reference patterns as needed)
+6) **CRITICAL: Behavioral Patterns** (Read reference patterns as needed)
 
 **Pattern Library** (Read on-demand, NOT injected - zero token impact):
 - **@.claude/patterns/pre-response-protocol.md** → MANDATORY 5-step checklist before every response
