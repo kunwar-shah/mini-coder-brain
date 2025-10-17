@@ -54,12 +54,11 @@ behavior_profile: "default" # default / focus / research / implementation / cust
 
 On SESSION START (when session-start hook displays boot status), do the following automatically:
 
-1) **Load context files ONCE** (these will persist in conversation history):
-   - @.claude/memory/productContext.md
-   - @.claude/memory/activeContext.md
-   - @.claude/memory/progress.md
-   - @.claude/memory/decisionLog.md
-   - @.claude/memory/systemPatterns.md
+1) **Context files are ALREADY LOADED by session-start hook** (they persist in conversation history):
+   - ⚠️ **FORBIDDEN**: DO NOT use Read tool on these files unless user explicitly asks
+   - ⚠️ **FORBIDDEN**: DO NOT re-read productContext.md, activeContext.md, progress.md, decisionLog.md, systemPatterns.md
+   - ✅ **CORRECT**: Use the content from Turn 1 (session-start hook output) available in conversation history
+   - These files are in conversation history from Turn 1 - reference that, don't re-read
 
 1b) **Load behavior profile ONCE** (v2.1+ feature):
    - Check `behavior_profile` setting in CLAUDE.md Project Setup Metadata (line ~41)
@@ -144,12 +143,14 @@ On SESSION START (when session-start hook displays boot status), do the followin
 - **(Optional) codebase-map.json** → Semantic file mapping (if /map-codebase was run)
 
 **MANDATORY PRE-RESPONSE PROTOCOL**:
-Before responding to ANY request, complete the 5-step checklist from @.claude/patterns/pre-response-protocol.md:
-1. ✅ CHECK productContext.md
-2. ✅ CHECK systemPatterns.md
-3. ✅ CHECK activeContext.md
-4. ✅ CHECK project-structure.json
-5. ✅ CHECK codebase-map.json (if exists)
+Before responding to ANY request, complete the 5-step checklist:
+1. ✅ CHECK productContext.md **IN CONVERSATION HISTORY** (from Turn 1 session-start)
+2. ✅ CHECK systemPatterns.md **IN CONVERSATION HISTORY** (from Turn 1 session-start)
+3. ✅ CHECK activeContext.md **IN CONVERSATION HISTORY** (from Turn 1 session-start)
+4. ✅ CHECK project-structure.json (read if needed)
+5. ✅ CHECK codebase-map.json (read if exists)
+
+**⚠️ CRITICAL**: Steps 1-3 check conversation history, NOT disk. Memory files were loaded in Turn 1.
 
 **ZERO ASSUMPTION RULE**: If context has the answer, USE IT immediately. Only ask user when genuinely missing information.
 
