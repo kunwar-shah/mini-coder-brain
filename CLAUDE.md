@@ -477,12 +477,76 @@ Update memory bank after major development work.
 - ❌ NO AI attribution in commit messages
 - ❌ NO bot signatures in commits
 
+**GUIDELINE 7: Docker Container Management - MANDATORY**
+
+**CRITICAL INSTRUCTION**: When creating or managing Docker containers/images for ANY project:
+
+**YOU MUST**:
+- **Create new containers** with project-name grouping
+- **Use project name as group** (e.g., "mini-coder-brain" as group, with containers underneath)
+- **Organize containers** by project ownership for easy identification
+- **Check existing containers** before any operation: `docker ps -a`
+- **Verify container ownership** before modifying or removing
+
+**CONTAINER NAMING PATTERN**:
+```bash
+# Correct pattern - project-name grouping
+mini-coder-brain-web-1
+mini-coder-brain-db-1
+mini-coder-brain-redis-1
+
+# Group: mini-coder-brain
+# Containers: web, db, redis
+```
+
+**VALIDATION BEFORE CONTAINER OPERATIONS**:
+- ✅ Ran `docker ps -a` to check existing containers
+- ✅ Verified container doesn't belong to other project
+- ✅ Used project-name prefix for new containers
+- ✅ Organized containers by project grouping
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ NEVER delete any existing containers without explicit user confirmation
+- ❌ NEVER remove images belonging to other projects
+- ❌ NEVER assume containers are unused without checking
+- ❌ NEVER run `docker system prune` without user approval
+- ❌ NEVER delete containers from other projects (they have different project-name prefixes)
+
+**EXAMPLES OF CORRECT BEHAVIOR**:
+
+**✅ CORRECT - Creating new project containers**:
+```bash
+# Check existing first
+docker ps -a
+
+# Create with project-name grouping
+docker-compose -p mini-coder-brain up -d
+# Creates: mini-coder-brain-web-1, mini-coder-brain-db-1
+```
+
+**✅ CORRECT - Listing containers by project**:
+```bash
+# List only this project's containers
+docker ps -a --filter "name=mini-coder-brain"
+```
+
+**❌ FORBIDDEN - Deleting without checking**:
+```bash
+# WRONG - deletes ALL containers including other projects
+docker rm $(docker ps -a -q)
+
+# WRONG - removes containers from other projects
+docker-compose down  # (if in wrong directory)
+```
+
 **VALIDATION BEFORE CLAIMING COMPLIANCE**:
 - ✅ Checked systemPatterns.md for coding conventions
 - ✅ Recorded decisions in decisionLog.md (if any made)
 - ✅ Updated progress.md (if task status changed)
 - ✅ Used Edit tool for all memory file updates
 - ✅ No co-author attribution in git commits
+- ✅ Verified existing containers before Docker operations
+- ✅ Used project-name grouping for new containers
 
 ### Behavioral Patterns (Read as Needed)
 **IMPORTANT**: Patterns are read on-demand to guide behavior WITHOUT bloating context tokens:
