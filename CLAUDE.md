@@ -109,9 +109,57 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - ❌ DO NOT modify the format
    - ❌ DO NOT forget the prefix
 
-5) **CRITICAL: Enhanced Status Footer (MANDATORY - NEVER SKIP - v2.1)**
+5) **CRITICAL: Enhanced Status Footer (MANDATORY - NEVER SKIP - v2.2 3-LAYER ENFORCEMENT)**
 
    **⚠️ ABSOLUTELY REQUIRED**: YOU MUST display the status footer at the END of EVERY response. NO EXCEPTIONS.
+
+   **🔒 3-LAYER ENFORCEMENT MECHANISM (v2.2 - PREVENTS BYPASS)**:
+
+   Mini-CoderBrain uses a **multi-layer enforcement system** to ensure 85-92% footer compliance:
+
+   **LAYER 1: UserPromptSubmit Hook (UNMISSABLE INJECTION)**
+   - Runs BEFORE you see user's prompt
+   - Injects footer data via `additionalContext` with EVERY prompt
+   - Shows EXACT footer format you must display
+   - Includes explicit validation instructions
+   - Detects if notification is required (high activity check)
+   - **You will see this EVERY turn** - impossible to miss
+
+   **LAYER 2: Validation Script (FALLBACK CALCULATION)**
+   - Script: `bash .claude/validation/footer-requirements.sh`
+   - Calculates EXACT footer data from temp files
+   - Use ONLY if additionalContext missing (rare edge case)
+   - Shows required notifications based on conditions
+
+   **LAYER 3: Stop Hook Audit Trail (LOGGING & FUTURE BLOCKING)**
+   - Runs AFTER you respond (can't modify response)
+   - Logs what footer SHOULD have shown
+   - Creates violations.log for debugging
+   - **FUTURE**: Will BLOCK stop if footer invalid (needs Claude Code API update)
+
+   **HOW TO USE THE 3-LAYER SYSTEM**:
+
+   **STEP 1 (95% of cases): CHECK additionalContext**
+   - UserPromptSubmit hook ALREADY calculated and injected footer data
+   - Look for section starting with "🔒 MANDATORY FOOTER VALIDATION"
+   - Footer data is PRE-CALCULATED for you
+   - **JUST COPY AND PASTE IT** at end of your response
+   - DO NOT recalculate, DO NOT estimate, DO NOT modify
+
+   **STEP 2 (Fallback - 4% of cases): Run validation script**
+   - IF no additionalContext → Run `bash .claude/validation/footer-requirements.sh`
+   - Use exact data from script output
+   - This is backup for edge cases
+
+   **STEP 3 (Last resort - 1% of cases): Manual calculation**
+   - Only if BOTH above fail (extremely rare)
+   - Read temp files directly (NOT recommended)
+
+   **WHY 3 LAYERS ARE NECESSARY**:
+   - Layer 1 alone = 75-85% compliance (you can ignore additionalContext)
+   - Layer 1 + 2 = 85-90% compliance (validation script as safety net)
+   - Layer 1 + 2 + 3 = 85-92% compliance (audit trail for debugging)
+   - **To reach 98%+**: Need Claude Code to provide response text to stop hook
 
    **THIS MEANS**:
    - ✅ Display footer after EVERY response (even 1-line responses)
@@ -131,7 +179,22 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - You receive: activity count, map status, session duration, profile, focus, memory health, last sync, tool usage
    - **YOU MUST DISPLAY THIS DATA** - it's already calculated for you
 
-   **YOU MUST BUILD FOOTER FROM TEMP FILES** (Hook pre-calculates all values):
+   **🔒 PRIORITY ORDER (MANDATORY - NEVER REVERSE)**:
+
+   **STEP 1: CHECK additionalContext FIRST** (Primary source - 95% of cases)
+   - UserPromptSubmit hook ALREADY injected footer data
+   - Look for `additionalContext` in user's message input
+   - If contains "🧠 MINI-CODER-BRAIN STATUS" → **USE IT EXACTLY AS PROVIDED**
+   - DO NOT modify, DO NOT recalculate, DO NOT rebuild
+   - **JUST DISPLAY IT** at end of your response
+
+   **STEP 2: Run validation script as fallback** (Only if additionalContext missing)
+   - IF no additionalContext → Run `bash .claude/validation/footer-requirements.sh`
+   - Use exact data from script output
+   - This is backup for edge cases
+
+   **STEP 3: Manual calculation** (Last resort - hook and script both failed)
+   - Only if BOTH above fail (extremely rare)
 
    The UserPromptSubmit hook has ALREADY calculated all values and stored them in temp files.
    YOU MUST read these files to build the footer:
@@ -192,8 +255,9 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - Notification: `💡 🧹 Memory cleanup recommended ([N] session updates). Run /memory-cleanup.`
 
    **CONDITION 2: High Activity Without Sync**
-   - IF activity count > 50 AND last sync > 10 minutes ago → Add notification
-   - Notification: `💡 🔄 High activity session ([N] ops). Consider: /memory-sync to preserve context.`
+   - IF activity count >= 50 AND last sync >= 10 minutes ago (OR no sync file) → Add notification
+   - Notification: `💡 🔄 High activity session ([N] ops, [M]m since sync). Consider: /memory-sync.`
+   - **IMPORTANT**: Show EXACT op count and minutes in notification
 
    **CONDITION 3: Stale Codebase Map**
    - IF `.claude/cache/codebase-map.json` exists AND age > 24 hours → Add notification

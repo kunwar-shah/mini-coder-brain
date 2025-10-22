@@ -228,8 +228,46 @@ else
 fi
 
 if [ -f "$context_flag" ]; then
-    # Inject micro-status for Claude's awareness
-    echo "{\"decision\": \"approve\", \"reason\": \"Context active\", \"additionalContext\": \"$full_status\"}"
+    # === ENHANCED FOOTER VALIDATION INJECTION (v2.2) ===
+    # Make footer requirements UNMISSABLE by injecting explicit instructions
+
+    # Build enhanced context with footer validation requirements
+    enhanced_context="$full_status\n\n"
+    enhanced_context="${enhanced_context}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+    enhanced_context="${enhanced_context}🔒 MANDATORY FOOTER VALIDATION (ENFORCED BY STOP HOOK)\n"
+    enhanced_context="${enhanced_context}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+
+    # Check if notification is required
+    notification_check=""
+    if [ "$activity_count" -ge 50 ] && [ -f "$last_sync_file" ]; then
+      last_sync_time=$(cat "$last_sync_file" 2>/dev/null || echo "0")
+      current_time=$(date +%s)
+      minutes_ago=$(( (current_time - last_sync_time) / 60 ))
+
+      if [ "$minutes_ago" -ge 10 ]; then
+        notification_check="⚠️ NOTIFICATION REQUIRED: High activity (${activity_count} ops, ${minutes_ago}m since sync)\n"
+        notification_check="${notification_check}   You MUST add 5th line: 💡 🔄 High activity session (${activity_count} ops, ${minutes_ago}m since sync). Consider: /memory-sync.\n\n"
+      fi
+    fi
+
+    # Add validation instructions
+    enhanced_context="${enhanced_context}BEFORE ENDING YOUR RESPONSE, YOU MUST:\n\n"
+    enhanced_context="${enhanced_context}1️⃣  USE the footer data above (already calculated by hook)\n"
+    enhanced_context="${enhanced_context}2️⃣  DISPLAY footer EXACTLY as shown above\n"
+    enhanced_context="${enhanced_context}3️⃣  DO NOT recalculate or estimate values\n"
+    enhanced_context="${enhanced_context}4️⃣  DO NOT modify the format\n\n"
+
+    if [ -n "$notification_check" ]; then
+      enhanced_context="${enhanced_context}${notification_check}"
+    fi
+
+    enhanced_context="${enhanced_context}✅ Footer data is PRE-CALCULATED (Activity: ${activity_count} ops, Last sync: ${last_sync})\n"
+    enhanced_context="${enhanced_context}✅ Stop hook will AUDIT footer requirements\n"
+    enhanced_context="${enhanced_context}✅ Violations are LOGGED for debugging\n\n"
+    enhanced_context="${enhanced_context}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    # Inject enhanced context with footer validation
+    echo "{\"decision\": \"approve\", \"reason\": \"Context active\", \"additionalContext\": \"$enhanced_context\"}"
 else
     # Edge case: flag missing
     echo '{"decision": "approve", "reason": "Session start hook will load context"}'

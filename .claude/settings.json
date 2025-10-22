@@ -46,6 +46,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/optimized-intelligent-stop.sh",
             "timeout": 60
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/footer-validator-stop.sh",
+            "timeout": 10
           }
         ]
       }
