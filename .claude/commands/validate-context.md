@@ -6,7 +6,9 @@ allowed-tools: Read(*), Write(*), Edit(*), Bash(wc:*)
 
 # Validate Context — Quality Check & Validation
 
-Check the quality and completeness of your mini-coder-brain memory bank. Ensures you have minimum required context for 100% effectiveness.
+**CRITICAL INSTRUCTION**: YOU MUST complete ALL validation steps IN EXACT ORDER. DO NOT skip steps. DO NOT improvise scoring logic. ONLY use Read, Write, Edit, Bash tools as specified.
+
+---
 
 ## Purpose
 
@@ -18,6 +20,8 @@ Validates that `.claude/memory/` files contain sufficient, high-quality context:
 - **decisionLog.md** - Technical decisions
 - **project-structure.json** - Auto-detected structure
 
+---
+
 ## Usage
 
 ```bash
@@ -28,11 +32,11 @@ Validates that `.claude/memory/` files contain sufficient, high-quality context:
 /validate-context --fix
 ```
 
-## Execution Steps
+---
 
-### STEP 1: Read All Memory Files
+## STEP 1: Read All Memory Files - MANDATORY
 
-Read and analyze:
+**YOU MUST USE Read TOOL** on these files:
 - `.claude/memory/productContext.md`
 - `.claude/memory/systemPatterns.md`
 - `.claude/memory/activeContext.md`
@@ -40,308 +44,364 @@ Read and analyze:
 - `.claude/memory/decisionLog.md`
 - `.claude/memory/project-structure.json` (if exists)
 
-### STEP 2: Validate Each File
+**CRITICAL**: Read ALL files first before any validation logic
 
-#### productContext.md Validation
+---
 
-**Critical Requirements** (must have):
-- ✅ Project name is NOT `[PROJECT_NAME]` or empty
-- ✅ Project type is defined (not `[AUTO_DETECTED]`)
-- ✅ At least 2 core features listed
-- ✅ Technology stack has 3+ items
-- ✅ Project overview has actual content (>20 words)
+## STEP 2: Validate productContext.md - MANDATORY
 
-**Recommended** (should have):
-- ✅ Architecture description
-- ✅ Development goals
-- ✅ Success metrics
+**YOU MUST CHECK** the following (use exact pattern matching):
 
-**Scoring**:
+### Check 1: Project Name (10 points)
+**CONDITION**: Find line matching `# Product Context — (.+)`
+**SCORING LOGIC**:
+- IF line contains `[PROJECT_NAME]` → 0 points (❌ Template placeholder)
+- IF project name is `.` or empty → 0 points (❌ Invalid)
+- IF project name exists and is real → 10 points (✅ Valid)
+
+### Check 2: Project Description (10 points)
+**CONDITION**: Count words in "Project Overview" section (first 100 words after header)
+**SCORING LOGIC**:
+- IF description < 20 words → 0 points (❌ Too short)
+- IF description contains `[PROJECT_DESCRIPTION]` or `[AUTO_DETECTED]` → 0 points (❌ Template)
+- IF description >= 20 words and is real → 10 points (✅ Valid)
+
+### Check 3: Technology Stack (15 points)
+**CONDITION**: Find "Technology Stack" or "Tech Stack" section, count items
+**SCORING LOGIC**:
+- IF contains `[AUTO_DETECTED]` → 0 points (❌ Template)
+- IF has 3+ technology items (bullets/list) → 15 points (✅ Complete)
+- IF has 1-2 items → 8 points (⚠️ Minimal)
+- IF has 0 items or missing → 0 points (❌ Missing)
+
+### Check 4: Core Features (15 points)
+**CONDITION**: Find "Core Features" or "Features" section, count items
+**SCORING LOGIC**:
+- IF contains `[FEATURE_1]` or similar placeholders → 0 points (❌ Template)
+- IF has 5+ features → 15 points (✅ Excellent)
+- IF has 2-4 features → 10 points (✅ Good)
+- IF has 1 feature → 5 points (⚠️ Minimal)
+- IF has 0 features → 0 points (❌ Missing)
+
+### Check 5: Architecture (10 points)
+**CONDITION**: Find "Architecture" section or mention
+**SCORING LOGIC**:
+- IF contains `[ARCHITECTURE]` placeholder → 0 points (❌ Template)
+- IF has architecture description (>30 words) → 10 points (✅ Detailed)
+- IF mentions architecture briefly (<30 words) → 5 points (⚠️ Basic)
+- IF missing → 0 points (❌ Missing)
+
+### Check 6: Development Goals (5 points)
+**CONDITION**: Find "Development Goals" or "Goals" section
+**SCORING LOGIC**:
+- IF section exists with content → 5 points (✅ Defined)
+- IF missing or empty → 0 points (❌ Missing)
+
+### Check 7: Success Metrics (5 points)
+**CONDITION**: Find "Success Metrics" or "Metrics" section
+**SCORING LOGIC**:
+- IF section exists with content → 5 points (✅ Defined)
+- IF missing or empty → 0 points (❌ Missing)
+
+**productContext.md MAX SCORE**: 70 points
+
+---
+
+## STEP 3: Validate systemPatterns.md - MANDATORY
+
+**YOU MUST CHECK** the following:
+
+### Check 1: Architectural Principles (10 points)
+**CONDITION**: Find "Architectural Principles" section, check content
+**SCORING LOGIC**:
+- IF has 3+ principles listed → 10 points (✅ Complete)
+- IF has 1-2 principles → 5 points (⚠️ Basic)
+- IF missing or placeholder `[PRINCIPLES]` → 0 points (❌ Missing)
+
+### Check 2: File Organization (5 points)
+**CONDITION**: Find "File Organization" or "Project Structure" section
+**SCORING LOGIC**:
+- IF section exists with content → 5 points (✅ Defined)
+- IF missing → 0 points (❌ Missing)
+
+### Check 3: Tech Stack Mentioned (5 points)
+**CONDITION**: Check if technology stack is referenced
+**SCORING LOGIC**:
+- IF tech stack mentioned → 5 points (✅ Referenced)
+- IF missing → 0 points (❌ Missing)
+
+### Check 4: Testing Patterns (5 points)
+**CONDITION**: Find "Testing" section with patterns
+**SCORING LOGIC**:
+- IF testing framework and patterns defined → 5 points (✅ Defined)
+- IF missing or generic → 0 points (❌ Missing)
+
+### Check 5: Error Handling (5 points)
+**CONDITION**: Find "Error Handling" section
+**SCORING LOGIC**:
+- IF error handling approach defined → 5 points (✅ Defined)
+- IF missing → 0 points (❌ Missing)
+
+**systemPatterns.md MAX SCORE**: 30 points
+
+---
+
+## STEP 4: Validate activeContext.md - MANDATORY
+
+**YOU MUST CHECK** the following:
+
+### Check 1: Current Focus (10 points)
+**CONDITION**: Find "Current Focus" section
+**SCORING LOGIC**:
+- IF contains `[CURRENT_FOCUS]` or similar placeholder → 0 points (❌ Template)
+- IF has real focus description (>10 words) → 10 points (✅ Defined)
+- IF has brief focus (<10 words) → 5 points (⚠️ Minimal)
+- IF missing → 0 points (❌ Missing)
+
+### Check 2: Recent Achievements (5 points)
+**CONDITION**: Find "Recent Achievements" section
+**SCORING LOGIC**:
+- IF has 1+ achievements listed → 5 points (✅ Tracked)
+- IF section empty or missing → 0 points (❌ Missing)
+
+### Check 3: Next Priorities (5 points)
+**CONDITION**: Find "Next Priorities" section
+**SCORING LOGIC**:
+- IF has 1+ priorities listed → 5 points (✅ Defined)
+- IF section empty or missing → 0 points (❌ Missing)
+
+### Check 4: Blockers Section (5 points)
+**CONDITION**: Find "Blockers" or "Current Blockers" section
+**SCORING LOGIC**:
+- IF section exists (even if "None") → 5 points (✅ Tracked)
+- IF missing → 0 points (❌ Missing)
+
+**activeContext.md MAX SCORE**: 25 points
+
+---
+
+## STEP 5: Validate progress.md - MANDATORY
+
+**YOU MUST CHECK** the following:
+
+### Check 1: Has Required Sections (10 points)
+**CONDITION**: Find "COMPLETED", "IN PROGRESS", "PENDING" sections
+**SCORING LOGIC**:
+- IF all 3 sections exist → 10 points (✅ Complete structure)
+- IF 1-2 sections exist → 5 points (⚠️ Partial)
+- IF no sections → 0 points (❌ Missing)
+
+### Check 2: Current Phase Defined (5 points)
+**CONDITION**: Find "Current Phase" or "Current Sprint"
+**SCORING LOGIC**:
+- IF contains `[CURRENT_PHASE]` placeholder → 0 points (❌ Template)
+- IF phase is defined → 5 points (✅ Defined)
+- IF missing → 0 points (❌ Missing)
+
+### Check 3: Has Completed Tasks (5 points)
+**CONDITION**: Check COMPLETED section has items
+**SCORING LOGIC**:
+- IF has 1+ completed tasks → 5 points (✅ Tracked)
+- IF empty → 0 points (❌ Empty)
+
+### Check 4: Sprint Info (5 points)
+**CONDITION**: Find sprint deadline, goals, or status
+**SCORING LOGIC**:
+- IF sprint info present → 5 points (✅ Defined)
+- IF missing → 0 points (❌ Missing)
+
+**progress.md MAX SCORE**: 25 points
+
+---
+
+## STEP 6: Validate decisionLog.md - MANDATORY
+
+**BONUS SCORING** (Optional - new projects may be empty):
+
+### Check 1: Has Decision Entries (5 points BONUS)
+**CONDITION**: Count ADR entries (lines with `## [DATE]`)
+**SCORING LOGIC**:
+- IF has 3+ decisions → 5 points (✅ Excellent)
+- IF has 1-2 decisions → 3 points (✅ Good)
+- IF has 0 decisions → 0 points (⚠️ Empty - acceptable for new projects)
+
+**decisionLog.md MAX SCORE**: 5 points (BONUS)
+
+---
+
+## STEP 7: Validate project-structure.json - MANDATORY
+
+**YOU MUST CHECK** if file exists:
+
+### Check 1: File Exists (5 points)
+**CONDITION**: Check if `.claude/memory/project-structure.json` exists
+**SCORING LOGIC**:
+- IF file exists → 5 points (✅ Present)
+- IF missing → 0 points (❌ Missing - suggest running /init-memory-bank)
+
+### Check 2: Valid JSON (5 points)
+**CONDITION**: Verify file is valid JSON (can be parsed)
+**SCORING LOGIC**:
+- IF valid JSON → 5 points (✅ Valid)
+- IF invalid or corrupted → 0 points (❌ Invalid)
+
+**project-structure.json MAX SCORE**: 10 points
+
+---
+
+## STEP 8: Calculate Overall Quality Score - MANDATORY
+
+**YOU MUST CALCULATE** total score from all files:
+
+**TOTAL POSSIBLE**: 165 points (160 + 5 bonus)
+**SCORING SYSTEM**:
 ```
-Project name: 10 points
-Description (>20 words): 10 points
-Tech stack (3+ items): 15 points
-Core features (2+ items): 15 points
-Architecture: 10 points
-Development goals: 5 points
-Success metrics: 5 points
+productContext.md:       70 points (43%)
+systemPatterns.md:       30 points (18%)
+activeContext.md:        25 points (15%)
+progress.md:             25 points (15%)
+project-structure.json:  10 points (6%)
+decisionLog.md:          5 points (3% BONUS)
 ```
-
-#### systemPatterns.md Validation
-
-**Critical Requirements**:
-- ✅ At least 1 architectural principle
-- ✅ File organization pattern defined
-- ✅ Technology stack mentioned
-
-**Recommended**:
-- ✅ Testing patterns
-- ✅ Error handling approach
-- ✅ Code style guidelines
-
-**Scoring**:
-```
-Architectural principles: 10 points
-File organization: 5 points
-Tech stack: 5 points
-Testing patterns: 5 points
-Error handling: 5 points
-```
-
-#### activeContext.md Validation
-
-**Critical Requirements**:
-- ✅ Current focus is defined (not placeholder)
-- ✅ Has actual content (>10 words)
-
-**Recommended**:
-- ✅ Recent achievements listed
-- ✅ Next priorities defined
-- ✅ Blockers identified (even if "none")
-
-**Scoring**:
-```
-Current focus: 10 points
-Recent achievements: 5 points
-Next priorities: 5 points
-Blockers section: 5 points
-```
-
-#### progress.md Validation
-
-**Critical Requirements**:
-- ✅ Has sections for COMPLETED/IN PROGRESS/PENDING
-- ✅ Current phase defined (not placeholder)
-
-**Recommended**:
-- ✅ At least 1 completed task
-- ✅ Current sprint info
-- ✅ Velocity tracking
-
-**Scoring**:
-```
-Has sections: 10 points
-Current phase: 5 points
-Completed tasks: 5 points
-Sprint info: 5 points
-```
-
-#### decisionLog.md Validation
-
-**Optional** (new projects may be empty):
-- No strict requirements
-- Bonus points if has >1 decision entry
-
-**Scoring**:
-```
-Has 1+ decision: 5 points (bonus)
-```
-
-#### project-structure.json Validation
-
-**Recommended**:
-- ✅ File exists and is valid JSON
-- ✅ Has detected structure paths
-
-**Scoring**:
-```
-File exists: 5 points
-Valid JSON: 5 points
-```
-
-### STEP 3: Calculate Overall Quality Score
-
-**Total Possible**: 150 points
 
 **Quality Levels**:
-- 🔴 **Below Minimum** (< 60 points / 40%): Critical issues, won't work effectively
-- 🟡 **Minimum** (60-90 points / 40-60%): Works but limited effectiveness
-- 🟢 **Recommended** (90-120 points / 60-80%): Good effectiveness
-- 🌟 **Optimal** (120-150 points / 80-100%): Excellent effectiveness
+- 🌟 **Optimal** (132+ points / 80%+): Excellent effectiveness, production-ready
+- 🟢 **Recommended** (99-131 points / 60-79%): Good effectiveness, fully functional
+- 🟡 **Minimum** (66-98 points / 40-59%): Works but limited, needs improvement
+- 🔴 **Below Minimum** (<66 points / <40%): Critical issues, run /init-memory-bank
 
-### STEP 4: Display Results
+---
+
+## STEP 9: Display Validation Report - MANDATORY
+
+**YOU MUST OUTPUT** in this EXACT format:
 
 ```
-🔍 Context Quality Validation Report
+🔍 CONTEXT QUALITY VALIDATION REPORT
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📊 Overall Score: 105/150 (70%) - RECOMMENDED ✅
+📊 Overall Score: [TOTAL]/165 ([PERCENTAGE]%) - [STATUS] [EMOJI]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 productContext.md: 55/70 points (79%)
-   ✅ Project name: my-awesome-app
-   ✅ Tech stack: 5 technologies detected
-   ✅ Core features: 4 features listed
-   ✅ Project overview: Complete
-   ⚠️  Architecture: Missing or placeholder
-   ⚠️  Development goals: Not defined
+📄 productContext.md: [SCORE]/70 points ([PERCENTAGE]%)
+   [For each check: ✅ or ❌ with specific details]
+   ✅ Project name: [actual project name]
+   ✅/❌ Tech stack: [count] technologies
+   ✅/❌ Core features: [count] features
+   ✅/❌ Architecture: [status]
+   ✅/❌ Development goals: [status]
+   ✅/❌ Success metrics: [status]
 
-📄 systemPatterns.md: 25/30 points (83%)
-   ✅ Architectural principles: Defined
-   ✅ File organization: Clear
-   ✅ Testing patterns: Present
-   ⚠️  Error handling: Generic
+📄 systemPatterns.md: [SCORE]/30 points ([PERCENTAGE]%)
+   [For each check: ✅ or ❌ with details]
 
-📄 activeContext.md: 20/25 points (80%)
-   ✅ Current focus: Defined
-   ✅ Recent achievements: Listed
-   ✅ Next priorities: Clear
-   ✅ Blockers: None currently
+📄 activeContext.md: [SCORE]/25 points ([PERCENTAGE]%)
+   [For each check: ✅ or ❌ with details]
 
-📄 progress.md: 20/25 points (80%)
-   ✅ Has proper sections
-   ✅ Current phase defined
-   ✅ Completed tasks tracked
-   ⚠️  Velocity tracking: Missing
+📄 progress.md: [SCORE]/25 points ([PERCENTAGE]%)
+   [For each check: ✅ or ❌ with details]
 
-📄 decisionLog.md: 5/5 points (BONUS)
-   ✅ Has 3 technical decisions recorded
+📄 decisionLog.md: [SCORE]/5 points (BONUS)
+   ✅/⚠️ Has [count] technical decisions
 
-📄 project-structure.json: 0/10 points
-   ❌ File not found
-   → Run /init-memory-bank to auto-generate
+📄 project-structure.json: [SCORE]/10 points
+   ✅/❌ File exists: [yes/no]
+   ✅/❌ Valid JSON: [yes/no]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎯 Recommendations:
+🎯 RECOMMENDATIONS:
 
-HIGH PRIORITY:
-  • Add project architecture description to productContext.md
-  • Define development goals in productContext.md
-  • Generate project-structure.json (run /init-memory-bank)
+[IF ANY SCORES BELOW MAX, LIST IMPROVEMENTS NEEDED]
 
-MEDIUM PRIORITY:
-  • Enhance error handling patterns in systemPatterns.md
-  • Add velocity tracking to progress.md
+HIGH PRIORITY (Critical for effectiveness):
+  • [List items with 0 points]
 
-OPTIONAL:
-  • Add more technical decisions as you make them
+MEDIUM PRIORITY (Recommended improvements):
+  • [List items with partial points]
+
+OPTIONAL (Nice to have):
+  • [List bonus items]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 Next Steps:
-   1. Address HIGH PRIORITY items first
-   2. Run /validate-context again after fixes
-   3. Aim for 80%+ score for optimal effectiveness
+💡 NEXT STEPS:
+   [IF SCORE >= 80%]: ✅ Your context is OPTIMAL! No action needed.
+   [IF SCORE 60-79%]: ⚠️  Address HIGH PRIORITY items, then re-run /validate-context
+   [IF SCORE < 60%]: 🔴 CRITICAL: Run /init-memory-bank to properly initialize
 
-✅ Your context is good enough to work with, but improvements
-   will enhance Mini-CoderBrain's effectiveness!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### STEP 5: --fix Mode (Optional)
+**Status Emoji Guide**:
+- 🌟 for Optimal (80%+)
+- 🟢 for Recommended (60-79%)
+- 🟡 for Minimum (40-59%)
+- 🔴 for Below Minimum (<40%)
 
-If `--fix` flag provided:
+---
 
-For each identified issue, offer to fix:
+## STEP 10: --fix Mode (Optional) - ONLY IF USER PROVIDED --fix FLAG
+
+**IF `--fix` FLAG PROVIDED**, ask user for each missing item:
+
+**DO NOT automatically fix without asking first!**
 
 ```
-Would you like me to help fix these issues? (yes/no)
-→ [wait for user response]
-
-If yes:
-
-1. Missing architecture:
-   "What is your project's architecture? (e.g., 'Monolithic REST API', 'Microservices with event bus')"
-   → [collect user input and update productContext.md]
-
-2. Missing development goals:
-   "What are your development goals? (e.g., 'MVP in 2 months', 'Production-ready by Q2')"
-   → [collect user input and update productContext.md]
-
-3. Missing project-structure.json:
-   "Should I auto-generate project structure? (yes/no)"
-   → [if yes, scan and create project-structure.json]
-
-After fixes:
-"✅ Context updated! Run /validate-context again to verify improvements."
+Would you like me to help fix the [COUNT] issues found? (yes/no)
 ```
 
-## Validation Logic (Internal Reference)
+**IF USER SAYS YES**:
 
-```typescript
-// Pseudo-code for validation logic
+For each HIGH PRIORITY issue:
+1. Ask specific question (e.g., "What is your project's architecture?")
+2. Wait for user response
+3. Update the appropriate memory file using Edit tool
+4. Confirm: "✅ Updated [file]"
 
-function validateProductContext(content: string): ValidationResult {
-  const score = 0;
-  const issues = [];
-
-  // Check project name
-  if (!content.includes('[PROJECT_NAME]') && content.match(/# Product Context — (.+)/)) {
-    score += 10;
-  } else {
-    issues.push('Project name is placeholder or missing');
-  }
-
-  // Check description
-  const descriptionWords = extractSection(content, 'Project Overview').split(' ').length;
-  if (descriptionWords > 20) {
-    score += 10;
-  } else {
-    issues.push('Project description too short or missing');
-  }
-
-  // Check tech stack
-  const techStackItems = extractList(content, 'Technology Stack').length;
-  if (techStackItems >= 3) {
-    score += 15;
-  } else {
-    issues.push(`Tech stack incomplete (${techStackItems}/3 items)`);
-  }
-
-  // Check core features
-  const features = extractList(content, 'Core Features').length;
-  if (features >= 2) {
-    score += 15;
-  } else {
-    issues.push(`Core features incomplete (${features}/2 required)`);
-  }
-
-  // Check architecture
-  if (content.includes('Architecture') && !content.includes('[ARCHITECTURE]')) {
-    score += 10;
-  } else {
-    issues.push('Architecture description missing');
-  }
-
-  return { score, maxScore: 70, issues };
-}
+**AFTER ALL FIXES**:
+```
+✅ Context updated! Run /validate-context again to verify improvements.
 ```
 
-## Output Modes
-
-### Mode 1: Pass (80%+ score)
+**IF USER SAYS NO**:
 ```
-✅ Context Quality: OPTIMAL (85%)
-   Your mini-coder-brain is ready for 100% effectiveness!
+Understood. You can fix these manually or run /validate-context again later.
 ```
 
-### Mode 2: Warning (60-80% score)
-```
-⚠️  Context Quality: RECOMMENDED (70%)
-   Mini-CoderBrain will work, but consider improvements for better results.
-```
+---
 
-### Mode 3: Fail (< 60% score)
-```
-🔴 Context Quality: BELOW MINIMUM (45%)
-   CRITICAL: Mini-CoderBrain won't work effectively.
-   Run: /init-memory-bank or /validate-context --fix
-```
+## ABSOLUTELY FORBIDDEN
 
-## Use Cases
+- ❌ DO NOT claim 95% or 100% score if files have template placeholders
+- ❌ DO NOT give points for `[PROJECT_NAME]` or `[AUTO_DETECTED]` placeholders
+- ❌ DO NOT skip reading all files before validation
+- ❌ DO NOT improvise different scoring logic
+- ❌ DO NOT modify files without user consent (except with --fix flag)
+- ❌ DO NOT use old 150-point scoring system (now 165 points)
+- ❌ DO NOT ignore empty sections when calculating scores
 
-### Use Case 1: After Installation
-```
-User: /validate-context
+**VALIDATION CHECK**: Before displaying report, verify:
+- ✅ All 6 files were read using Read tool
+- ✅ Each check followed exact scoring logic from STEP 2-7
+- ✅ Total score is sum of all file scores (max 165)
+- ✅ Percentage calculated correctly: (total / 165) × 100
+- ✅ Status matches score range (80%+, 60-79%, 40-59%, <40%)
 
-[Shows validation report]
+---
 
-If score < 60%:
-  → "Run /init-memory-bank to properly initialize your context"
-```
+## Summary
 
-### Use Case 2: Debugging "Claude Doesn't Know My Stack"
-```
-User: "Why does Claude keep asking what framework I'm using?"
+**This command validates memory bank context quality with strict, objective scoring.**
+
+**Key Changes from Previous Version**:
+- ✅ Now 165 points total (was 150)
+- ✅ Template placeholder detection (fails `[PROJECT_NAME]`, etc.)
+- ✅ Explicit scoring logic for each check
+- ✅ Matches what `/init-memory-bank` actually creates
+- ✅ Mental model strengthening (MUST, MANDATORY, FORBIDDEN)
+
+**Remember**: This validation MUST match the output of `/init-memory-bank` command!
+

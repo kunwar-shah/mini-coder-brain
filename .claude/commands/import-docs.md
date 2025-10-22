@@ -1,20 +1,22 @@
 ---
 description: Import external documentation into memory bank (SRS, architecture, API docs)
 argument-hint: "<path-to-docs> [--type <srs|architecture|api|general>]"
-allowed-tools: Read(*), Edit(*), Glob(*), Bash(find:*, ls:*)
+allowed-tools: Read(*), Edit(*), Glob(*)
 ---
 
 # Import Docs — Documentation Integration
+
+**CRITICAL INSTRUCTION**: YOU MUST complete ALL steps below IN EXACT ORDER. DO NOT SKIP any step. ONLY use Read, Edit, and Glob tools as specified.
 
 Import external documentation (SRS, technical specs, architecture docs) into your memory bank after initial setup. Use this when you have documentation that wasn't imported during `/init-memory-bank`.
 
 ## Purpose
 
-Reads external documentation files and integrates them into appropriate memory bank files:
-- **SRS/Requirements** → Updates `productContext.md` (features, requirements)
-- **Architecture Docs** → Updates `systemPatterns.md` (patterns, architecture)
-- **API Documentation** → Updates `systemPatterns.md` (API patterns)
-- **Technical Decisions** → Updates `decisionLog.md` (ADRs)
+**THIS COMMAND INTEGRATES** external documentation into appropriate memory bank files:
+- **SRS/Requirements** → YOU MUST update `productContext.md` (features, requirements)
+- **Architecture Docs** → YOU MUST update `systemPatterns.md` (patterns, architecture)
+- **API Documentation** → YOU MUST update `systemPatterns.md` (API patterns)
+- **Technical Decisions** → YOU MUST update `decisionLog.md` (ADRs)
 
 ## Usage
 
@@ -48,15 +50,34 @@ Reads external documentation files and integrates them into appropriate memory b
 - `--type decisions` → Technical decision records
 - `--type general` → General documentation (analyze and categorize)
 
-## Execution Steps
+---
 
-### STEP 1: Parse Arguments
+## EXECUTION STEPS - MANDATORY
 
+## STEP 1: Parse Arguments - MANDATORY
+
+**ACTION**: Extract path and type from command
+
+**DETECT** (YOU MUST check):
+- Path argument: First argument after `/import-docs`
+- Type argument: IF contains `--type <value>` → Set TYPE=<value>
+- IF no type → Set TYPE="auto-detect"
+
+**OUTPUT**:
 ```
-Arguments:
-  <path>: Path to file or folder to import
-  --type: Optional type hint (srs|architecture|api|decisions|general)
+📚 Import Docs Command
+   - Path: [path]
+   - Type: [type | auto-detect]
 ```
+
+**VALIDATION**:
+- ✅ Path provided (required)
+- ✅ Type detected or set to auto-detect
+- ✅ Path format validated
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT proceed without path
+- ❌ DO NOT assume document type without checking
 
 ### STEP 2: Discover Documentation Files
 

@@ -1,22 +1,14 @@
 ---
 description: Update active context with current focus, blockers, and priorities
 argument-hint: "[focus|blocker|priority|achievement] [description]"
-allowed-tools: Read(*), Write(*), Edit(*), Bash(date:*)
+allowed-tools: Read(*), Edit(*), Bash(date:*)
 ---
 
 # Context Update — Real-Time Context Management
 
+**CRITICAL INSTRUCTION**: YOU MUST complete ALL steps below IN EXACT ORDER. DO NOT SKIP any step. ONLY use Read, Edit, and Bash tools as specified.
+
 Quickly update `.claude/memory/activeContext.md` with current development state without running full memory sync.
-
-## Purpose
-
-The `/context-update` command provides fast, targeted updates to your active context:
-- **Focus**: Change current development focus
-- **Blocker**: Add new blocker discovered
-- **Priority**: Add new priority to next steps
-- **Achievement**: Record recent achievement
-
-Perfect for maintaining real-time context awareness throughout your development session.
 
 ## Usage
 
@@ -37,79 +29,115 @@ Perfect for maintaining real-time context awareness throughout your development 
 /context-update
 ```
 
-## Update Types
+---
 
-### Focus Update
-Updates the "Current Focus" section with what you're working on right now.
+## EXECUTION STEPS - MANDATORY
 
-**Example**:
-```bash
-/context-update focus "Refactoring database layer for better testability"
-```
+## STEP 1: Parse Arguments - MANDATORY
 
-**Updates activeContext.md**:
-```markdown
-## 🎯 Current Focus
-**Refactoring database layer for better testability**
-_Updated: 2025-09-29 12:34:56 UTC_
-```
+**ACTION**: Detect update type and description
+
+**DETECT** (YOU MUST check for these EXACT patterns):
+- IF message matches `/context-update focus "..."` → Set TYPE="focus", DESC="..."
+- IF message matches `/context-update blocker "..."` → Set TYPE="blocker", DESC="..."
+- IF message matches `/context-update priority "..."` → Set TYPE="priority", DESC="..."
+- IF message matches `/context-update achievement "..."` → SET TYPE="achievement", DESC="..."
+- IF no arguments → Set TYPE="interactive"
+
+**OUTPUT**: Tell user which type detected:
+- "Updating focus: [description]"
+- "Adding blocker: [description]"
+- "Adding priority: [description]"
+- "Recording achievement: [description]"
+- "Interactive mode (will prompt for details)"
+
+**VALIDATION**:
+- ✅ Detected type correctly
+- ✅ Extracted description (if provided)
+- ✅ Set TYPE and DESC variables
 
 ---
 
-### Blocker Addition
-Adds new blocker to "Current Blockers" section.
+## STEP 2: Get UTC Timestamp - MANDATORY
 
-**Example**:
+**YOU MUST USE Bash TOOL** to get current UTC timestamp
+
+**EXACT COMMAND**:
 ```bash
-/context-update blocker "Third-party API documentation missing endpoint details"
+date -u +"%Y-%m-%d %H:%M:%S UTC"
 ```
 
-**Appends to activeContext.md**:
+**VALIDATION**:
+- ✅ Ran date command
+- ✅ Got timestamp in format: YYYY-MM-DD HH:MM:SS UTC
+- ✅ Stored timestamp for use in updates
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT skip timestamp
+- ❌ DO NOT use local time (must be UTC)
+- ❌ DO NOT use different format
+
+---
+
+## STEP 3: Read activeContext.md - MANDATORY
+
+**YOU MUST USE Read TOOL** to read current activeContext
+
+**FILE PATH**: `.claude/memory/activeContext.md`
+
+**PURPOSE**: Need to see current content before editing
+
+**VALIDATION**:
+- ✅ Used Read tool
+- ✅ File exists and was read successfully
+- ✅ Can see current structure (sections: Focus, Achievements, Priorities, Blockers)
+
+---
+
+## STEP 4: Update activeContext.md Based on Type - MANDATORY
+
+**YOU MUST USE Edit TOOL** to make the update
+
+### IF TYPE="focus":
+**FIND**: Section `## 🎯 Current Focus`
+**ACTION**: Replace current focus with new one
+**FORMAT**:
 ```markdown
-## 🔒 Current Blockers
-- **Third-party API documentation missing endpoint details**
-  - _Added: 2025-09-29 12:34:56 UTC_
+## 🎯 Current Focus
+**[New focus description]**
+_Updated: YYYY-MM-DD HH:MM:SS UTC_
+```
+
+### IF TYPE="blocker":
+**FIND**: Section `## 🔒 Current Blockers`
+**ACTION**: Append new blocker to list
+**FORMAT**:
+```markdown
+- **[Blocker description]**
+  - _Added: YYYY-MM-DD HH:MM:SS UTC_
   - Status: Investigating
 ```
 
----
-
-### Priority Addition
-Adds new item to "Next Priorities" section.
-
-**Example**:
-```bash
-/context-update priority "Add input validation for user registration form"
-```
-
-**Appends to activeContext.md**:
+### IF TYPE="priority":
+**FIND**: Section `## 🚀 Next Priorities`
+**ACTION**: Add to top of numbered list
+**FORMAT**:
 ```markdown
-## 🚀 Next Priorities
-1. Add input validation for user registration form _(Added: 2025-09-29 12:34:56 UTC)_
-2. [Previous priorities...]
+1. [Priority description] _(Added: YYYY-MM-DD HH:MM:SS UTC)_
+[Previous priorities with numbers incremented]
 ```
 
----
-
-### Achievement Recording
-Adds achievement to "Recent Achievements" section.
-
-**Example**:
-```bash
-/context-update achievement "Completed integration tests for authentication module - 100% coverage"
-```
-
-**Appends to activeContext.md**:
+### IF TYPE="achievement":
+**FIND**: Section `## ✅ Recent Achievements`
+**ACTION**: Prepend to list (most recent first)
+**LIMIT**: Keep only last 5 achievements
+**FORMAT**:
 ```markdown
-## ✅ Recent Achievements
-- **Completed integration tests for authentication module - 100% coverage** — 2025-09-29 12:34:56 UTC
-- [Previous achievements...]
+- **[Achievement description]** — YYYY-MM-DD HH:MM:SS UTC
 ```
 
-## Interactive Mode
-
-Running `/context-update` without arguments enters interactive mode:
-
+### IF TYPE="interactive":
+**ACTION**: Prompt user:
 ```
 🔄 Context Update — Interactive Mode
 
@@ -118,12 +146,81 @@ What would you like to update?
 2. Add Blocker
 3. Add Priority
 4. Record Achievement
-5. Cancel
 
-Select (1-5): _
+Select (1-4):
+```
+**WAIT** for user response, then proceed with selected type
+
+**VALIDATION**:
+- ✅ Used Edit tool (not Write)
+- ✅ Updated correct section
+- ✅ Added UTC timestamp
+- ✅ Preserved existing content
+- ✅ Followed exact format for type
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT use Write tool (will erase file)
+- ❌ DO NOT skip timestamp
+- ❌ DO NOT remove existing content
+- ❌ DO NOT update wrong section
+- ❌ DO NOT leave placeholder values
+
+---
+
+## STEP 5: Show Confirmation - MANDATORY
+
+**YOU MUST OUTPUT** in this EXACT format:
+
+```
+✅ Context Updated: [Type]
+
+📝 Updated activeContext.md:
+   [Type]: "[description]"
+   Timestamp: YYYY-MM-DD HH:MM:SS UTC
+
+🎯 Context is now up-to-date for next AI response!
 ```
 
-AI will prompt for details and update accordingly.
+---
+
+## CRITICAL VALIDATIONS - MANDATORY
+
+**BEFORE CLAIMING SUCCESS**, verify:
+- ✅ Completed ALL steps (1-5) in exact order
+- ✅ Used Edit tool (not Write)
+- ✅ Added UTC timestamp
+- ✅ Updated correct section in activeContext.md
+- ✅ Preserved all existing content
+- ✅ No placeholder values remain
+
+**IF ANY VALIDATION FAILS** → Report: "❌ Failed at STEP [X]: [reason]"
+
+---
+
+## ABSOLUTELY FORBIDDEN
+
+- ❌ DO NOT use Write tool (will overwrite entire file)
+- ❌ DO NOT skip timestamp
+- ❌ DO NOT update without reading file first
+- ❌ DO NOT remove old achievements/blockers/priorities
+- ❌ DO NOT use local time (must be UTC)
+- ❌ DO NOT claim success if validations fail
+
+---
+
+## Update Types
+
+### Focus Update
+Updates the "Current Focus" section with what you're working on right now.
+
+### Blocker Addition
+Adds new blocker to "Current Blockers" section.
+
+### Priority Addition
+Adds new item to "Next Priorities" section.
+
+### Achievement Recording
+Adds achievement to "Recent Achievements" section.
 
 ## Benefits
 
@@ -148,92 +245,8 @@ AI will prompt for details and update accordingly.
 - End of significant work session
 - Want comprehensive session summary
 
-## Examples
-
-### Typical Development Flow
-
-**Morning Start**:
-```bash
-/context-update focus "Implementing payment processing with Stripe integration"
-```
-
-**Hit a Blocker**:
-```bash
-/context-update blocker "Stripe webhook signatures failing validation - investigating HMAC implementation"
-```
-
-**Found Solution, Add Priority**:
-```bash
-/context-update priority "Document webhook setup process for future reference"
-```
-
-**Completed Feature**:
-```bash
-/context-update achievement "Payment processing live - tested with $0.50 test charge successfully"
-```
-
-**End of Day**:
-```bash
-/memory-sync --full
-# (Full sync to capture all work comprehensively)
-```
-
-## Integration with Hooks
-
-### Works With Micro-Context Flow
-- Updates immediately visible in next user prompt
-- Stop hook includes recent context updates
-- Session start hook shows latest focus and blockers
-
-### Complements Automatic Sync
-- Automatic: Basic session summaries (low detail)
-- `/context-update`: Targeted real-time updates (medium detail)
-- `/memory-sync`: Comprehensive synchronization (high detail)
-
-## Output
-
-```
-✅ Context Updated: Focus
-
-📝 Updated activeContext.md:
-   Current Focus: "Implementing authentication system"
-   Timestamp: 2025-09-29 12:34:56 UTC
-
-🎯 Context is now up-to-date for next AI response!
-```
-
-## Best Practices
-
-1. **Update focus when switching tasks**
-   - Helps AI understand context changes
-   - Provides clear development narrative
-
-2. **Record blockers immediately when hit**
-   - Captures problem while fresh
-   - Helps find patterns in blockers
-
-3. **Add achievements as you complete them**
-   - Builds motivating progress history
-   - Helps with sprint reviews
-
-4. **Use priorities to plan next steps**
-   - Keeps TODO list actionable
-   - Aligns team on next actions
-
-5. **Combine with `/memory-sync` for comprehensive updates**
-   - Quick updates during work
-   - Full sync at milestones
-
-## Technical Notes
-
-- Appends with UTC timestamps
-- Preserves existing markdown structure
-- Creates backup before modification
-- Validates activeContext.md format
-- Works offline (no network required)
-
 ---
 
-**Related Commands**: `/memory-sync`, `/umb`
+**Related Commands**: `/memory-sync`, `/update-memory-bank`
 **Frequency**: Use liberally throughout session
 **Impact**: Medium - keeps context current in real-time

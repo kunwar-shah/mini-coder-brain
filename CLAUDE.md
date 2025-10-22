@@ -79,53 +79,169 @@ On SESSION START (when session-start hook displays boot status), do the followin
    - If you see "⚠️ Memory bloat detected" → STRONGLY recommend /memory-cleanup before continuing work
    - This prevents token bloat and "Prompt too long" errors
 
-3) Produce a short **Boot Status** (3–5 bullets):
-   - Current focus & objectives (from activeContext)
-   - Key blockers / open questions (from activeContext)
-   - Recent progress (from progress)
-   - Decisions relevant today (from decisionLog)
+3) **YOU MUST PRODUCE** a short **Boot Status** (3–5 bullets ONLY):
 
-4) Prefix EVERY response with: `[MINI-CODER-BRAIN: ACTIVE]`.
+   **REQUIRED CONTENT**:
+   - Current focus & objectives (from activeContext in conversation history)
+   - Key blockers / open questions (from activeContext in conversation history)
+   - Recent progress (from progress - read if needed)
+   - Decisions relevant today (from decisionLog - read if needed)
 
-5) **Enhanced Status Footer** (MANDATORY - NEVER SKIP - v2.1):
-   - The UserPromptSubmit hook injects enhanced status footer data
-   - You MUST display this status footer at the END of EVERY response
-   - **Always display it** - even for short responses, errors, or questions
-   - **CRITICAL**: Display the EXACT footer with notifications (if any)
+   **VALIDATION**:
+   - ✅ Boot status is 3-5 bullets (not more, not less)
+   - ✅ Used data from conversation history (NOT re-read files)
+   - ✅ Kept concise (< 200 characters total)
 
-   **How to construct the footer**:
-   - Read activity count from tool logs (`.claude/memory/conversations/tool-tracking/`)
-   - Read session duration from `.claude/tmp/session-start-time`
-   - Read last sync from `.claude/tmp/last-memory-sync`
-   - Read current profile from `.claude/tmp/current-profile`
-   - Check for notifications (memory bloat, high activity, map staleness)
+   **ABSOLUTELY FORBIDDEN**:
+   - ❌ DO NOT exceed 5 bullets
+   - ❌ DO NOT re-read productContext/activeContext/systemPatterns (already loaded)
+   - ❌ DO NOT output verbose multi-paragraph status
 
-   **Footer format** (3-4 lines):
+4) **YOU MUST PREFIX** EVERY response with: `[MINI-CODER-BRAIN: ACTIVE]`
+
+   **THIS MEANS**:
+   - ✅ EVERY single response starts with this prefix
+   - ✅ Before any other text
+   - ✅ Exact format: `[MINI-CODER-BRAIN: ACTIVE]`
+
+   **ABSOLUTELY FORBIDDEN**:
+   - ❌ DO NOT skip the prefix (even for 1-line responses)
+   - ❌ DO NOT modify the format
+   - ❌ DO NOT forget the prefix
+
+5) **CRITICAL: Enhanced Status Footer (MANDATORY - NEVER SKIP - v2.1)**
+
+   **⚠️ ABSOLUTELY REQUIRED**: YOU MUST display the status footer at the END of EVERY response. NO EXCEPTIONS.
+
+   **THIS MEANS**:
+   - ✅ Display footer after EVERY response (even 1-line responses)
+   - ✅ Display footer even for error messages
+   - ✅ Display footer even when asking questions
+   - ✅ Display footer BEFORE user can reply
+   - ✅ Display footer for ALL responses without exception
+
+   **THIS DOES NOT MEAN**:
+   - ❌ "Skip footer for short responses"
+   - ❌ "Only show when you remember"
+   - ❌ "Make footer conditional on response type"
+
+   **HOW THE FOOTER WORKS**:
+   - The UserPromptSubmit hook (`conversation-capture-user-prompt.sh`) generates ALL footer data
+   - Hook injects data via `additionalContext` field with EVERY user prompt
+   - You receive: activity count, map status, session duration, profile, focus, memory health, last sync, tool usage
+   - **YOU MUST DISPLAY THIS DATA** - it's already calculated for you
+
+   **YOU MUST BUILD FOOTER FROM TEMP FILES** (Hook pre-calculates all values):
+
+   The UserPromptSubmit hook has ALREADY calculated all values and stored them in temp files.
+   YOU MUST read these files to build the footer:
+
+   **MANDATORY: Read these files for footer data**:
+
+   1. **Activity Count**:
+      - Read file: `.claude/memory/conversations/tool-tracking/$(date '+%Y-%m-%d')-tools.log`
+      - Count lines: `wc -l < file` = activity count
+
+   2. **Session Duration**:
+      - Read file: `.claude/tmp/session-start-time`
+      - Calculate: `(current_time - start_time) / 60` = minutes
+      - Format: "<60min: "25m" | 60-1440min: "2h 15m" | >1440min: "3d 5h"
+
+   3. **Last Sync**:
+      - Read file: `.claude/tmp/last-memory-sync`
+      - Calculate: `(current_time - last_sync) / 60` = minutes_ago
+      - Format: "0: Just now | <60: "25m ago" | <1440: "2h ago" | >=1440: "3d ago"
+
+   4. **Current Profile**:
+      - Read file: `.claude/tmp/current-profile`
+      - Use value (default: "default")
+
+   5. **Current Focus**:
+      - Use from activeContext.md (already in conversation history from session start)
+      - First line after "## 🎯 Current Focus" (max 50 chars)
+
+   6. **Memory Health**:
+      - Count session updates in activeContext.md: `grep "^## .* Session Update" | wc -l`
+      - If >15: "Needs Cleanup" | If >10: "Monitor" | Else: "Healthy"
+
+   7. **Tool Usage** (current turn only):
+      - Count tools YOU used THIS TURN
+      - Format: "Read(3) Edit(2) Bash(1)" (top 3)
+
+   8. **Map Status**:
+      - Check if `.claude/cache/codebase-map.json` exists
+      - If no: "None" | If yes: check age and say "Fresh" or "Stale"
+
+   **EXACT FOOTER FORMAT** (4 lines - MANDATORY structure):
+
    ```
 
    🧠 MINI-CODER-BRAIN STATUS
-   📊 Activity: X ops | 🗺️ Map: Status | ⚡ Context: Active
-   🎭 Profile: name | ⏱️ duration | 🎯 Focus: current work
-   💾 Memory: health | 🔄 Last sync: time | 🔧 Tools: top 3
-
-   💡 [Notifications ONLY if they exist - THIS IS CRITICAL FOR USER ENGAGEMENT]
+   📊 Activity: [X] ops | 🗺️ Map: [status] | ⚡ Context: Active
+   🎭 Profile: [profile] | ⏱️ [duration] | 🎯 Focus: [current work]
+   💾 Memory: [health] | 🔄 Last sync: [time] | 🔧 Tools: [top 3 tools]
 
    ```
 
-   **Notification Types** (show when triggered):
-   - 🧹 Memory cleanup: >10 session updates in activeContext
-   - 🔄 High activity: >50 ops + >10min since last sync
-   - 🗺️ Map stale: Codebase map >24h old
+   **NOTIFICATION DETECTION - MANDATORY**:
 
-   **Example with notifications**:
+   **YOU MUST CHECK** these conditions and add 5th line if ANY are true:
+
+   **CONDITION 1: Memory Cleanup Needed**
+   - IF session updates in activeContext.md > 10 → Add notification
+   - Notification: `💡 🧹 Memory cleanup recommended ([N] session updates). Run /memory-cleanup.`
+
+   **CONDITION 2: High Activity Without Sync**
+   - IF activity count > 50 AND last sync > 10 minutes ago → Add notification
+   - Notification: `💡 🔄 High activity session ([N] ops). Consider: /memory-sync to preserve context.`
+
+   **CONDITION 3: Stale Codebase Map**
+   - IF `.claude/cache/codebase-map.json` exists AND age > 24 hours → Add notification
+   - Notification: `💡 🗺️ Codebase map is stale. Run /map-codebase --rebuild to refresh.`
+
+   **5TH LINE FORMAT** (add ONLY if notification exists):
    ```
+   💡 [notification text]
+   ```
+
+   **VALIDATION BEFORE DISPLAYING FOOTER**:
+   - ✅ Checked all 3 notification conditions
+   - ✅ IF any condition true → Added 5th line with notification
+   - ✅ IF no conditions true → Display 4-line footer only
+
+   **ABSOLUTELY FORBIDDEN**:
+   - ❌ DO NOT skip notification detection
+   - ❌ DO NOT display notifications when conditions are false
+   - ❌ DO NOT forget to check all 3 conditions
+
+   **EXAMPLE OUTPUT** (using hook data):
+   ```
+
    🧠 MINI-CODER-BRAIN STATUS
    📊 Activity: 149 ops | 🗺️ Map: None | ⚡ Context: Active
-   🎭 Profile: default | ⏱️ 2h 15m | 🎯 Focus: Test suite development
-   💾 Memory: Monitor | 🔄 Last sync: 1d ago | 🔧 Tools: Write(20) Bash(15) Edit(10)
+   🎭 Profile: default | ⏱️ 2h 15m | 🎯 Focus: Command validation fixes
+   💾 Memory: Monitor | 🔄 Last sync: 1d ago | 🔧 Tools: Edit(20) Read(15) Bash(10)
 
-   💡 🧹 Memory cleanup recommended (13 session updates). Run /memory-cleanup. 🔄 High activity (149 ops) + 1698m since last sync. Run /memory-sync --full.
+   💡 🧹 Memory cleanup recommended (13 session updates). Run /memory-cleanup.
    ```
+
+   **⚠️ ABSOLUTELY FORBIDDEN**:
+   - ❌ NEVER skip the status footer (even for 1-line responses)
+   - ❌ NEVER ignore data from UserPromptSubmit hook's `additionalContext`
+   - ❌ NEVER make up random values when hook data is available
+   - ❌ NEVER say "I'll show it next time"
+   - ❌ NEVER make footer "conditional" based on response length or type
+   - ❌ NEVER end response without footer
+   - ❌ NEVER modify the 4-line structure
+
+   **CRITICAL VALIDATION** (before sending response):
+   - ✅ Footer is present at the END of response
+   - ✅ Footer uses data from `additionalContext` if available, or reads from temp files
+   - ✅ Footer has all 4 lines minimum (or 5 if notifications exist)
+   - ✅ Footer follows exact format with emojis and structure
+   - ✅ No response is sent without footer
+
+   **REMEMBER**: The hook does ALL the heavy work (reads files, calculates values, detects notifications). YOU MUST DISPLAY what the hook provides via `additionalContext`, or read from temp files if unavailable. Footer is NOT OPTIONAL - it's MANDATORY like your signature on every response.
 
 > If `.claude/memory/` is missing: ask to create & initialize with default templates, then stop until done.
 
@@ -167,11 +283,37 @@ Before responding to ANY request, complete the 5-step checklist:
 - Tool selection → @.claude/patterns/tool-selection-rules.md
 - Proactive suggestions → @.claude/patterns/proactive-behavior.md
 
-5) Project context awareness:
-   - Auto-detect technology stack (package.json, requirements.txt, Cargo.toml, etc.)
-   - Read and understand project structure from `.claude/memory/project-structure.json`
-   - Identify development patterns and architectural decisions
-   - Adapt to project-specific conventions and standards
+5) **Project Context Awareness - MANDATORY**:
+
+   **YOU MUST PERFORM** these actions at session start and throughout development:
+
+   **ACTION 1: Auto-Detect Technology Stack**
+   - **YOU MUST DETECT** tech stack from project files
+   - **CHECK**: package.json (Node.js), requirements.txt (Python), Cargo.toml (Rust), etc.
+   - **USE Read OR Glob TOOL** to find and read these files
+   - **STORE** detected stack in memory for session
+
+   **ACTION 2: Understand Project Structure**
+   - **YOU MUST READ** `.claude/memory/project-structure.json` (if exists)
+   - **USE Read TOOL** to load project structure
+   - **UNDERSTAND**: Frontend path, backend path, database path, tests path
+   - **USE** this structure to locate files quickly
+
+   **ACTION 3: Identify Development Patterns**
+   - **YOU MUST CHECK** architectural decisions in decisionLog.md (read if needed)
+   - **IDENTIFY**: Design patterns used, testing approach, error handling patterns
+   - **REMEMBER**: Patterns throughout session for consistency
+
+   **ACTION 4: Adapt to Project Conventions**
+   - **YOU MUST FOLLOW** conventions defined in systemPatterns.md (already in conversation history)
+   - **ADAPT**: Naming conventions, file organization, coding style
+   - **NEVER ASSUME**: Always check patterns before making suggestions
+
+   **VALIDATION**:
+   - ✅ Detected and recorded technology stack
+   - ✅ Read project-structure.json (if exists)
+   - ✅ Aware of architectural decisions
+   - ✅ Following systemPatterns.md conventions
 
 6) Available commands:
    - **Essential**: `/init-memory-bank` (MANDATORY first run), `/update-memory-bank`, `/map-codebase`
@@ -258,26 +400,89 @@ Update memory bank after major development work.
 
 ---
 
-## ✅ Memory-Bank Update Rules
-- Append with **UTC timestamps**; never overwrite history.
-- **Decisions** → `.claude/memory/decisionLog.md`
-- **Progress** → `.claude/memory/progress.md`
-- **Session focus/blockers** → `.claude/memory/activeContext.md`
-- **Standards/patterns** → `.claude/memory/systemPatterns.md`
-- **Project overview** → `.claude/memory/productContext.md`
+## ✅ Memory-Bank Update Rules - MANDATORY
+
+**CRITICAL INSTRUCTION**: When updating ANY memory bank file, YOU MUST follow these rules:
+
+**RULE 1: Tool Usage - MANDATORY**
+- **YOU MUST USE Edit TOOL** to update existing memory files
+- NEVER use Write tool (will overwrite entire file and lose history)
+- Edit tool preserves existing content and appends new data
+
+**RULE 2: Timestamps - MANDATORY**
+- **YOU MUST append** with UTC timestamps in ISO 8601 format
+- Format: `YYYY-MM-DDTHH:MM:SSZ` for decisionLog
+- Format: `YYYY-MM-DD HH:MM:SS UTC` for session updates
+- Get timestamp using: `date -u +"%Y-%m-%dT%H:%M:%SZ"`
+
+**RULE 3: File Mapping - MANDATORY**
+- **Decisions** → YOU MUST update `.claude/memory/decisionLog.md`
+- **Progress** → YOU MUST update `.claude/memory/progress.md`
+- **Session focus/blockers** → YOU MUST update `.claude/memory/activeContext.md`
+- **Standards/patterns** → YOU MUST update `.claude/memory/systemPatterns.md`
+- **Project overview** → YOU MUST update `.claude/memory/productContext.md`
+
+**VALIDATION BEFORE UPDATING**:
+- ✅ Used Edit tool (not Write)
+- ✅ Added UTC timestamp
+- ✅ Updating correct file for content type
+- ✅ Preserving all existing content
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ NEVER use Write tool on existing memory files
+- ❌ NEVER overwrite or delete existing history
+- ❌ NEVER skip timestamps
+- ❌ NEVER modify old entries (append only)
 
 ---
 
 ## 🔐 Universal Working Rules
 
-### Core Guidelines
-- Follow project-specific patterns in `systemPatterns.md`
-- Record all technical decisions in `decisionLog.md`
-- Keep `progress.md` accurate (**Completed / Current / Next**)
-- Ensure `activeContext.md` reflects today's focus & blockers
-- Auto-detect and adapt to project's technology stack
-- Use project structure from `.claude/memory/project-structure.json`
-- **NEVER add co-author attribution to git commits** - No "Co-Authored-By: Claude" or similar tags
+### Core Guidelines - MANDATORY
+
+**YOU MUST FOLLOW** these guidelines for ALL development work:
+
+**GUIDELINE 1: Follow Project Patterns**
+- **YOU MUST READ** `systemPatterns.md` (from conversation history) before writing code
+- **YOU MUST APPLY** project-specific patterns and conventions
+- **YOU MUST ADAPT** to coding style defined in systemPatterns
+
+**GUIDELINE 2: Record Technical Decisions**
+- **YOU MUST RECORD** all architecture/tech choices in `decisionLog.md`
+- **YOU MUST USE** ADR format (Decision, Rationale, Impact, Implementation, Follow-ups)
+- **YOU MUST ADD** UTC timestamp to every decision
+- **USE Edit TOOL** to append decisions (never Write)
+
+**GUIDELINE 3: Keep Progress Accurate**
+- **YOU MUST UPDATE** `progress.md` when tasks complete or status changes
+- **YOU MUST ORGANIZE** as: **Completed / In Progress / Next**
+- **YOU MUST ADD** dates to all progress entries
+- **USE Edit TOOL** to update (never Write)
+
+**GUIDELINE 4: Maintain Active Context**
+- **YOU MUST ENSURE** `activeContext.md` reflects current focus & blockers
+- **YOU MUST UPDATE** when focus changes, blockers discovered, or achievements made
+- **USE /context-update** command for real-time updates
+- **USE Edit TOOL** to modify (never Write)
+
+**GUIDELINE 5: Auto-Detect Technology Stack**
+- **YOU MUST DETECT** tech stack from files (package.json, requirements.txt, etc.)
+- **YOU MUST ADAPT** suggestions to detected stack
+- **YOU MUST USE** project structure from `.claude/memory/project-structure.json`
+- **DO NOT ASSUME** stack - always detect or check productContext.md
+
+**GUIDELINE 6: Git Commit Attribution**
+- **ABSOLUTELY FORBIDDEN**: NEVER add co-author attribution to git commits
+- ❌ NO "Co-Authored-By: Claude" tags
+- ❌ NO AI attribution in commit messages
+- ❌ NO bot signatures in commits
+
+**VALIDATION BEFORE CLAIMING COMPLIANCE**:
+- ✅ Checked systemPatterns.md for coding conventions
+- ✅ Recorded decisions in decisionLog.md (if any made)
+- ✅ Updated progress.md (if task status changed)
+- ✅ Used Edit tool for all memory file updates
+- ✅ No co-author attribution in git commits
 
 ### Behavioral Patterns (Read as Needed)
 **IMPORTANT**: Patterns are read on-demand to guide behavior WITHOUT bloating context tokens:

@@ -1,662 +1,557 @@
 ---
 description: Initialize memory bank with auto-populated project context (MANDATORY on first install)
 argument-hint: "[--dry-run] [--docs-path <path>]"
-allowed-tools: Read(*), Write(*), Edit(*), Glob(*), Grep(*), Bash(git:*, ls:*, find:*, wc:*)
+allowed-tools: Read(*), Write(*), Edit(*), Glob(*), Grep(*), Bash(git:*, ls:*, find:*, wc:*, grep:*)
 ---
 
 # Init Memory Bank — Smart Context Initialization
 
 **⚠️ MANDATORY**: Run this command immediately after installing mini-coder-brain!
 
-You are an intelligent initialization wizard. Your job is to populate `.claude/memory/` files with high-quality project context by:
-1. Detecting project type (empty/existing/complex)
-2. Auto-scanning code, configs, and documentation
-3. Interactive prompting for missing critical info
-4. Generating complete, accurate memory bank files
+**CRITICAL INSTRUCTION**: You MUST complete ALL 8 steps below IN EXACT ORDER. DO NOT SKIP any step. DO NOT improvise. DO NOT use shell scripts. ONLY use Read, Write, Glob, Grep, Bash tools as specified.
 
-## Execution Steps (FOLLOW IN ORDER)
+---
 
-### STEP 1: Parse Arguments
+## STEP 1: Parse Arguments - MANDATORY
 
-Check for arguments:
-- `--dry-run` → Preview mode (show what would be done, don't write files)
-- `--docs-path <path>` → Custom documentation folder to scan
+**ACTION**: Check if user provided arguments
 
-### STEP 2: Detect Project Type
+**DETECT**:
+- If message contains `--dry-run` → Set DRY_RUN=true (preview mode, don't write files)
+- If message contains `--docs-path <path>` → Extract path, set DOCS_PATH=<path>
+- If neither → Set DRY_RUN=false, DOCS_PATH=""
 
-Scan current directory and classify:
+**OUTPUT**: Tell user which mode activated
 
-**Type A: Empty Project** (< 10 files, no package.json/requirements.txt/etc)
-- Behavior: Interactive wizard, create from scratch
-- Prompt user for: name, description, tech stack, goals
+---
 
-**Type B: Existing Project - Simple** (has code, no docs folder)
-- Behavior: Auto-detect + confirm with user
-- Scan: package.json, README.md, git history, code structure
+## STEP 2: Detect Project Type - MANDATORY
 
-**Type C: Existing Project - Complex** (has code + documentation)
-- Behavior: Auto-detect + auto-read docs + minimal prompts
-- Scan: everything from Type B + docs folder
+**YOU MUST execute these Bash commands**:
 
-**Detection Logic**:
 ```bash
-# Check for project config files
-has_config=$(ls package.json requirements.txt Cargo.toml go.mod 2>/dev/null | wc -l)
+# Check for traditional package managers
+ls package.json requirements.txt Cargo.toml go.mod composer.json Gemfile pom.xml 2>/dev/null | wc -l
 
 # Check for documentation folder
-has_docs=$(ls -d docs/ documentation/ .docs/ 2>/dev/null | wc -l)
+ls -d docs/ documentation/ .docs/ 2>/dev/null | wc -l
 
 # Count total files
-file_count=$(find . -maxdepth 2 -type f 2>/dev/null | wc -l)
+find . -maxdepth 2 -type f 2>/dev/null | wc -l
 
-# Classify
-if [ $file_count -lt 10 ] && [ $has_config -eq 0 ]; then
-  project_type="empty"
-elif [ $has_docs -gt 0 ]; then
-  project_type="complex"
-else
-  project_type="simple"
-fi
+# Count shell scripts (for Bash projects)
+find . -maxdepth 3 -name "*.sh" -type f 2>/dev/null | wc -l
+
+# Count markdown files (for doc projects)
+find . -maxdepth 2 -name "*.md" -type f 2>/dev/null | wc -l
 ```
 
-### STEP 3: Execute Type-Specific Workflow
+**CLASSIFICATION LOGIC** (YOU MUST FOLLOW):
+- **If** file_count < 10 AND no package manager → Type A (Empty)
+- **Else If** has docs folder → Type C (Complex)
+- **Else If** has package manager → Type B (Simple)
+- **Else If** sh_count > 5 → Type B-Bash (Shell project)
+- **Else** → Type B (Unknown/Generic)
 
-#### For Type A (Empty Project):
+**OUTPUT**: "✅ Detected: [TYPE] project"
 
-1. **Interactive Prompts** (ask user):
-```
-🎯 Let's set up your project context!
+---
 
-What is your project name?
-→ [user input]
+## STEP 3: Extract Project Name - MANDATORY
 
-What type of application are you building? (1-2 sentences)
-→ [user input]
+**TRY IN ORDER** (stop at first success):
 
-What technology stack do you plan to use? (e.g., "Next.js, TypeScript, Prisma, PostgreSQL")
-→ [user input]
+1. **If package.json exists** → Use Bash: `cat package.json | grep '"name"' | head -1`
+2. **If Cargo.toml exists** → Use Bash: `grep '^name =' Cargo.toml | head -1`
+3. **If README.md exists** → Use Read tool, extract first `# Title` line
+4. **Fallback** → Use Bash: `basename $(pwd)`
 
-What are the core features? (3-5 features, comma-separated)
-→ [user input]
+**STORE RESULT**: PROJECT_NAME variable
 
-What is your primary development goal? (e.g., "MVP in 2 months", "Production-ready SaaS")
-→ [user input]
+**OUTPUT**: "📦 Project: [PROJECT_NAME]"
 
-Do you have technical documentation? (path or "none")
-→ [user input or none]
-```
+---
 
-2. **Generate Files**:
-- Create productContext.md with user inputs
-- Create systemPatterns.md with tech stack defaults
-- Create activeContext.md with "Project initialization" as focus
-- Create progress.md with "Planning phase"
-- Create decisionLog.md (empty, ready for use)
+## STEP 4: Extract Description - MANDATORY
 
-3. **Output**:
-```
-✅ Project context initialized!
-📝 Next: Start building! I'll help you implement features with full context awareness.
-```
+**TRY IN ORDER**:
 
-#### For Type B (Existing - Simple):
+1. **If package.json exists** → Use Bash: `cat package.json | grep '"description"'`
+2. **If README.md exists** → Use Read tool on README.md
+   - Find lines 2-10
+   - Look for first non-header, non-empty line
+   - Exclude lines starting with `#`, `[`, `!`, or empty lines
+3. **Fallback** → Use: "A software development project"
 
-1. **Auto-Detect** (scan files):
-   - `package.json` / `Cargo.toml` / `requirements.txt` → project name, dependencies
-   - `README.md` → project description, features
-   - Git history (last 30 days) → recent work, patterns
-   - Code structure → frontend/backend/database paths
-   - Test files → testing framework
-   - Config files → linter, formatter detection
+**STORE RESULT**: DESCRIPTION variable
 
-2. **Show Detection Summary**:
-```
-🔍 Project Analysis Complete!
+**OUTPUT**: "📄 Description: [first 60 chars]..."
 
-Detected:
-  Name: my-awesome-app
-  Type: Node.js + TypeScript
-  Tech Stack: React 18, Express, Prisma, PostgreSQL
-  Structure: Frontend (src/), Backend (api/), Database (prisma/)
-  Recent Activity: 47 commits in 30 days
-  Testing: Vitest detected
+---
 
-Is this correct? (yes/no/edit)
-→ [wait for user confirmation]
-```
+## STEP 5: Extract Features from README - MANDATORY
 
-3. **Prompt for Missing Critical Info**:
-```
-I couldn't detect these items. Please provide:
+**YOU MUST USE Read TOOL** on README.md if it exists:
 
-What are your core features? (3-5 features)
-→ [user input]
+**SEARCH FOR** (in order of preference):
+1. Section with header `## Core Features` or `## Features`
+2. Lines matching pattern `^- \*\*` (bold bullet points)
+3. Lines matching pattern `^- ` after intro (first 100 lines)
 
-What is your current development goal?
-→ [user input]
+**USE Grep TOOL** with pattern: `"^- "` on README.md content
 
-Do you have documentation I should read? (path or "none")
-→ [user input]
-```
+**STORE UP TO 10** feature lines
 
-4. **Generate Files** with detected + user-provided info
+**IF FOUND**: FEATURES variable = extracted lines
+**IF NOT FOUND**: FEATURES = ""
 
-#### For Type C (Existing - Complex):
+**OUTPUT**: Number of features found (or "No features section found")
 
-1. **Auto-Detect** (everything from Type B)
+---
 
-2. **Auto-Read Documentation**:
+## STEP 6: Extract Tech Stack - MANDATORY
 
-Scan for common doc files:
-```bash
-# Default docs to read
-docs=(
-  "README.md"
-  "docs/SRS.md"
-  "docs/ARCHITECTURE.md"
-  "docs/API.md"
-  "docs/TECHNICAL_SPEC.md"
-  "ARCHITECTURE.md"
-  "SRS.md"
-)
+**DETECT FROM FILES**:
 
-# If --docs-path provided, scan that folder
-if [ -n "$docs_path" ]; then
-  # Find all .md files in docs path
-  find "$docs_path" -name "*.md" -o -name "*.txt"
-fi
-```
+**YOU MUST CHECK** (use Bash ls, grep, find):
+- `package.json` exists → Check for: react, vue, svelte, next, express, fastify, prisma, typescript
+- `requirements.txt` exists → Check for: django, flask, fastapi
+- `Cargo.toml` exists → Add "Rust"
+- Shell scripts (*.sh) > 5 files → Add "Bash/Shell"
+- Markdown files (*.md) > 5 files → Add "Markdown"
+- `.git/` folder exists → Add "Git"
 
-For each found doc:
-- Read file using Read tool
-- Extract relevant sections:
-  - Features → productContext.md
-  - Architecture → systemPatterns.md
-  - Tech stack → productContext.md
-  - Decisions → decisionLog.md
+**BUILD STRING**: Comma-separated list (e.g., "Bash/Shell, Markdown, Git")
 
-3. **Show Integration Summary**:
-```
-📚 Documentation Analysis Complete!
+**STORE RESULT**: TECH_STACK variable
 
-Read files:
-  ✅ README.md (89 lines) → Project overview
-  ✅ docs/SRS.md (234 lines) → Features & requirements
-  ✅ docs/ARCHITECTURE.md (156 lines) → System design
-  ✅ docs/API.md (178 lines) → API structure
+**OUTPUT**: "🛠️  Tech Stack: [TECH_STACK]"
 
-Extracted:
-  → 12 core features
-  → 8 technical decisions
-  → Complete tech stack description
-  → Architecture patterns
+---
 
-Context Quality: 95% (Optimal)
+## STEP 7: Analyze Git History - MANDATORY
 
-Proceed with initialization? (yes/no)
-→ [wait for user confirmation]
-```
-
-4. **Generate Files** with full integration
-
-### STEP 4: Generate project-structure.json
-
-Auto-detect and create project structure file:
-
-```json
-{
-  "detected": true,
-  "timestamp": "2025-10-14T10:30:00Z",
-  "structure": {
-    "frontend": ["src/", "app/", "components/"],
-    "backend": ["api/", "server/", "backend/"],
-    "database": ["prisma/", "migrations/", "db/"],
-    "tests": ["__tests__/", "tests/", "test/"],
-    "docs": ["docs/", "documentation/"],
-    "config": ["package.json", "tsconfig.json", "Cargo.toml"]
-  },
-  "languages": ["typescript", "javascript"],
-  "frameworks": ["react", "express", "prisma"]
-}
-```
-
-Save to `.claude/memory/project-structure.json`
-
-### STEP 5: Validate Context Quality
-
-Check minimum requirements:
-- ✅ Project name defined (not `[PROJECT_NAME]`)
-- ✅ Tech stack has 3+ items
-- ✅ Core features has 2+ items
-- ✅ Architecture or structure defined
-
-Calculate quality score:
-```
-Base: 40%
-+ Project name: +10%
-+ Description: +10%
-+ Tech stack (3+): +15%
-+ Core features (2+): +15%
-+ Architecture: +10%
-+ Documentation read: +20%
-+ Git history: +10%
-+ Testing info: +5%
-+ Patterns detected: +5%
-```
-
-Show result:
-```
-📊 Context Quality: 85% (Recommended)
-
-✅ Project name: my-awesome-app
-✅ Tech stack: 5 technologies
-✅ Core features: 4 features
-✅ Architecture: Defined
-⚠️  Documentation: Basic (consider adding SRS/technical docs)
-
-Ready for development!
-```
-
-### STEP 6: Update CLAUDE.md Metadata
-
-Update the Project Setup Metadata section in CLAUDE.md:
-
-```yaml
-uses_git: true              # (detected from .git/)
-git_host: github            # (detected from remote)
-repository_url: "..."       # (from git remote)
-uses_docker: true           # (detected Dockerfile)
-testing_framework: "vitest" # (detected)
-# ... etc
-```
-
-### STEP 7: Output Summary
-
-```
-🎉 Memory Bank Initialized Successfully!
-
-📊 Summary:
-   Project Type: Existing - Complex
-   Context Quality: 95% (Optimal)
-   Files Created: 5
-   Documentation Read: 3 files
-   Auto-detected: Tech stack, structure, patterns
-
-📁 Memory Bank Files:
-   ✅ productContext.md (187 lines)
-   ✅ systemPatterns.md (134 lines)
-   ✅ activeContext.md (89 lines)
-   ✅ progress.md (76 lines)
-   ✅ decisionLog.md (45 lines)
-   ✅ project-structure.json (auto-generated)
-
-🚀 Next Steps:
-   1. Review .claude/memory/productContext.md
-   2. Run /map-codebase for instant file access
-   3. Start developing with full context awareness!
-
-⚡ Mini-CoderBrain is now active and ready!
-```
-
-### STEP 8: Dry-Run Mode
-
-If `--dry-run` flag detected:
-- DO NOT write any files
-- Show preview of what would be written
-- Display detection results
-- Show quality score
-- Exit with instructions to run without --dry-run
-
-## Implementation Notes
-
-- Use Glob to find files efficiently
-- Use Grep to search for patterns in code
-- Use Read to read documentation files
-- Use Write to create new memory files
-- Use Edit if files already exist (append, don't overwrite)
-- Always show progress with emoji indicators
-- Be conversational and helpful
-- Validate all inputs
-- Handle errors gracefully
-
-## Error Handling
-
-- No git repo → Skip git analysis, use file scan only
-- No README → Prompt user for description
-- No docs → Rely on auto-detection + user input
-- Empty project → Interactive wizard only
-- Permission errors → Show clear error message
-
-## Purpose
-
-The `/init-memory-bank` command intelligently analyzes your project and creates fully populated context files:
-- **productContext.md** - Project name, tech stack, features (from package.json, README, Cargo.toml)
-- **progress.md** - Recent work (from git commit history)
-- **systemPatterns.md** - Coding patterns (from code analysis)
-- **decisionLog.md** - Technical decisions (from git history + code comments)
-- **activeContext.md** - Current state (from git status + recent commits)
-
-## Usage
+**YOU MUST RUN** these Bash commands:
 
 ```bash
-# MANDATORY: Initialize memory bank (auto-populates all files)
-/init-memory-bank
+# Check if git repo exists
+test -d .git && echo "yes" || echo "no"
 
-# With custom documentation path (highly recommended!)
-/init-memory-bank --docs-path ./docs
+# If yes, get commit count (last 30 days)
+git log --oneline --since="30 days ago" 2>/dev/null | wc -l
 
-# Dry run (preview what would be populated, no changes)
-/init-memory-bank --dry-run
+# Get branch count
+git branch 2>/dev/null | wc -l
 
-# Full setup with docs
-/init-memory-bank --docs-path ./documentation --dry-run
+# Get remote URL
+git remote get-url origin 2>/dev/null
 ```
 
-## Critical: Context Quality
+**STORE RESULTS**:
+- HAS_GIT (true/false)
+- COMMIT_COUNT (number)
+- BRANCH_COUNT (number)
+- GIT_REMOTE (URL or empty)
 
-Mini-CoderBrain requires quality context to work at 100% effectiveness:
+**OUTPUT**:
+- "✅ Found [COUNT] commits in last 30 days"
+- "✅ Detected [COUNT] branches"
+- "✅ Remote: [URL]" (if available)
 
-**🔴 MANDATORY (Must Provide):**
-- Project name & description
-- Technology stack (3+ items)
-- Core features (2+ items)
+---
 
-**🟡 HIGHLY RECOMMENDED (80%+ accuracy):**
-- Path to SRS, Technical Specs, Architecture docs
-- Existing project documentation
-- Link to requirements document
+## STEP 8: Read Documentation (if --docs-path provided) - MANDATORY
 
-**🟢 OPTIMAL (100% effectiveness):**
-- Complete SRS with all requirements
-- Architecture diagrams and explanations
-- API documentation
-- Decision history
+**ONLY IF** DOCS_PATH is not empty:
 
-**💡 TIP**: Use `--docs-path` to point to your documentation folder. Claude will read and integrate all relevant docs automatically!
+**USE Glob TOOL** to find: `${DOCS_PATH}/**/*.md`
 
-## What Gets Populated
+**FOR EACH FILE FOUND** (max 5 files):
+- Use **Read tool** to read the file
+- Count lines
+- Show: "✅ [filename] ([lines] lines)"
 
-### 1. productContext.md
-**Sources**:
-- `package.json` / `Cargo.toml` / `pyproject.toml` → Project name, description, dependencies
-- `README.md` → Project overview, features, goals
-- File structure analysis → Frontend/backend/database detection
-- Git remote → Repository URL
+**IF** no --docs-path → Skip this step, show: "⏭️  No --docs-path provided (using auto-detection only)"
 
-**Example Output**:
+---
+
+## STEP 9: Calculate Context Quality Score - MANDATORY
+
+**YOU MUST CALCULATE** using this formula:
+
+```
+score = 40  (base)
+
+IF PROJECT_NAME != "" AND PROJECT_NAME != "." → score += 10
+IF DESCRIPTION != "A software development project" → score += 10
+IF TECH_STACK has 3+ items (count commas) → score += 15
+IF TECH_STACK has 1-2 items → score += 10
+IF FEATURES != "" (has features) → score += 15
+IF HAS_GIT = true AND COMMIT_COUNT > 10 → score += 10
+IF docs were read (STEP 8) → score += 20
+```
+
+**STORE**: QUALITY_SCORE variable
+
+**OUTPUT**: "📊 Context Quality: [SCORE]% ([Status])"
+- Score >= 80 → "✅ Optimal"
+- Score 60-79 → "⚠️  Good"
+- Score < 60 → "⚠️  Basic"
+
+---
+
+## STEP 10: Generate productContext.md - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/productContext.md`
+
+**EXACT CONTENT TEMPLATE**:
+
 ```markdown
-# Product Context — my-awesome-app
+# Product Context — [PROJECT_NAME]
 
-**Last Updated**: 2025-10-06
-**Project Type**: Full-stack Web Application
+**Last Updated**: [TODAY_DATE in YYYY-MM-DD]
+**Project Type**: [PROJECT_TYPE from STEP 2]
+
+---
 
 ## Project Overview
-**my-awesome-app** — A modern task management application with real-time collaboration
+**[PROJECT_NAME]** — [DESCRIPTION]
 
+[IF FEATURES != "", ADD THIS SECTION:]
 ### Core Features
-- Real-time task updates with WebSocket
-- User authentication and authorization
-- Team collaboration features
-- Mobile-responsive design
+[FEATURES - each line as-is from STEP 5]
 
 ### Technology Stack
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Node.js, Express, Prisma
-- **Database**: PostgreSQL
-- **Infrastructure**: Docker, Vercel
+[IF TECH_STACK != "", split by comma and output each as:]
+- **[ITEM]**
+
+[IF TECH_STACK = "", output:]
+- Auto-detection in progress
+
+---
+
+## Project Structure
+
+\`\`\`
+[PROJECT_NAME]/
+[LIST directories found: src/, app/, lib/, docs/, tests/, .claude/]
+\`\`\`
+
+---
+
+## Development Goals
+
+### Current Phase
+Active Development
+
+### Success Metrics
+- Code quality and maintainability
+- Feature completion and testing
+- Documentation coverage
+
+---
+
+## Context Notes
+**Repository**: [GIT_REMOTE from STEP 7]
+**Initialized**: [TODAY_DATE] via /init-memory-bank
+**Quality Score**: [QUALITY_SCORE]%
 ```
 
-### 2. progress.md
-**Sources**:
-- Recent git commits (last 7 days) → Completed tasks
-- Git branches → In-progress work
-- TODO comments in code → Pending tasks
+**IF DRY_RUN = true**: Show "Would create productContext.md ([lines] lines)" - DO NOT write
+**IF DRY_RUN = false**: Write file using Write tool
 
-**Example Output**:
+---
+
+## STEP 11: Generate progress.md - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/progress.md`
+
+**EXACT CONTENT TEMPLATE**:
+
 ```markdown
-# Development Progress — my-awesome-app
+# Development Progress — [PROJECT_NAME]
 
-**Last Updated**: 2025-10-06
+**Last Updated**: [TODAY_DATE]
 **Current Phase**: Active Development
 
+---
+
 ## CURRENT SPRINT
-**Overall Progress**: 65% Complete
+**Overall Progress**: In Progress
 
 ### ✅ COMPLETED (Last 7 Days)
-- **2025-10-05** ✅ Implemented user authentication with JWT
-- **2025-10-04** ✅ Created task CRUD API endpoints
-- **2025-10-03** ✅ Set up Prisma schema and migrations
+[IF HAS_GIT = true, GET LAST 10 COMMITS from last 7 days:]
+[Run: git log --pretty=format:"%ad %s" --date=short --since="7 days ago" | head -10]
+[Format each as: - **[date]** ✅ [message]]
 
-### 🔄 IN PROGRESS (Today)
-- **2025-10-06** 🔄 Real-time updates with WebSocket
-- **2025-10-06** 🔄 Team collaboration features
+[IF HAS_GIT = false:]
+- Project structure initialized
 
-### ⏳ PENDING (Discovered from TODO comments)
-- Add email verification flow
-- Implement task filtering and search
-- Create admin dashboard
+### 🔄 IN PROGRESS
+- Development ongoing
+
+### ⏳ PENDING
+- See project backlog
+
+---
+
+## Key Achievements
+
+### 🏗️ FOUNDATIONAL WORK
+✅ Project structure established
+✅ Memory bank initialized ([TODAY_DATE])
+[IF COMMIT_COUNT > 50:]
+✅ Active development ([COMMIT_COUNT] commits in 30 days)
+
+---
+
+## Context Notes
+Initialized from git history and project analysis on [TODAY_DATE]
 ```
 
-### 3. systemPatterns.md
-**Sources**:
-- Code analysis → Patterns in existing code
-- ESLint/Prettier configs → Code style rules
-- Test file patterns → Testing conventions
-- Git commit messages → Commit style
+**IF DRY_RUN = false**: Write file
 
-**Example Output**:
+---
+
+## STEP 12: Generate systemPatterns.md - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/systemPatterns.md`
+
+**DETECT PATTERNS BASED ON PROJECT_TYPE**:
+
 ```markdown
-# System Patterns — my-awesome-app
+# System Patterns — [PROJECT_NAME]
 
-**Last Updated**: 2025-10-06
+**Last Updated**: [TODAY_DATE]
+
+---
+
+## Architectural Principles
+[IF PROJECT_TYPE contains "Shell" OR "Bash":]
+- POSIX compliance for maximum portability
+- Proper error handling with set -eu
+- Quote all variables to prevent word splitting
+
+[ELSE IF PROJECT_TYPE = "Node.js":]
+- Modern ES6+ syntax
+- TypeScript for type safety
+- Async/await over callbacks
+
+[ELSE:]
+- Follow established project conventions
+- Maintain code consistency
+- Document complex logic
+
+---
 
 ## Code Style Patterns
-- Functional React components with TypeScript
-- Zod validation for API inputs
-- Custom hooks in `src/hooks/` directory
-
-## API Patterns
-- REST endpoints return `{data, error}` structure
-- Prisma for database operations
-- JWT authentication on protected routes
+- Clear and descriptive naming
+- Single responsibility principle
+- DRY (Don't Repeat Yourself)
 
 ## Testing Patterns
-- Vitest for unit tests
-- Tests colocated in `__tests__/` folders
-- Mock external APIs in tests
+[IF package.json has "vitest":]
+- Testing Framework: Vitest
+- Test files colocated with source
+- Unit and integration tests required
 
-## Commit Patterns
-- Conventional commits: feat:/fix:/refactor:
-- Imperative mood, 50 char max
-- Detailed body for complex changes
+[ELSE IF package.json has "jest":]
+- Testing Framework: Jest
+- Tests in __tests__/ directories
+- Comprehensive coverage expected
+
+[ELSE:]
+- Write tests for critical functionality
+- Verify edge cases and error handling
+
+---
+
+## Development Workflow
+[IF HAS_GIT = true:]
+- Version Control: Git
+- Main Branch: [detect: main or master]
+- Feature branches for new work
+
+[ELSE:]
+- Version control recommended
+- Branch-based workflow
+
+---
+
+## Context Notes
+Patterns initialized on [TODAY_DATE]
+Will be refined over time via /memory-sync
 ```
 
-### 4. decisionLog.md
-**Sources**:
-- Git commit messages with "Decision:" or "ADR:" → Extracted decisions
-- Major dependency additions → Technology choices
-- Architecture comments in code
+**IF DRY_RUN = false**: Write file
 
-**Example Output**:
+---
+
+## STEP 13: Generate decisionLog.md - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/decisionLog.md`
+
 ```markdown
-# Decision Log — my-awesome-app
+# Decision Log — [PROJECT_NAME]
 
-**Last Updated**: 2025-10-06
+**Last Updated**: [TODAY_DATE]
 
-## [2025-10-05] Use JWT for Authentication
-**Context**: Need secure user authentication
-**Decision**: Implement JWT tokens with refresh token rotation
-**Rationale**: Industry standard, works well with REST APIs, scalable
-**Consequences**: Need to implement token refresh logic, store refresh tokens securely
+---
 
-## [2025-10-03] Choose Prisma as ORM
-**Context**: Need type-safe database access layer
-**Decision**: Use Prisma instead of TypeORM
-**Rationale**: Better TypeScript support, excellent migrations, great DX
-**Consequences**: Learning curve for team, new migration workflow
+## [[TODAY_DATE]] Memory Bank Initialized
+
+**Context**: Project setup with Mini-CoderBrain
+**Decision**: Initialize memory bank via /init-memory-bank
+**Impact**: Enables persistent context awareness across sessions
+**Quality Score**: [QUALITY_SCORE]%
+
+---
+
+## Future Decisions
+
+Technical decisions will be recorded here via /memory-sync
+
+---
 ```
 
-### 5. activeContext.md
-**Sources**:
-- Git status → Uncommitted changes
-- Current branch name → Active feature
-- Recent commits (last 24 hours) → Today's focus
+**IF DRY_RUN = false**: Write file
 
-**Example Output**:
+---
+
+## STEP 14: Generate activeContext.md - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/activeContext.md`
+
 ```markdown
-# Active Context — my-awesome-app
+# Active Context — [PROJECT_NAME]
 
-**Last Updated**: 2025-10-06
-**Current Sprint**: Sprint 3
+**Last Updated**: [TODAY_DATE]
+
+---
 
 ## 🎯 Current Focus
-Implementing real-time task updates with WebSocket integration
+[IF HAS_GIT = true, get last commit from last 24 hours:]
+[Run: git log --oneline --since="24 hours ago" | head -1]
+[Use commit message, OR if empty: "Active development in progress"]
+
+[ELSE:]
+Project initialized with Mini-CoderBrain
 
 ## ✅ Recent Achievements
-- Completed user authentication system (JWT-based)
-- Created full CRUD API for tasks
-- Set up Prisma with PostgreSQL
+[IF HAS_GIT = true, get last 5 commits from last 3 days:]
+[Run: git log --oneline --since="3 days ago" | head -5]
+[Format as: - [message without hash]]
+
+- Memory bank initialized ([TODAY_DATE])
 
 ## 🚀 Next Priorities
-1. Complete WebSocket integration for real-time updates
-2. Add team collaboration features
-3. Implement task filtering and search
+1. Continue active development
+2. Run /map-codebase for instant file access
+3. Use /memory-sync after significant work
 
 ## 🔒 Current Blockers
 None detected
 
-## 🧠 Key Insights
-- Authentication system is production-ready
-- Need to add rate limiting to API endpoints
-- Consider adding Redis for WebSocket scaling
+---
+
+## Session Updates
+<!-- Automated session updates will be appended here -->
 ```
 
-## Initialization Process
-
-1. **Detect Project Type**
-   - Scan for package.json, Cargo.toml, requirements.txt, etc.
-   - Identify primary language and framework
-
-2. **Extract Project Metadata**
-   - Project name, description from config files
-   - Parse README.md for overview
-   - Detect dependencies and tech stack
-
-3. **Analyze Git History**
-   - Recent commits → Completed work
-   - Branches → In-progress features
-   - Commit messages → Patterns and decisions
-
-4. **Scan Codebase Structure**
-   - File organization patterns
-   - Testing conventions
-   - Code style from configs
-
-5. **Generate Memory Files**
-   - Populate all 5 memory bank files
-   - Use real data, no placeholders
-   - Add timestamps and metadata
-
-6. **Verify and Save**
-   - Show summary of populated data
-   - Save to `.claude/memory/`
-   - Ready for use immediately
-
-## Benefits
-
-- ✅ **Zero Manual Work** - Fully automated context creation
-- ✅ **Real Data** - No [PROJECT_NAME] placeholders
-- ✅ **Instant Context** - Start with full project awareness
-- ✅ **Git-Aware** - Understands your project history
-- ✅ **Pattern Detection** - Learns from existing code
-
-## When to Use
-
-### First Installation
-```bash
-# Just installed Mini-CoderBrain on existing project
-/init-memory-bank
-# Memory bank now populated with real project data!
-```
-
-### After Major Changes
-```bash
-# Switched tech stack, major refactor, or new features added
-/init-memory-bank
-# Re-scans and updates memory bank
-```
-
-### Dry Run Preview
-```bash
-# Want to see what would be populated first
-/init-memory-bank --dry-run
-# Shows preview without making changes
-```
-
-## Output
-
-```
-🔍 Scanning project structure...
-✅ Detected: Node.js + TypeScript project
-
-📦 Analyzing package.json...
-✅ Found: my-awesome-app v1.2.0
-
-📄 Reading README.md...
-✅ Extracted project overview and features
-
-🔄 Analyzing git history...
-✅ Found 47 commits in last 30 days
-✅ Detected 3 active branches
-
-🔍 Analyzing code patterns...
-✅ Detected: React + TypeScript patterns
-✅ Found: Zod validation, Vitest testing
-
-📝 Populating memory bank files...
-✅ productContext.md (154 lines) ← Real project data
-✅ progress.md (73 lines) ← Recent commits + TODO items
-✅ systemPatterns.md (89 lines) ← Detected patterns
-✅ decisionLog.md (31 lines) ← Git history decisions
-✅ activeContext.md (67 lines) ← Current state
-
-🎯 Memory Bank Initialized Successfully!
-📁 All files saved to .claude/memory/
-⚡ Ready for development with full context awareness!
-
-Next: Continue working - Claude has full project context now!
-```
-
-## Technical Notes
-
-- Requires git repository (for history analysis)
-- Safe to run multiple times (appends, doesn't overwrite)
-- Creates backups before modifying existing files
-- Works offline (no external APIs)
-- Respects .gitignore (doesn't scan ignored files)
-
-## Edge Cases
-
-### No Git Repository
-If project has no git history:
-- Still populates from config files (package.json, README)
-- Skips git-dependent features (commit history, branches)
-- Minimal but functional memory bank created
-
-### Empty README
-If no README.md found:
-- Uses project name from config
-- Creates basic description from file structure
-- User can enhance manually later
-
-### Large Repositories
-For repos with >10,000 commits:
-- Analyzes only recent commits (last 90 days)
-- Uses git log --since for efficiency
-- Focuses on relevant history only
+**IF DRY_RUN = false**: Write file
 
 ---
 
-**Related Commands**: `/memory-sync`, `/context-update`
-**Frequency**: Run once at installation, or after major changes
-**Impact**: High - creates instant project awareness
+## STEP 15: Generate project-structure.json - MANDATORY
+
+**YOU MUST USE Write TOOL** to create `.claude/memory/project-structure.json`
+
+**DETECT DIRECTORIES** using Bash ls or find:
+
+```json
+{
+  "detected": true,
+  "timestamp": "[ISO_8601_TIMESTAMP]",
+  "structure": {
+    "frontend": [list if exists: "src/", "app/", "components/"],
+    "backend": [list if exists: "api/", "server/", "backend/"],
+    "database": [list if exists: "prisma/", "migrations/", "db/"],
+    "tests": [list if exists: "__tests__/", "tests/", "test/"],
+    "docs": [list if exists: "docs/", "documentation/"]
+  },
+  "languages": [detected from files: "typescript", "javascript", "bash", etc.],
+  "frameworks": [detected from TECH_STACK]
+}
+```
+
+**IF DRY_RUN = false**: Write file
+
+---
+
+## STEP 16: Show Final Summary - MANDATORY
+
+**YOU MUST OUTPUT**:
+
+```
+🎉 Memory Bank Initialized Successfully!
+
+📊 Context Quality: [QUALITY_SCORE]% ([Status])
+
+📁 Files Created:
+  ✅ productContext.md ([lines] lines)
+  ✅ progress.md ([lines] lines)
+  ✅ systemPatterns.md ([lines] lines)
+  ✅ decisionLog.md ([lines] lines)
+  ✅ activeContext.md ([lines] lines)
+  ✅ project-structure.json
+
+🚀 Next Steps:
+  1. Review .claude/memory/productContext.md
+  2. Run /map-codebase for instant file access
+  3. Start developing with full context awareness!
+
+💡 Tip: Memory bank now contains [COMMIT_COUNT] commits, [FEATURES count] features, [TECH_STACK item count] technologies
+```
+
+**IF DRY_RUN = true**: Show "DRY RUN - No files written. Run without --dry-run to create files."
+
+---
+
+## CRITICAL VALIDATIONS - MANDATORY
+
+**BEFORE CLAIMING SUCCESS**, verify:
+
+- ✅ Used Read tool to read README.md (not bash cat)
+- ✅ Used Write tool to create 5 memory files (not bash echo)
+- ✅ productContext.md has PROJECT_NAME, not [PROJECT_NAME] placeholder
+- ✅ Generated EXACTLY 5 files (not 4, not 6)
+- ✅ Quality score calculated (40-100 range)
+- ✅ Did NOT edit any .sh files
+- ✅ Did NOT call any shell hooks
+
+**IF ANY VALIDATION FAILS** → STOP and report: "❌ Initialization failed at STEP [X]: [reason]"
+
+---
+
+## Error Handling
+
+- **No git repository**: Continue with file detection only, set HAS_GIT=false
+- **No README.md**: Use fallback description, FEATURES=""
+- **No package manager**: Use file-based detection (shell/markdown counts)
+- **Permission errors**: Report clear error: "Cannot write to .claude/memory/ (check permissions)"
+
+---
+
+## ABSOLUTELY FORBIDDEN
+
+- ❌ DO NOT edit or run `.claude/hooks/init-memory-bank.sh`
+- ❌ DO NOT use bash `cat` instead of Read tool
+- ❌ DO NOT use bash `echo >` instead of Write tool
+- ❌ DO NOT skip steps "because project type doesn't need them"
+- ❌ DO NOT improvise different detection methods
+- ❌ DO NOT leave [PLACEHOLDER] values in generated files
+- ❌ DO NOT claim success if files contain template placeholders
+
+---
+
+**REMEMBER**: This is a COMMAND, not a shell script. YOU (the AI) execute it using tools. The .sh file is IRRELEVANT.

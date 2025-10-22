@@ -1,21 +1,14 @@
 ---
 description: Synchronize all memory bank files with current session context
 argument-hint: "[--full] [--quick]"
-allowed-tools: Read(*), Write(*), Edit(*), Bash(date:*), Bash(echo:*)
+allowed-tools: Read(*), Edit(*), Bash(date:*, echo:*)
 ---
 
 # Memory Sync — Universal Context Synchronization
 
+**CRITICAL INSTRUCTION**: YOU MUST complete ALL steps below IN EXACT ORDER. DO NOT SKIP any step. ONLY use Read, Edit, and Bash tools as specified.
+
 Synchronizes all `.claude/memory/` files with current session state, ensuring perfect context preservation across sessions.
-
-## Purpose
-
-The `/memory-sync` command provides intelligent synchronization of your memory bank:
-- Updates `activeContext.md` with current focus and progress
-- Appends session summary to `progress.md`
-- Records technical decisions in `decisionLog.md`
-- Refreshes `productContext.md` if project scope changed
-- Updates `systemPatterns.md` if new patterns emerged
 
 ## Usage
 
@@ -30,51 +23,281 @@ The `/memory-sync` command provides intelligent synchronization of your memory b
 /memory-sync
 ```
 
-## What Gets Synchronized
+---
 
-### Always Updated
-- **activeContext.md**: Current focus, recent achievements, next priorities, blockers
-- Session timestamp and activity summary
+## EXECUTION STEPS - MANDATORY
 
-### Conditionally Updated (--full flag)
-- **progress.md**: Completed tasks, in-progress items, next sprint goals
-- **decisionLog.md**: Technical decisions made during session (ADR format)
-- **systemPatterns.md**: New patterns or conventions adopted
-- **productContext.md**: Project overview if scope changed
+## STEP 1: Parse Arguments - MANDATORY
 
-## Synchronization Process
+**ACTION**: Detect sync mode
 
-1. **Analyze Session Activity**
-   - Count operations performed (Read, Write, Edit, Bash)
-   - Identify files modified
-   - Detect technical decisions made
-   - Extract progress milestones
+**DETECT** (YOU MUST check for these EXACT strings):
+- IF message contains `--full` → Set MODE="full" (sync all memory files)
+- IF message contains `--quick` → Set MODE="quick" (activeContext only)
+- IF neither → Set MODE="smart" (analyze session, decide what to sync)
 
-2. **Record Sync Timestamp** (IMPORTANT - do this FIRST)
-   - Update `.claude/tmp/last-memory-sync` with current Unix timestamp: `date +%s > .claude/tmp/last-memory-sync`
-   - This tracks when sync was performed for notification system
+**OUTPUT**: Tell user which mode activated:
+- "Full synchronization mode (--full)"
+- "Quick sync mode (--quick)"
+- "Smart sync mode (analyzing session activity)"
 
-3. **Update Active Context**
-   - Append session summary with timestamp
-   - Update current focus if changed
-   - Add new blockers discovered
-   - Record achievements completed
+---
 
-4. **Update Progress (if --full)**
-   - Move completed items to ✅ COMPLETED section
-   - Update in-progress status
-   - Add new pending tasks
-   - Update sprint progress percentage
+## STEP 2: Record Sync Timestamp - MANDATORY
 
-5. **Record Decisions (if --full)**
-   - Extract technical decisions from conversation
-   - Format as ADR (Architecture Decision Record)
-   - Append to decisionLog.md with timestamp
+**YOU MUST USE Bash TOOL FIRST** before any other step
 
-6. **Update Patterns (if applicable)**
-   - Detect new coding patterns adopted
-   - Record architectural changes
-   - Update technology stack if changed
+**EXACT COMMAND** (run this immediately):
+```bash
+date +%s > .claude/tmp/last-memory-sync
+```
+
+**WHY THIS IS CRITICAL**:
+- Intelligent status notification system reads this file
+- Footer shows "Last sync: Xm ago" based on this timestamp
+- MUST update BEFORE syncing files (not after)
+
+**VALIDATION**:
+- ✅ Ran `date +%s > .claude/tmp/last-memory-sync` command
+- ✅ Command executed successfully
+- ✅ Did this BEFORE reading/editing any memory files
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT skip this step
+- ❌ DO NOT do this AFTER syncing (must be BEFORE)
+- ❌ DO NOT use different timestamp format
+
+---
+
+## STEP 3: Analyze Session Activity - MANDATORY
+
+**YOU MUST ANALYZE**:
+1. **Operations Count**: Count Read, Edit, Write, Bash operations THIS session
+2. **Files Modified**: Which files were changed (check conversation history)
+3. **Technical Decisions**: Were architecture/tech choices made?
+4. **Progress Changes**: Were tasks completed or started?
+5. **New Blockers**: Were blockers discovered?
+6. **Pattern Changes**: Were new patterns adopted?
+
+**OUTPUT** (show user the analysis):
+```
+📊 Session Analysis:
+   - Operations: [count] (Read: X, Edit: Y, Bash: Z)
+   - Files modified: [count] files
+   - Technical decisions: [Y/N]
+   - Tasks completed: [count]
+   - New blockers: [count]
+   - New patterns: [Y/N]
+
+Sync mode: [full/quick/smart]
+Will update: [list of files to sync]
+```
+
+**DETERMINE WHAT TO SYNC**:
+- **IF MODE="quick"** → ONLY activeContext.md
+- **IF MODE="full"** → ALL applicable memory files
+- **IF MODE="smart"** → Decide based on session activity:
+  - IF 50+ operations OR technical decisions → sync like --full
+  - IF 10-49 operations → sync activeContext + progress
+  - IF <10 operations → sync activeContext only
+
+---
+
+## STEP 4: Update activeContext.md - MANDATORY
+
+**YOU MUST USE Edit TOOL** to update activeContext
+
+**REQUIRED UPDATES**:
+
+### Append Session Update:
+**FORMAT**:
+```markdown
+---
+
+## Session Update — YYYY-MM-DD HH:MM:SS UTC
+
+**Session Duration**: [duration]
+**Operations**: [count]
+**Files Modified**: [list]
+
+### Achievements This Session:
+- [Achievement 1]
+- [Achievement 2]
+
+### Focus Changes:
+- [What changed in focus, if anything]
+
+### New Blockers:
+- [Any new blockers discovered]
+
+### Next Steps:
+- [What to do next session]
+```
+
+**VALIDATION**:
+- ✅ Used Edit tool (not Write)
+- ✅ Appended session update (didn't overwrite)
+- ✅ UTC timestamp in format: YYYY-MM-DD HH:MM:SS UTC
+- ✅ All sections present (Achievements, Focus Changes, Blockers, Next Steps)
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT use Write tool (will erase all history)
+- ❌ DO NOT skip timestamp
+- ❌ DO NOT remove old session updates
+- ❌ DO NOT invent fake achievements
+
+**IF MODE="quick"** → Skip to STEP 9 (show summary)
+
+---
+
+## STEP 5: Update progress.md (if MODE="full" or MODE="smart" with >10 ops) - CONDITIONAL
+
+**CONDITION**: IF MODE="full" OR (MODE="smart" AND operations > 10)
+
+**YOU MUST USE Edit TOOL** to update progress
+
+**ACTIONS**:
+1. **Move Completed Tasks**: Tasks in "IN PROGRESS" that are now done → move to "COMPLETED"
+2. **Add New Tasks**: Tasks started this session → add to "IN PROGRESS"
+3. **Update Sprint Status**: IF sprint milestone reached
+
+**FORMAT**:
+```markdown
+### ✅ COMPLETED (This Sprint)
+- **YYYY-MM-DD** ✅ [Task description]
+
+### 🔄 IN PROGRESS (Today)
+- **YYYY-MM-DD** 🔄 [Task description]
+```
+
+**VALIDATION**:
+- ✅ Used Edit tool
+- ✅ Added timestamps to all entries
+- ✅ Preserved existing content
+- ✅ Only updated what actually changed
+
+**IF CONDITION FALSE** → Skip to STEP 6
+
+---
+
+## STEP 6: Update decisionLog.md (if MODE="full" AND decisions exist) - CONDITIONAL
+
+**CONDITION**: IF MODE="full" AND technical decisions were made
+
+**YOU MUST USE Edit TOOL** to append decisions
+
+**EXACT FORMAT**:
+```markdown
+[YYYY-MM-DDTHH:MM:SSZ] ADR-YYYYMMDD-NN — [Decision Title]
+
+**Decision**: [What was decided]
+**Rationale**: [Why this decision]
+**Impact**: [Expected consequences]
+**Implementation**: [How to implement]
+**Follow-ups**: [Next steps]
+```
+
+**VALIDATION**:
+- ✅ UTC timestamp in ISO 8601 format
+- ✅ All 5 sections present
+- ✅ ADR number is unique (increment from last)
+
+**IF NO DECISIONS** → Skip to STEP 7
+
+---
+
+## STEP 7: Update systemPatterns.md (if new patterns discovered) - CONDITIONAL
+
+**CONDITION**: IF new coding patterns or conventions emerged
+
+**YOU MUST USE Edit TOOL** to append patterns
+
+**VALIDATION**:
+- ✅ Pattern is genuinely new (not already in file)
+- ✅ Pattern has clear description and example
+- ✅ Used Edit tool (not Write)
+
+**IF NO PATTERNS** → Skip to STEP 8
+
+---
+
+## STEP 8: Update productContext.md (if scope changed) - CONDITIONAL
+
+**CONDITION**: IF project scope/features/architecture changed significantly
+
+**YOU MUST USE Edit TOOL** to update relevant sections
+
+**VALIDATION**:
+- ✅ Only update if genuinely needed (rare)
+- ✅ Preserve existing structure
+- ✅ Used Edit tool
+
+---
+
+## STEP 9: Show Summary - MANDATORY
+
+**YOU MUST OUTPUT** in this EXACT format:
+
+```
+🔄 Memory Sync Complete!
+
+📊 Session Activity:
+   - Operations: [count]
+   - Duration: [time]
+   - Sync mode: [mode]
+
+📝 Memory Bank Updates:
+✅ activeContext.md - Updated with session summary
+[if updated] ✅ progress.md - [changes made]
+[if updated] ✅ decisionLog.md - [N decisions recorded]
+[if updated] ✅ systemPatterns.md - [N patterns added]
+[if updated] ✅ productContext.md - [changes made]
+
+💾 Sync timestamp recorded: YYYY-MM-DD HH:MM:SS UTC
+
+📊 Summary:
+   - Files synchronized: [N]
+   - Session updates recorded: [N]
+   - Total operations: [count]
+
+🎯 Next session will load with complete context awareness!
+```
+
+---
+
+## CRITICAL VALIDATIONS - MANDATORY
+
+**BEFORE CLAIMING SUCCESS**, verify:
+- ✅ Completed STEP 2 (timestamp) BEFORE all other steps
+- ✅ Used Edit tool for ALL modifications (NEVER Write)
+- ✅ All timestamps in correct format (UTC)
+- ✅ Preserved all existing content (append-only)
+- ✅ Updated ONLY files with actual changes
+- ✅ Session summary appended to activeContext.md
+
+**IF ANY VALIDATION FAILS** → Report: "❌ Failed at STEP [X]: [reason]"
+
+---
+
+## ABSOLUTELY FORBIDDEN
+
+- ❌ DO NOT use Write tool (will erase history - use Edit)
+- ❌ DO NOT skip STEP 2 (timestamp must be set FIRST)
+- ❌ DO NOT remove old content from memory files
+- ❌ DO NOT invent fake progress or decisions
+- ❌ DO NOT update productContext unless scope truly changed
+- ❌ DO NOT claim success if validations fail
+
+---
+
+## Purpose
+
+The `/memory-sync` command provides intelligent synchronization of your memory bank:
+- Updates `activeContext.md` with current focus and progress
+- Appends session summary to `progress.md`
+- Records technical decisions in `decisionLog.md`
+- Refreshes `productContext.md` if project scope changed
+- Updates `systemPatterns.md` if new patterns emerged
 
 ## Examples
 

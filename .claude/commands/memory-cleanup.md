@@ -1,39 +1,156 @@
 # /memory-cleanup — Memory Bank Cleanup & Optimization
 
+**CRITICAL INSTRUCTION**: YOU MUST complete ALL steps below IN EXACT ORDER. DO NOT SKIP any step. ONLY use Read, Edit, and Bash tools as specified.
+
 **Purpose**: Archive old session updates, deduplicate ADRs, clean temporary files to prevent "Prompt is too long" errors
 
 **When to use**: Run when notified by intelligent-status-notification.sh, or manually when memory bloat is suspected
 
 ---
 
-## Command Behavior
+## EXECUTION STEPS - MANDATORY
 
-When you run `/memory-cleanup`, I will:
+When you run `/memory-cleanup`, YOU MUST:
 
-1. **Analyze current bloat sources**
-   - Count session updates in activeContext.md
-   - Count ADR entries in decisionLog.md
-   - Check file sizes and tmp/ directory
+## STEP 1: Analyze Bloat Sources - MANDATORY
 
-2. **Archive old session updates** (keep last 5)
-   - Move old updates to `.claude/archive/session-history-YYYY-MM.md`
-   - Preserve all data (never delete)
-   - Update activeContext.md with clean structure
+**YOU MUST USE Read TOOL** to analyze these files:
+- `.claude/memory/activeContext.md`
+- `.claude/memory/decisionLog.md`
 
-3. **Deduplicate decision log**
-   - Consolidate repetitive ADR entries
-   - Keep first and last occurrence of each decision type
-   - Archive duplicates to `.claude/archive/decisions-archive-YYYY-MM.md`
+**DETECT**:
+- Count session updates in activeContext.md (search for "## Session Update" headers)
+- Count ADR entries in decisionLog.md (search for "ADR-" patterns)
+- Calculate file sizes
 
-4. **Clean temporary files**
-   - Remove micro-context files > 1 hour old
-   - Clean stale cache files > 7 days old
-   - Clear notification markers
+**OUTPUT** (show user):
+```
+📊 Memory Bloat Analysis:
+   - activeContext.md: [size]KB, [N] session updates
+   - decisionLog.md: [size]KB, [N] ADRs
+   - Recommendation: [Keep last 5 updates / Clean needed / No action]
+```
 
-5. **Report cleanup results**
-   - Show before/after file sizes
-   - Report tokens saved (~60% reduction expected)
-   - Confirm data preserved in archives
+**VALIDATION**:
+- ✅ Used Read tool on both files
+- ✅ Counted session updates accurately
+- ✅ Reported findings to user
+
+---
+
+## STEP 2: Archive Old Session Updates - MANDATORY
+
+**CONDITION**: IF session updates > 5
+
+**YOU MUST USE Edit TOOL** to archive old updates
+
+**METHOD**:
+1. Read activeContext.md (already done in STEP 1)
+2. Identify session updates to archive (all except last 5)
+3. Extract old updates to archive file
+4. Remove old updates from activeContext.md (keep last 5)
+
+**ARCHIVE FORMAT**:
+File: `.claude/archive/session-history-YYYY-MM.md`
+Content: Old session updates with timestamps
+
+**VALIDATION**:
+- ✅ Used Edit tool (not Write)
+- ✅ Kept exactly 5 most recent updates
+- ✅ Archived old updates (never deleted)
+- ✅ Preserved all data
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT delete any session updates
+- ❌ DO NOT keep more than 5 updates
+- ❌ DO NOT lose any historical data
+- ❌ DO NOT use Write tool (will overwrite file)
+
+**IF session updates ≤ 5** → Skip to STEP 3
+
+---
+
+## STEP 3: Clean Temporary Files - MANDATORY
+
+**YOU MUST USE Bash TOOL** to clean temp files
+
+**EXACT COMMANDS**:
+```bash
+# Clean old micro-context files (>1 hour)
+find .claude/tmp -name "micro-context-*.md" -mmin +60 -delete 2>/dev/null || true
+
+# Clean stale cache files (>7 days)
+find .claude/cache -type f -mtime +7 -delete 2>/dev/null || true
+
+# Clear notification markers
+rm -f .claude/tmp/notification-* 2>/dev/null || true
+```
+
+**VALIDATION**:
+- ✅ Ran all cleanup commands
+- ✅ No errors occurred
+- ✅ Temporary files cleaned
+
+**ABSOLUTELY FORBIDDEN**:
+- ❌ DO NOT delete memory bank files
+- ❌ DO NOT delete hooks
+- ❌ DO NOT delete archive folder
+- ❌ DO NOT delete project files
+
+---
+
+## STEP 4: Report Cleanup Results - MANDATORY
+
+**YOU MUST OUTPUT** in this EXACT format:
+
+```
+🧹 Memory Cleanup Complete!
+
+📊 Before/After:
+   - activeContext.md: [before]KB → [after]KB ([saved]KB saved)
+   - Session updates: [before] → 5 ([archived] archived)
+   - Temp files cleaned: [count] files
+
+💾 Data Preserved:
+   ✅ Old session updates archived to: .claude/archive/session-history-YYYY-MM.md
+   ✅ All historical data preserved (nothing deleted)
+
+📈 Token Efficiency:
+   - Estimated tokens saved: ~[N] tokens ([percentage]% reduction)
+   - activeContext.md now optimized for session loading
+
+💡 Next: Continue development with optimized context!
+```
+
+---
+
+## CRITICAL VALIDATIONS - MANDATORY
+
+**BEFORE CLAIMING SUCCESS**, verify:
+- ✅ Completed ALL applicable steps (1-4) in exact order
+- ✅ Used Edit tool for file modifications (not Write)
+- ✅ Archived old data (never deleted)
+- ✅ Kept exactly 5 recent session updates
+- ✅ Cleaned temporary files only
+- ✅ Reported accurate before/after stats
+
+**IF ANY VALIDATION FAILS** → Report: "❌ Failed at STEP [X]: [reason]"
+
+---
+
+## ABSOLUTELY FORBIDDEN
+
+- ❌ DO NOT delete any memory bank content
+- ❌ DO NOT use Write tool (will overwrite - use Edit)
+- ❌ DO NOT keep more than 5 session updates
+- ❌ DO NOT clean memory bank files
+- ❌ DO NOT delete hooks or commands
+- ❌ DO NOT lose historical data
+- ❌ DO NOT claim success if validations fail
+
+---
+
+## Safety Features
 
 ---
 
