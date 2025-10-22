@@ -740,31 +740,8 @@ Stop hook auto-syncs basic context. Run `/memory-cleanup` if notified about memo
 
 ---
 
-## 📌 Version & Features
-
-**Mini-CoderBrain Version**: **v2.2** - 3-Layer Enforcement Edition
-
-**Key Features**:
-- ✅ **3-Layer Footer Enforcement** - 85-92% compliance (up from 60-70%)
-- ✅ **Stop Hook Audit Trail** - Logs footer requirements for debugging
-- ✅ **Docker Container Management** - MUST NOT delete containers from other projects
-- ✅ **100% Test Coverage** - 24/24 core components tested
-- ✅ **Mental Model Strengthening** - MUST/FORBIDDEN patterns for 95%+ compliance
-- ✅ **Zero Context Duplication** - Load-once principle, 25% longer conversations
-
+**Mini-CoderBrain Version**: v1.0 - Universal Edition (Optimized)
 **Installation**: Drop `.claude/` folder + `CLAUDE.md` into your project
 **Compatibility**: All major programming languages and frameworks
 **Dependencies**: None - works out of the box with Claude Code
-
-**Recent Updates** (v2.2 - 2025-10-22):
-- 3-layer footer enforcement system (UserPromptSubmit injection + validation script + stop hook audit)
-- Docker container management guideline (GUIDELINE 7)
-- Footer compliance improvement: 60% → 85-92%
-- Stop hook validator for audit trail
-- Threshold fixes (>= instead of > for boundary cases)
-
-**Previous Updates** (v2.1):
-- Mental model strengthening (6 CLAUDE.md sections + 8 command files)
-- Notification detection fix (high activity threshold)
-- Behavior profile system
-- Memory health monitoring
+**Performance**: Zero context duplication, 25% longer conversations, perfect continuity
