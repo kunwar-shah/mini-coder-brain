@@ -1,28 +1,39 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
 # Pre-Compact Hook - Preserve context before conversation compaction
 # Runs automatically when Claude Code is about to compact the conversation
+# Philosophy: Graceful degradation - prefer fallback over failure
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
+
 MB="$ROOT/.claude/memory"
 CLAUDE_TMP="$ROOT/.claude/tmp"
 
-# Ensure directories exist
-mkdir -p "$MB/conversations/compact-summaries" "$MB" "$CLAUDE_TMP/precompact"
-touch "$MB/progress.md" "$MB/activeContext.md" "$MB/decisionLog.md"
+# Ensure directories exist (using safe pattern)
+ensure_dir "$MB/conversations/compact-summaries"
+ensure_dir "$MB"
+ensure_dir "$CLAUDE_TMP/precompact"
+
+# Ensure memory files exist
+touch "$MB/progress.md" "$MB/activeContext.md" "$MB/decisionLog.md" 2>/dev/null || true
 
 # Timestamp
 ts="precompact-$(date +%Y%m%d-%H%M%S)"
 dt="$(date --iso-8601=seconds)"
 
-# Read hook input
-input=$(cat)
-if command -v jq >/dev/null 2>&1; then
-  reason=$(echo "$input" | jq -r '.reason // "conversation_length"' 2>/dev/null || echo "conversation_length")
-else
-  reason="conversation_length"
-fi
+# Read hook input (SAFE: never crash on empty/invalid stdin)
+input=$(read_stdin_safe "{}")
+
+# Extract reason field (SAFE: no jq dependency, pure bash)
+reason=$(extract_json_field "$input" "reason" "conversation_length")
 
 # Create pre-compact summary to preserve session context
 compact_summary="$MB/conversations/compact-summaries/$ts.md"
@@ -89,4 +100,5 @@ find "$MB/conversations/compact-summaries/" -name "precompact-*.md" -type f 2>/d
 # Update sync timestamp (Fix #3: Status footer integration)
 bash "$ROOT/.claude/hooks/lib/update-sync-timestamp.sh" 2>/dev/null || true
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

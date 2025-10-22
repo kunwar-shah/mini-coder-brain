@@ -1,30 +1,34 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
 # Session End Hook - Captures conversation when user explicitly ends session
 # Runs when user closes conversation or exits Claude Code
+# Philosophy: Graceful degradation - prefer fallback over failure
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
+
 MB="$ROOT/.claude/memory"
 
-# Read hook input
-payload=$(cat)
+# Read hook input (SAFE: fallback if empty)
+payload=$(read_stdin_safe "{}")
 
-# Extract fields
-if command -v jq >/dev/null 2>&1; then
-  tp=$(echo "$payload" | jq -r '.transcript_path // empty' 2>/dev/null || echo "")
-  reason=$(echo "$payload" | jq -r '.reason // "user_exit"' 2>/dev/null || echo "user_exit")
-else
-  tp=""
-  reason="user_exit"
-fi
+# Extract fields (SAFE: no jq dependency)
+tp=$(extract_json_field "$payload" "transcript_path" "")
+reason=$(extract_json_field "$payload" "reason" "user_exit")
 
 # Timestamp
 stamp="sessionend-$(date +%Y%m%d-%H%M%S)"
 dt=$(date --iso-8601=seconds)
 
-# Ensure directories
-mkdir -p "$MB/conversations"
+# Ensure directories (SAFE: never crash)
+ensure_dir "$MB/conversations"
 
 # Create session end summary
 summary_file="$MB/conversations/$stamp.summary.md"
@@ -107,4 +111,5 @@ if [ -f "$ROOT/.claude/hooks/metrics-collector.sh" ]; then
   "$ROOT/.claude/hooks/metrics-collector.sh" cleanup 2>/dev/null || true
 fi
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

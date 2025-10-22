@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
 # Session-Aware Context Loading (v2.0 Fix)
 # Loads context ONLY when starting a NEW conversation/session
+# Philosophy: Graceful degradation - prefer fallback over failure
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
+
 MB="$ROOT/.claude/memory"
 CLAUDE_TMP="$ROOT/.claude/tmp"
 
@@ -12,8 +21,8 @@ CLAUDE_TMP="$ROOT/.claude/tmp"
 session_id="sessionstart-$(date +%s)"
 context_flag="$CLAUDE_TMP/context-loaded.flag"
 
-# Store session start time for duration tracking
-echo "$(date +%s)" > "$CLAUDE_TMP/session-start-time"
+# Store session start time for duration tracking (SAFE: never crash)
+write_file_safe "$CLAUDE_TMP/session-start-time" "$(date +%s)"
 
 # === LIGHTWEIGHT CLEANUP (background) ===
 {
@@ -32,10 +41,10 @@ fi
 should_load_context=true
 
 if [ -f "$context_flag" ]; then
-    # Read stored session ID
-    stored_session_id=$(head -1 "$context_flag" 2>/dev/null || echo "")
+    # Read stored session ID (SAFE: fallback if file read fails)
+    stored_session_id=$(read_file_safe "$context_flag" "" | head -1)
 
-    if [ "$stored_session_id" == "$session_id" ]; then
+    if [ "$stored_session_id" = "$session_id" ]; then
         # Same session - context already in conversation history
         should_load_context=false
     else
@@ -49,7 +58,7 @@ else
 fi
 
 # === LOAD CONTEXT IF NEEDED (New Conversation) ===
-if [ "$should_load_context" == "true" ]; then
+if [ "$should_load_context" = "true" ]; then
     # This is a new conversation, load context into conversation history
 
     # Load productContext.md
@@ -149,3 +158,6 @@ if [ -n "$memory_health_tip" ]; then
   echo ""
   echo "$memory_health_tip"
 fi
+
+# CRITICAL: Always exit 0, never crash the session
+safe_exit
