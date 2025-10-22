@@ -314,11 +314,11 @@ On SESSION START (when session-start hook displays boot status), do the followin
 6) **CRITICAL: Behavioral Patterns** (Read reference patterns as needed)
 
 **Pattern Library** (Read on-demand, NOT injected - zero token impact):
-- **@.claude/patterns/pre-response-protocol.md** → MANDATORY 5-step checklist before every response
-- **@.claude/patterns/context-utilization.md** → How to use memory bank files without duplication
-- **@.claude/patterns/proactive-behavior.md** → When/how to make helpful suggestions
-- **@.claude/patterns/anti-patterns.md** → Banned behaviors and common mistakes to avoid
-- **@.claude/patterns/tool-selection-rules.md** → Which tool to use for each task
+- **.claude/patterns/pre-response-protocol.md** → MANDATORY 5-step checklist before every response
+- **.claude/patterns/context-utilization.md** → How to use memory bank files without duplication
+- **.claude/patterns/proactive-behavior.md** → When/how to make helpful suggestions
+- **.claude/patterns/anti-patterns.md** → Banned behaviors and common mistakes to avoid
+- **.claude/patterns/tool-selection-rules.md** → Which tool to use for each task
 
 **Memory Bank Files** (loaded once at session start, persist in conversation history):
 - **productContext.md** → Project name, tech stack, architecture, features, goals
@@ -342,10 +342,10 @@ Before responding to ANY request, complete the 5-step checklist:
 **ZERO ASSUMPTION RULE**: If context has the answer, USE IT immediately. Only ask user when genuinely missing information.
 
 **For detailed behavioral guidelines, read patterns on-demand**:
-- Context usage → @.claude/patterns/context-utilization.md
-- What NOT to do → @.claude/patterns/anti-patterns.md
-- Tool selection → @.claude/patterns/tool-selection-rules.md
-- Proactive suggestions → @.claude/patterns/proactive-behavior.md
+- Context usage → .claude/patterns/context-utilization.md
+- What NOT to do → .claude/patterns/anti-patterns.md
+- Tool selection → .claude/patterns/tool-selection-rules.md
+- Proactive suggestions → .claude/patterns/proactive-behavior.md
 
 5) **Project Context Awareness - MANDATORY**:
 
@@ -615,28 +615,28 @@ docker-compose down  # (if in wrong directory)
 ### Behavioral Patterns (Read as Needed)
 **IMPORTANT**: Patterns are read on-demand to guide behavior WITHOUT bloating context tokens:
 
-- **@.claude/patterns/pre-response-protocol.md** - MANDATORY 5-step checklist
+- **.claude/patterns/pre-response-protocol.md** - MANDATORY 5-step checklist
   - Check all context files before responding
   - Zero assumption rule
   - Banned questions list
 
-- **@.claude/patterns/context-utilization.md** - Memory bank usage
+- **.claude/patterns/context-utilization.md** - Memory bank usage
   - How to use each memory file
   - Load-once principle (79.9% token reduction)
   - Context persistence throughout session
 
-- **@.claude/patterns/proactive-behavior.md** - When to suggest
+- **.claude/patterns/proactive-behavior.md** - When to suggest
   - Good times to suggest (after tasks, detecting patterns)
   - Bad times to suggest (after every action)
   - Suggestion format and etiquette
 
-- **@.claude/patterns/anti-patterns.md** - What NOT to do
+- **.claude/patterns/anti-patterns.md** - What NOT to do
   - Context duplication (banned)
   - Asking questions context answers (banned)
   - Over-engineering simple tasks
   - Security anti-patterns
 
-- **@.claude/patterns/tool-selection-rules.md** - Which tool to use
+- **.claude/patterns/tool-selection-rules.md** - Which tool to use
   - Read vs Glob vs Grep
   - Edit vs Write
   - Bash vs specialized tools
@@ -645,19 +645,19 @@ docker-compose down  # (if in wrong directory)
 ### Reference Rules (Read as Needed)
 **IMPORTANT**: These rules exist to guide development WITHOUT bloating context tokens:
 
-- **@.claude/rules/token-efficiency.md** - Prevent "Prompt too long" errors
+- **.claude/rules/token-efficiency.md** - Prevent "Prompt too long" errors
   - MAX 4-5 lines session start output
   - MAX 3-4 lines micro-context
   - Memory bank size limits
   - Smart injection patterns
 
-- **@.claude/rules/coding-standards.md** - Code quality guidelines
+- **.claude/rules/coding-standards.md** - Code quality guidelines
   - Language-specific best practices
   - Error handling patterns
   - Security requirements
   - Testing standards
 
-- **@.claude/rules/context-management.md** - Memory bank maintenance
+- **.claude/rules/context-management.md** - Memory bank maintenance
   - What goes in each file
   - Cleanup schedules
   - Anti-patterns to avoid
