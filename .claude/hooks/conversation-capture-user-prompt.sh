@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
-set -eu
+set -u
+
+# Philosophy: Graceful degradation - prefer fallback over failure
+
+ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
 
 # Conversation Capture - User Prompt Hook (OPTIMIZED - Zero Duplication)
 # Part of CoderBrain conversation intelligence system
@@ -273,4 +284,5 @@ else
     echo '{"decision": "approve", "reason": "Session start hook will load context"}'
 fi
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

@@ -1,16 +1,27 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
 # Metrics Collector for Mini-CoderBrain v2.1
 # Collects behavioral and performance metrics during session
+# Philosophy: Graceful degradation - prefer fallback over failure
 
 ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
+
 METRICS_DIR="$ROOT/.claude/metrics"
 SESSIONS_DIR="$METRICS_DIR/sessions"
 CLAUDE_TMP="$ROOT/.claude/tmp"
 
-# Ensure directories exist
-mkdir -p "$SESSIONS_DIR" "$METRICS_DIR/aggregated" "$METRICS_DIR/archive"
+# Ensure directories exist (SAFE: never crash)
+ensure_dir "$SESSIONS_DIR"
+ensure_dir "$METRICS_DIR/aggregated"
+ensure_dir "$METRICS_DIR/archive"
 
 # Get current session ID
 session_flag="$CLAUDE_TMP/context-loaded.flag"
@@ -179,4 +190,5 @@ case "${1:-}" in
     ;;
 esac
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

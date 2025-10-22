@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
-set -eu
+set -u
+
+# Philosophy: Graceful degradation - prefer fallback over failure
+
+ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
 
 # Intelligent Status Notification Hook v2.1 (Enhanced)
 # - Minimal status footer every response (user knows system is alive)
@@ -276,4 +287,5 @@ fi
 status_log="$CLAUDE_TMP/status-checks.log"
 echo "$(date --iso-8601=seconds): Status checked - $activity_count operations, bloat_check=$([ -n "$bloat_notification" ] && echo "notified" || echo "ok")" >> "$status_log" 2>/dev/null || true
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

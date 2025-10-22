@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
-set -eu
+set -u
+
+# Philosophy: Graceful degradation - prefer fallback over failure
+
+ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
 
 # Optimized Intelligent Stop Hook - Ultimate Session Analysis
 # Combines: intelligent-stop-enhanced.sh + enhanced-stop-umb-sync.sh + session milestone detection
@@ -21,7 +32,7 @@ input=$(cat)
 session_id=$(echo "$input" | jq -r '.session_id // "unknown"' 2>/dev/null || echo "unknown")
 
 # Ensure directories exist
-mkdir -p "$MB/conversations/sessions" "$MB/conversations/responses" "$MB/conversations/analysis/insights" "$MB" "$ROOT/.claude/tmp"
+ensure_dir "$MB/conversations/sessions" "$MB/conversations/responses" "$MB/conversations/analysis/insights" "$MB" "$ROOT/.claude/tmp"  # SAFE: never crash
 touch "$MB/progress.md" "$MB/activeContext.md" "$MB/decisionLog.md"
 
 # Enhanced timestamp with readable format

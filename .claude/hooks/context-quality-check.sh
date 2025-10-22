@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
-set -eu
+set -u
+
+# Philosophy: Graceful degradation - prefer fallback over failure
+
+ROOT="${CLAUDE_PROJECT_DIR:-.}"
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
 
 # Context Quality Check Hook v1.0
 # Runs on session-start to validate memory bank quality
@@ -255,7 +266,7 @@ else
 fi
 
 # Cache result
-mkdir -p "$CACHE"
+ensure_dir "$CACHE"  # SAFE: never crash
 cat > "$QUALITY_CACHE" <<EOF
 {
   "timestamp": "$(date --iso-8601=seconds)",
@@ -325,4 +336,5 @@ else
 EOF
 fi
 
-exit 0
+# CRITICAL: Always exit 0, never crash the session
+safe_exit

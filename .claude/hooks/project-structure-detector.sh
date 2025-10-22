@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-set -eu
+set -u
 
 # Universal Project Structure Detector
 # Detects common project patterns and populates {detected_*_path} variables
 # Used by CoderBrain commands for universal project compatibility
+# Philosophy: Graceful degradation - prefer fallback over failure
 
 # Find project root more reliably
 if [[ -n "${CLAUDE_PROJECT_DIR:-}" ]]; then
@@ -12,11 +13,19 @@ else
   ROOT="$(pwd)"
 fi
 
+LIB="$ROOT/.claude/hooks/lib/hook-patterns.sh"
+
+# Source bulletproof patterns library
+source "$LIB"
+
+# Setup safe exit trap (CRITICAL: ensures we always exit 0)
+setup_safe_exit_trap
+
 CLAUDE_MEMORY="$ROOT/.claude/memory"
 PROJECT_STRUCTURE_FILE="$CLAUDE_MEMORY/project-structure.json"
 
-# Ensure directories exist
-mkdir -p "$CLAUDE_MEMORY"
+# Ensure directories exist (SAFE: never crash)
+ensure_dir "$CLAUDE_MEMORY"
 
 # Initialize project structure detection
 detect_project_structure() {
@@ -174,3 +183,6 @@ detect_project_structure
 
 # Output success JSON for Claude Code hook
 echo '{"decision": "approve", "reason": "Project structure detected successfully"}'
+
+# CRITICAL: Always exit 0, never crash the session
+safe_exit
