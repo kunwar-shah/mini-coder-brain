@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.py",
             "timeout": 30
           }
         ]
@@ -44,13 +44,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/optimized-intelligent-stop.sh",
-            "timeout": 60
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/footer-validator-stop.sh",
-            "timeout": 10
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/stop.py",
+            "timeout": 30
           }
         ]
       }
@@ -60,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/conversation-capture-user-prompt.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/user-prompt-submit.py",
             "timeout": 15
           }
         ]
