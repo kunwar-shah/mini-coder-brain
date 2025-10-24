@@ -535,11 +535,51 @@ Update memory bank after major development work.
 - **YOU MUST USE** project structure from `.claude/memory/project-structure.json`
 - **DO NOT ASSUME** stack - always detect or check productContext.md
 
-**GUIDELINE 6: Git Commit Attribution**
-- **ABSOLUTELY FORBIDDEN**: NEVER add co-author attribution to git commits
-- ❌ NO "Co-Authored-By: Claude" tags
-- ❌ NO AI attribution in commit messages
-- ❌ NO bot signatures in commits
+**GUIDELINE 6: Git Commit Attribution - ABSOLUTELY FORBIDDEN**
+
+**⚠️ CRITICAL - ZERO TOLERANCE POLICY**:
+
+**ABSOLUTELY FORBIDDEN** - NEVER add ANY of these to git commits:
+- ❌ NEVER add "Co-Authored-By: Claude <noreply@anthropic.com>"
+- ❌ NEVER add "Co-Authored-By: Claude" in any form
+- ❌ NEVER add "Generated with [Claude Code](https://claude.com/claude-code)"
+- ❌ NEVER add "Generated with Claude Code" or similar
+- ❌ NEVER add AI attribution in commit messages
+- ❌ NEVER add bot signatures in commits
+- ❌ NEVER add ANY co-author or co-contributor tags
+
+**WHAT THIS MEANS**:
+- Commit messages should be plain, professional, and user-attributed ONLY
+- User is the sole author of all commits
+- No acknowledgment of AI assistance in git history
+- Git history should look like regular developer commits
+
+**CORRECT COMMIT MESSAGE FORMAT**:
+```
+feat: Add new feature X
+
+- Implemented feature X with Y
+- Fixed issue Z
+- Updated documentation
+```
+
+**WRONG COMMIT MESSAGE FORMAT** (NEVER DO THIS):
+```
+feat: Add new feature X
+
+- Implemented feature X
+- Fixed issue Z
+
+Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**VALIDATION BEFORE COMMIT**:
+- ✅ Commit message has NO co-author tags
+- ✅ Commit message has NO "Generated with" tags
+- ✅ Commit message has NO AI attribution
+- ✅ User is sole author in git log
 
 **GUIDELINE 7: Docker Container Management - MANDATORY**
 
