@@ -32,7 +32,7 @@ fi
 # 2. Active Blockers Count
 blockers=0
 if [ -f "$MB/activeContext.md" ]; then
-  blockers=$(grep -c "^-.*\[BLOCKED\]\|^-.*blocker" "$MB/activeContext.md" 2>/dev/null || echo "0")
+  blockers=$( (grep -c "^-.*\[BLOCKED\]\|^-.*blocker" "$MB/activeContext.md" 2>/dev/null || echo "0") | tr -d '\n ')
 fi
 
 # 3. Hook Health Status
@@ -41,7 +41,7 @@ hook_label="OK"
 
 # Check if any hooks have recent errors (from logs)
 if [ -d "$ROOT/logs" ]; then
-  error_count=$(find "$ROOT/logs" -name "*.log" -type f -mmin -60 -exec grep -l "ERROR\|FAIL\|Exception" {} \; 2>/dev/null | wc -l || echo "0")
+  error_count=$( (find "$ROOT/logs" -name "*.log" -type f -mmin -60 -exec grep -l "ERROR\|FAIL\|Exception" {} \; 2>/dev/null | wc -l || echo "0") | tr -d '\n ')
 
   if [ "$error_count" -gt 0 ]; then
     hook_health="⚠️"
@@ -86,13 +86,13 @@ fi
 # 7. Memory Bank Files Count
 mb_files=0
 if [ -d "$MB" ]; then
-  mb_files=$(find "$MB" -name "*.md" -type f 2>/dev/null | wc -l || echo "0")
+  mb_files=$( (find "$MB" -name "*.md" -type f 2>/dev/null | wc -l || echo "0") | tr -d '\n ')
 fi
 
 # 8. Active Tasks Count (from progress.md)
 active_tasks=0
 if [ -f "$MB/progress.md" ]; then
-  active_tasks=$(grep -c "^- \[x\]" "$MB/progress.md" 2>/dev/null || echo "0")
+  active_tasks=$( (grep -c "^- \[x\]" "$MB/progress.md" 2>/dev/null || echo "0") | tr -d '\n ')
 fi
 
 # ============================================================================
