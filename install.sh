@@ -166,8 +166,9 @@ install_mini_coderbrain() {
     # Install .claude folder structure
     print_info "Installing .claude folder structure..."
 
-    # Create base directory
+    # Create base directory structure
     mkdir -p "$target_path/.claude"
+    mkdir -p "$target_path/.claude/memory"
 
     # Copy framework files ONLY (exclude development data)
     cp -r "$SCRIPT_DIR/.claude/hooks" "$target_path/.claude/"
