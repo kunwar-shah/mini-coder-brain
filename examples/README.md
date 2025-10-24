@@ -1,6 +1,11 @@
 # Mini-CoderBrain Examples
 
+**Version**: Compatible with v2.0, v2.1, and v2.2
+**Last Updated**: October 2025
+
 This folder contains example projects showing how mini-coder-brain should be set up for different scenarios.
+
+**Note**: All examples are fully compatible with Mini-CoderBrain v2.2. The memory bank structure and initialization process remain unchanged across versions.
 
 ## Examples Included
 
