@@ -170,16 +170,17 @@ install_mini_coderbrain() {
     mkdir -p "$target_path/.claude"
     mkdir -p "$target_path/.claude/memory"
 
-    # Copy framework files ONLY (exclude development data)
+    # Copy framework files ONLY (exclude development data and templates)
     cp -r "$SCRIPT_DIR/.claude/hooks" "$target_path/.claude/"
     cp -r "$SCRIPT_DIR/.claude/commands" "$target_path/.claude/"
     cp -r "$SCRIPT_DIR/.claude/patterns" "$target_path/.claude/"
     cp -r "$SCRIPT_DIR/.claude/profiles" "$target_path/.claude/"
     cp -r "$SCRIPT_DIR/.claude/rules" "$target_path/.claude/"
-    cp -r "$SCRIPT_DIR/.claude/memory/templates" "$target_path/.claude/memory/"
     cp -r "$SCRIPT_DIR/.claude/validation" "$target_path/.claude/" 2>/dev/null || true
     cp -r "$SCRIPT_DIR/.claude/status_lines" "$target_path/.claude/" 2>/dev/null || true
     cp "$SCRIPT_DIR/.claude/settings.json" "$target_path/.claude/"
+
+    # NOTE: Templates are NOT copied - they're only used to generate memory files below
 
     print_success ".claude folder installed (framework files only)"
 
@@ -203,10 +204,10 @@ install_mini_coderbrain() {
     chmod +x "$target_path/.claude/hooks"/*.sh 2>/dev/null || true
     print_success "Hooks configured"
 
-    # Copy templates to actual memory files
+    # Create memory files from templates (read from SOURCE, write to TARGET)
     print_info "Initializing memory bank from templates..."
 
-    for template in "$target_path/.claude/memory/templates"/*-template.md; do
+    for template in "$SCRIPT_DIR/.claude/memory/templates"/*-template.md; do
         if [ -f "$template" ]; then
             filename=$(basename "$template" | sed 's/-template//')
             target_file="$target_path/.claude/memory/$filename"
@@ -237,7 +238,6 @@ cache/
 archive/
 memory/conversations/
 memory/*.md
-!memory/templates/
 
 # Keep framework files (committed)
 !hooks/
