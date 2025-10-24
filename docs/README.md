@@ -2,6 +2,8 @@
 
 Complete documentation for Mini-CoderBrain - Data-Driven Behavioral Intelligence for Claude Code.
 
+**Current Version**: v2.2.0 (October 2025)
+
 ---
 
 ## 📚 Quick Start
@@ -9,11 +11,15 @@ Complete documentation for Mini-CoderBrain - Data-Driven Behavioral Intelligence
 **New Users**:
 1. [Quick Start Guide](quickstart.md) - Get started in 5 minutes
 2. [Installation Guide](how-to-use.md) - Detailed installation instructions
-3. [Documentation Index](V2.1-DOCUMENTATION-INDEX.md) - Complete feature documentation
+3. [Documentation Index v2.2](V2.2-DOCUMENTATION-INDEX.md) - Complete feature documentation
 
-**Existing Users**:
-- [Migration Guide](MIGRATION-V2.1.md) - Upgrade from previous versions
-- [Changelog](changelog.md) - What's new in each release
+**Upgrading from v2.1**:
+- [Migration Guide v2.2](MIGRATION-V2.2.md) - Upgrade from v2.1 (no breaking changes!)
+- [Changelog](changelog.md) - What's new in v2.2
+
+**Upgrading from v2.0**:
+- [Migration Guide v2.1](MIGRATION-V2.1.md) - Upgrade from v2.0
+- Then follow v2.2 migration guide above
 
 ---
 
@@ -84,7 +90,10 @@ Located in `docs/v2-planning/`:
 ## 📋 Complete Documentation Index
 
 For a comprehensive, categorized list of all documentation, see:
-**[Complete Documentation Index](V2.1-DOCUMENTATION-INDEX.md)**
+**[Complete Documentation Index v2.2](V2.2-DOCUMENTATION-INDEX.md)** (Latest)
+
+Previous versions:
+- [Documentation Index v2.1](V2.1-DOCUMENTATION-INDEX.md)
 
 ---
 
