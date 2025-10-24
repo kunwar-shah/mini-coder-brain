@@ -22,7 +22,13 @@ Initializes `.claude/memory/` files with auto-detected project context:
 
 ## Usage
 
-Check for --dry-run or --docs-path arguments in user message.
+**CRITICAL**: Steps 1-5 (auto-detection) ALWAYS run first, regardless of arguments.
+
+**Arguments ADD additional information**:
+- `--dry-run` - Preview what would be written (still runs full auto-detection)
+- `--docs-path <path>` - ADD documentation analysis to auto-detected data (doesn't skip Steps 1-5)
+
+Check for arguments in user message, but ALWAYS complete Steps 1-5 first.
 
 ---
 
@@ -89,6 +95,8 @@ Extract feature list (first 5 features maximum)
 
 ## STEP 6: Read Documentation (if --docs-path provided) - MANDATORY
 
+**IMPORTANT**: Steps 1-5 have ALREADY detected core project data (name, description, tech stack, features from README, src folder structure). This step ADDS additional information from documentation.
+
 **IF** user message contains --docs-path:
 
 Extract the path value
@@ -97,15 +105,21 @@ Extract the path value
 
 **YOU MUST USE Read TOOL** on key docs: SRS.md, ARCHITECTURE.md, API.md
 
-Extract additional features and architecture details
+**MERGE** additional features and architecture details WITH auto-detected data from Steps 1-5
+
+**DO NOT** replace auto-detected data - only ADD more information
 
 **ELSE**:
 
-Skip this step
+Skip this step (use auto-detected data from Steps 1-5 only)
 
 ---
 
 ## STEP 7: Write Memory Bank Files - MANDATORY
+
+**CHECK FOR --dry-run FIRST**:
+- **IF** user message contains --dry-run → SKIP to Step 8 (display what WOULD be written, but don't write files)
+- **ELSE** → Continue with writing files
 
 **YOU MUST USE Write TOOL** to create these files:
 

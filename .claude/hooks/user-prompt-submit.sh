@@ -83,7 +83,7 @@ get_last_sync() {
 
   if [ ! -f "$sync_file" ]; then
     echo "Never"
-    echo "99999"
+    echo "0"
     return
   fi
 
