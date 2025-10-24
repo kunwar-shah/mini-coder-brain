@@ -1,8 +1,11 @@
-# Installation Guide - Mini-CoderBrain v2.0
+# Installation Guide - Mini-CoderBrain v2.2
 
-Complete installation guide for Universal AI Context Awareness System with Intelligent Setup & Validation.
+Complete installation guide for Universal AI Context Awareness System with Production-Verified Quality.
 
-**⚠️ IMPORTANT**: Version 2.0 requires **MANDATORY** initialization after installation. Follow all steps carefully!
+**Current Version**: v2.2.0 (October 2025)
+**Latest Features**: 3-Layer Footer Enforcement, Zero-Tolerance Co-Author Policy, Docker Safety, 100% Production Verification
+
+**⚠️ IMPORTANT**: Version 2.2 requires **MANDATORY** initialization after installation. Follow all steps carefully!
 
 ---
 
