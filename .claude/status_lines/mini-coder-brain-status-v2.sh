@@ -50,11 +50,15 @@ if [ -d "$ROOT/logs" ]; then
 fi
 
 # 4. Current Sprint/Milestone (from activeContext)
-sprint="General Dev"
+sprint="Setup"
 if [ -f "$MB/activeContext.md" ]; then
   sprint_line=$(grep "^**Current Sprint" "$MB/activeContext.md" 2>/dev/null | head -1 || echo "")
   if [ -n "$sprint_line" ]; then
     sprint=$(echo "$sprint_line" | sed 's/.*: //' | sed 's/\*\*//g' | cut -c 1-15)
+    # Fallback if template placeholder found
+    if echo "$sprint" | grep -q "\[SPRINT_NAME\]"; then
+      sprint="Setup"
+    fi
   fi
 fi
 
@@ -129,8 +133,12 @@ if [ "$blockers" -gt 0 ]; then
   parts+=("${RED}🚫 ${blockers} blocked${RESET}")
 fi
 
-# Sprint/milestone
-parts+=("${BLUE}🎯 ${sprint}${RESET}")
+# Sprint/milestone (always show, even on fresh install)
+if [ "$sprint" = "Setup" ]; then
+  parts+=("${YELLOW}⚙️ ${sprint}${RESET}")  # Yellow for setup/initialization
+else
+  parts+=("${BLUE}🎯 ${sprint}${RESET}")
+fi
 
 # Test status
 if [ "$test_status" != "No tests" ]; then
