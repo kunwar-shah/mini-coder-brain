@@ -756,12 +756,15 @@ Stop hook auto-syncs basic context. Run `/memory-cleanup` if notified about memo
 **Compatibility**: All major programming languages and frameworks
 **Dependencies**: None - works out of the box with Claude Code
 
-**Recent Updates** (v2.2 - 2025-10-22):
+**Recent Updates** (v2.2 - 2025-10-24):
 - 3-layer footer enforcement system (UserPromptSubmit injection + validation script + stop hook audit)
 - Docker container management guideline (GUIDELINE 7)
 - Footer compliance improvement: 60% → 85-92%
 - Stop hook validator for audit trail
 - Threshold fixes (>= instead of > for boundary cases)
+- Test infrastructure improvements (CRLF → LF line ending fixes)
+- Production verification: 100% pass rate (36/36 checks)
+- Session lifecycle tests: 100% pass rate (8/8 tests)
 
 **Previous Updates** (v2.1):
 - Mental model strengthening (6 CLAUDE.md sections + 8 command files)
