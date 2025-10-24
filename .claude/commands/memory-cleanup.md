@@ -150,10 +150,6 @@ rm -f .claude/tmp/notification-* 2>/dev/null || true
 
 ---
 
-## Safety Features
-
----
-
 ## Configuration
 
 Default cleanup thresholds (can be customized):
@@ -213,6 +209,48 @@ AI: [Cleans everything, keeps only last 3 session updates]
 - **Preventive**: After major development sessions (10+ operations)
 - **Regular**: Once per week for active projects
 - **Emergency**: When experiencing "Prompt is too long" errors
+
+---
+
+## Hybrid Approach - AI + Shell Script Safety Net
+
+**Architecture**: This command uses a **hybrid intelligent design**:
+
+### Primary: AI-Driven Cleanup (Flexible)
+- Uses mental model instructions with Read, Edit, Bash tools
+- Adapts to edge cases and explains actions
+- Interactive feedback during cleanup
+- Handles complex scenarios
+
+### Safety Net: Shell Script Backup (Deterministic)
+- File: `.claude/hooks/memory-cleanup.sh`
+- Carefully designed for exact folder structure
+- Deterministic, reliable edge case handling
+- Can run independently if AI skips something
+
+### When to Use Shell Script Directly
+
+**Run shell script manually**:
+```bash
+bash .claude/hooks/memory-cleanup.sh              # Standard cleanup
+bash .claude/hooks/memory-cleanup.sh --dry-run    # Preview changes
+bash .claude/hooks/memory-cleanup.sh --full       # Aggressive cleanup (keep 3)
+bash .claude/hooks/memory-cleanup.sh --keep 10    # Custom retention
+```
+
+**Use cases for direct shell script**:
+1. **After AI cleanup** - Validate AI didn't miss anything
+2. **Automated scripts** - CI/CD, cron jobs, automation workflows
+3. **Emergency** - AI fails or behaves unexpectedly
+4. **Paranoid mode** - Double-check AI work with deterministic script
+
+### Recommended Workflow
+
+**Standard**: `/memory-cleanup` (AI-driven, interactive)
+**Validation**: `bash .claude/hooks/memory-cleanup.sh --dry-run` (verify nothing missed)
+**Emergency**: `bash .claude/hooks/memory-cleanup.sh` (bypass AI, direct execution)
+
+**Best of both worlds**: AI intelligence + Shell script reliability!
 
 ---
 
