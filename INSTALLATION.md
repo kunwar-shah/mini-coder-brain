@@ -1,8 +1,11 @@
-# Installation Guide - Mini-CoderBrain v2.0
+# Installation Guide - Mini-CoderBrain v2.2
 
-Complete installation guide for Universal AI Context Awareness System with Intelligent Setup & Validation.
+Complete installation guide for Universal AI Context Awareness System with Production-Verified Quality.
 
-**⚠️ IMPORTANT**: Version 2.0 requires **MANDATORY** initialization after installation. Follow all steps carefully!
+**Current Version**: v2.2.0 (October 2025)
+**Latest Features**: 3-Layer Footer Enforcement, Zero-Tolerance Co-Author Policy, Docker Safety, 100% Production Verification
+
+**⚠️ IMPORTANT**: Version 2.2 requires **MANDATORY** initialization after installation. Follow all steps carefully!
 
 ---
 
@@ -362,18 +365,20 @@ brew install jq
 cp -r .claude .claude.v1.backup
 ```
 
-### Install v2.0
+### Install v2.2
 ```bash
 # Run new installer (will backup automatically)
 cd mini-coder-brain
 ./install.sh /path/to/your/project
 ```
 
-### Key Changes in v2.0
-- ✨ Hooks completely rewritten (zero duplication)
-- ✨ Memory cleanup system added
-- ✨ Context loading strategy changed
-- ✨ 79.9% token reduction achieved
+### Key Changes in v2.2
+- ✨ 3-Layer Footer Enforcement (85-92% compliance)
+- ✨ Zero-Tolerance Co-Author Policy
+- ✨ Docker Container Safety Guidelines
+- ✨ 100% Production Verification (36/36 checks passed)
+- ✨ Enhanced Test Coverage (58% pass rate)
+- ✨ Maintains all v2.0/v2.1 features (79.8% token efficiency)
 
 ### Migration Notes
 - Memory files compatible (no changes needed)
@@ -407,7 +412,7 @@ mv CLAUDE.md.backup CLAUDE.md
 
 ## 🎯 Post-Installation
 
-### Recommended First Steps (v2.0 Workflow)
+### Recommended First Steps (v2.2 Workflow)
 
 1. **Initialize Context (MANDATORY)**
    ```
@@ -464,7 +469,7 @@ mv CLAUDE.md.backup CLAUDE.md
 
 **Installation Complete!** 🎉
 
-Mini-CoderBrain v2.0 is now active in your project.
+Mini-CoderBrain v2.2 is now active in your project.
 
 **⚠️ REMEMBER**: Run `/init-memory-bank` to complete setup!
 
