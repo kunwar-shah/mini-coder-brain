@@ -1,7 +1,7 @@
 ---
 description: Synchronize current session into .claude/memory (decisions, progress, focus)
 argument-hint: [optional note]
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(cat:*)
+allowed-tools: Bash(*)
 ---
 
 ## Context (auto)

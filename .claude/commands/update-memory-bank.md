@@ -1,7 +1,7 @@
 ---
 description: Update memory bank after major development work (decisions, progress, context changes)
 argument-hint: "[optional note]"
-allowed-tools: Bash(git status:*), Bash(git diff:*), Read(*), Edit(*)
+allowed-tools: Bash(*)
 ---
 
 # Update Memory Bank — Session Context Synchronization
