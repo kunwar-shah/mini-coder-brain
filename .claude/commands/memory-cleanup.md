@@ -216,15 +216,5 @@ AI: [Cleans everything, keeps only last 3 session updates]
 
 ---
 
-## Implementation
-
-This command executes `.claude/hooks/memory-cleanup.sh` which performs the cleanup logic.
-
-**Related hooks**:
-- `intelligent-status-notification.sh` - Detects bloat and notifies
-- `session-start.sh` - Lightweight tmp/ cleanup on startup
-
----
-
 **Version**: 1.0
 **Part of**: Mini-CoderBrain Memory Management System
