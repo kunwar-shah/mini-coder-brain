@@ -163,22 +163,39 @@ install_mini_coderbrain() {
     # Backup existing installation
     backup_existing "$target_path"
 
-    # Install .claude folder
-    print_info "Installing .claude folder..."
-    cp -r "$SCRIPT_DIR/.claude" "$target_path/"
-    print_success ".claude folder installed"
+    # Install .claude folder structure
+    print_info "Installing .claude folder structure..."
+
+    # Create base directory
+    mkdir -p "$target_path/.claude"
+
+    # Copy framework files ONLY (exclude development data)
+    cp -r "$SCRIPT_DIR/.claude/hooks" "$target_path/.claude/"
+    cp -r "$SCRIPT_DIR/.claude/commands" "$target_path/.claude/"
+    cp -r "$SCRIPT_DIR/.claude/patterns" "$target_path/.claude/"
+    cp -r "$SCRIPT_DIR/.claude/profiles" "$target_path/.claude/"
+    cp -r "$SCRIPT_DIR/.claude/rules" "$target_path/.claude/"
+    cp -r "$SCRIPT_DIR/.claude/memory/templates" "$target_path/.claude/memory/"
+    cp -r "$SCRIPT_DIR/.claude/validation" "$target_path/.claude/" 2>/dev/null || true
+    cp -r "$SCRIPT_DIR/.claude/status_lines" "$target_path/.claude/" 2>/dev/null || true
+    cp "$SCRIPT_DIR/.claude/settings.json" "$target_path/.claude/"
+
+    print_success ".claude folder installed (framework files only)"
 
     # Install CLAUDE.md
     print_info "Installing CLAUDE.md controller..."
     cp "$claude_md_source" "$target_path/"
     print_success "CLAUDE.md installed"
 
-    # Create required directories
-    print_info "Creating required directories..."
+    # Create required directories (EMPTY - no development data)
+    print_info "Creating clean directories..."
     mkdir -p "$target_path/.claude/tmp"
     mkdir -p "$target_path/.claude/cache"
     mkdir -p "$target_path/.claude/archive"
-    print_success "Directories created"
+    mkdir -p "$target_path/.claude/memory/conversations/tool-tracking"
+    mkdir -p "$target_path/.claude/memory/conversations/session-summaries"
+    mkdir -p "$target_path/.claude/memory/conversations/behavioral-metrics"
+    print_success "Clean directories created"
 
     # Make hooks executable
     print_info "Making hooks executable..."
@@ -209,6 +226,30 @@ install_mini_coderbrain() {
     done
 
     print_success "Memory bank initialized"
+
+    # Create .gitignore for development data
+    print_info "Creating .gitignore for user data..."
+    cat > "$target_path/.claude/.gitignore" <<'EOF'
+# User data - never commit these
+tmp/
+cache/
+archive/
+memory/conversations/
+memory/*.md
+!memory/templates/
+
+# Keep framework files (committed)
+!hooks/
+!commands/
+!patterns/
+!profiles/
+!rules/
+!validation/
+!status_lines/
+!settings.json
+!.gitignore
+EOF
+    print_success ".gitignore created"
 
     # Verify installation
     print_info "Verifying installation..."
