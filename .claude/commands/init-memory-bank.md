@@ -1,7 +1,6 @@
 ---
 description: Initialize memory bank with auto-populated project context (MANDATORY on first install)
 argument-hint: "[--dry-run] [--docs-path <path>]"
-allowed-tools: Read(*), Write(*), Edit(*), Glob(*), Grep(*), Bash(*)
 ---
 
 # Init Memory Bank — Smart Context Initialization
